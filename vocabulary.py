@@ -1,13 +1,13 @@
 from math import *
 import pygame
-from math import *
 from pygame.draw import *
 
-WIDTH, HEIGHT = 1280, 720
+WIDTH, HEIGHT = 600, 600
 FPS = 30
 k = 0.01  # Чувствительность мыши
-
-
+stopper_acceleration = 4  # На сколько ед\с падают составляющие скорости
+gravity = 10
+znak = [ 1, 1, -1, -1, 1]
 
 LEFT = "LEFT"
 RIGHT = "RIGHT"
@@ -28,6 +28,7 @@ GREY1 = (180, 180, 180)
 # -------------------------------------------------------------------
 import pygame
 from pygame.draw import *
+
 
 def text_render(scrn, nm, point_x, point_y):
     """
