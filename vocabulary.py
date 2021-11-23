@@ -1,3 +1,14 @@
+from math import *
+import pygame
+from math import *
+from pygame.draw import *
+
+WIDTH, HEIGHT = 1280, 720
+FPS = 30
+k = 0.01  # Чувствительность мыши
+
+
+
 LEFT = "LEFT"
 RIGHT = "RIGHT"
 BACKWARD = "BACKWARD"
