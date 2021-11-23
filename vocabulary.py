@@ -4,8 +4,8 @@ from numpy import sign
 from pygame.draw import *
 
 WIDTH, HEIGHT = 600, 600
-FPS = 30
-k = 0.003  # Чувствительность мыши
+FPS = 60
+k = 0.001  # Чувствительность мыши
 leg_force = 0.1
 stopper_acceleration = 0.3*leg_force  # На сколько ед\с падают составляющие скорости
 gravity = 0

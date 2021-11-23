@@ -56,7 +56,7 @@ class Camera(Vector):
 
         if self.controlling[4]:
             self.an_xy = (self.controlling[5] + self.an_xy) % (pi * 2)
-            self.an_xz = (self.controlling[6] + self.an_xz) % (pi * 2)
+            # self.an_xz = (self.controlling[6] + self.an_xz) % (pi * 2)
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
 
 

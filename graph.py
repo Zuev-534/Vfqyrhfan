@@ -20,9 +20,9 @@ class Vector:
         self.dz = self.d * sin(self.an_xz)
 
     def new_di_in_new_pos(self, vector_nul):
-        self.dx = vector_nul.x - self.x
-        self.dy = vector_nul.y - self.y
-        self.dz = vector_nul.z - self.z
+        self.dx = -vector_nul.x + self.x
+        self.dy = -vector_nul.y + self.y
+        self.dz = -vector_nul.z + self.z
 
     def set_coords_d_from_di(self):
         self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
@@ -67,5 +67,5 @@ class Vector:
 
     def coords_to_cam(self):
         self.rotate_vector(-self.an_xy, self.an_xz)
-        self.rotate_vector(fi_xy=pi / 2)
-        return (-(self.dx - WIDTH / 2), -(self.dy - HEIGHT / 2))
+        self.rotate_vector(fi_xy=pi/2)
+        return ((self.dx*10 - WIDTH / 2), (self.dy*10 - HEIGHT / 2))

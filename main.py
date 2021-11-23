@@ -5,8 +5,10 @@ Victor = Camera()
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Test controlling')
-# pygame.mouse.set_visible(False)
+pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
+Victor.x, Victor.y = 90, 90
+u=15
 while True:
     clock.tick(FPS)
     screen.fill(GREY1)
@@ -15,8 +17,11 @@ while True:
         Victor.control()
     Victor.move()
     coords(screen, Victor)
-    circle(screen, BLACK, (Victor.x, Victor.y,), 5)
+    circle(screen, BLACK, (Victor.x, Victor.y), 5)
     circle(screen, BLACK, (100,100), 5)
 
-    circle(screen, BLACK, Vector(100, 100, 0).get_vector(Victor).coords_to_cam(), 10)
+    circle(screen, BLACK, Vector(10, 100, 0).get_vector(Victor).coords_to_cam(), 10)
+    pygame.draw.lines(screen, WHITE, True,
+                      [(Victor.x, Victor.y), (Victor.x + u*cos(Victor.an_xy), Victor.y + u*sin(Victor.an_xy))], 2)
+    circle(screen, BLACK, Vector(100, 111, 200).get_vector(Victor).coords_to_cam(), 10)
     pygame.display.update()
