@@ -13,7 +13,21 @@ class Vector:
         self.an_xy = an_xy0
         self.an_xz = an_xz0
 
-    def set_coords(self):
+    def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
         self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
         self.dz = self.d * sin(self.an_xz)
+
+    def new_di_in_new_pos(self, vector_nul):
+        self.dx = vector_nul.x - self.x
+        self.dy = vector_nul.y - self.y
+        self.dz = vector_nul.z - self.z
+
+    def set_coords_d_from_di(self):
+        self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
+
+    def scalar(self, vector_nul):
+        return (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dy * vector_nul.dy)
+
+    def get_angle(self, vector_nul):
+        return self.scalar(vector_nul)
