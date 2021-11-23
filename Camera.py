@@ -5,7 +5,7 @@ class Camera:
         self.x = x0
         self.y = y0
         self.vx = v0
-        self.vy =v0
+        self.vy = v0
         self.an_xy = an_xy
         self.an_xz = an_xz
         self.h = h
