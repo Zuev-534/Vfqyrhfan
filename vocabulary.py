@@ -8,7 +8,7 @@ FPS = 30
 k = 0.01  # Чувствительность мыши
 
 
-
+STOP = "STOP"
 LEFT = "LEFT"
 RIGHT = "RIGHT"
 BACKWARD = "BACKWARD"
