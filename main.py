@@ -15,4 +15,5 @@ while True:
         Victor.control()
     Victor.move()
     coords(screen, Victor)
+    # circle(screen, BLACK, (Victor.x, Victor.y,), 5)
     pygame.display.update()

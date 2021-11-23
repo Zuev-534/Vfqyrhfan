@@ -1,14 +1,18 @@
 from math import *
 import pygame
+from numpy import sign
 from pygame.draw import *
 
 WIDTH, HEIGHT = 600, 600
 FPS = 30
 k = 0.01  # Чувствительность мыши
-stopper_acceleration = 0.1  # На сколько ед\с падают составляющие скорости
+stopper_acceleration = 0.3  # На сколько ед\с падают составляющие скорости
 gravity = 0
-znak = [ 1, 1, -1, -1, 1]
-speed_limit = 3
+leg_force = 1
+znak1 = [ 1, 1, -1, -1]
+znak2 = [1, -1, -1, 1]
+speed_limit_max = 3
+speed_limit_min = 0.7
 
 
 LEFT = "LEFT"
