@@ -8,6 +8,8 @@ k = 0.01  # Чувствительность мыши
 stopper_acceleration = 4  # На сколько ед\с падают составляющие скорости
 gravity = 10
 znak = [ 1, 1, -1, -1, 1]
+speed_limit = 3
+
 
 LEFT = "LEFT"
 RIGHT = "RIGHT"
