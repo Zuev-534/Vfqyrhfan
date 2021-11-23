@@ -19,7 +19,7 @@ class Camera:
         :param an_xy: угол в горизонтальной плоскости
         :return: ---
         """
-        # Матрица поворота:
+        # Матрица повороооота:
         # self.vx = vx * cos(an_xy) - vy * sin(an_xy)
         # self.vy = vx * sin(an_xy) + vy * cos(an_xy)
         self.vx = int(int(0.4 * self.vx*100)/100)
