@@ -59,13 +59,40 @@ class Vector:
         abc.set_coords_d_from_di()
         return abc
 
-    def rotate_vector(self, fi_xy=0.0, fi_zx=0.0):
-        self.dx = self.dx * cos(fi_xy) - self.dy * sin(fi_xy)
-        self.dy = self.dx * sin(fi_xy) + self.dy * cos(fi_xy)
-        self.dx = self.dx * cos(fi_zx) + self.dz * sin(fi_zx)
-        self.dz = - self.dx * sin(fi_zx) + self.dz * cos(fi_zx)
+    def rotate_vector_z(self, fi_xy=0.0):
+        x = self.dx
+        y = self.dy
+        self.dx = x * cos(fi_xy) - y * sin(fi_xy)
+        self.dy = x * sin(fi_xy) + y * cos(fi_xy)
 
-    def coords_to_cam(self):
-        self.rotate_vector(-self.an_xy, self.an_xz)
-        self.rotate_vector(fi_xy=pi/2)
-        return ((self.dx*10 - WIDTH / 2), (self.dy*10 - HEIGHT / 2))
+    def rotate_vector_y(self, fi_zx=0.0):
+        x = self.dx
+        z = self.dz
+        self.dx = x * cos(fi_zx) + z * sin(fi_zx)
+        self.dz = - x * sin(fi_zx) + z * cos(fi_zx)
+
+    def rotate_vector_x(self, fi_yz=0.0):
+        z = self.dz
+        y = self.dy
+        self.dz = y * sin(fi_yz) + z * cos(fi_yz)
+        self.dy = y * cos(fi_yz) - z * sin(fi_yz)
+
+    def print_all(self):
+        print("self = ", self)
+        print("d = ", self.d)
+        print("x = ", self.x)
+        print("y = ", self.y)
+        print("z = ", self.z)
+        print("dx = ", self.dx)
+        print("dy = ", self.dy)
+        print("dz = ", self.dz)
+        print("an_xy = ", self.an_xy)
+        print("an_xy = ", self.an_xz)
+
+    def coords_to_cam(self, cam):
+        self.rotate_vector_z(-cam.an_xy)
+        self.rotate_vector_y(cam.an_xz)
+        self.rotate_vector_z(fi_xy=pi / 2)
+        self.print_all()
+        print(((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2)))
+        return ((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2))

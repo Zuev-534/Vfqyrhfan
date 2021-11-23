@@ -3,7 +3,7 @@ import pygame
 from numpy import sign
 from pygame.draw import *
 
-WIDTH, HEIGHT = 600, 600
+WIDTH, HEIGHT = 800, 450
 FPS = 60
 k = 0.001  # Чувствительность мыши
 leg_force = 0.1
