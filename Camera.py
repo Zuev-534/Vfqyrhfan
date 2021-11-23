@@ -30,6 +30,7 @@ class Camera(Vector):
             self.an_xy = (an_xy + self.an_xy) % pi
             self.an_xz = (an_xz + self.an_xz) % pi
         if self.vx > speed_limit:
+            self.vx
 
 
     def move(self):
