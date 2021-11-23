@@ -1,4 +1,4 @@
-from math import *
+from vocabulary import *
 
 
 class Vector:
@@ -29,5 +29,39 @@ class Vector:
     def scalar(self, vector_nul):
         return (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dy * vector_nul.dy)
 
-    def get_angle(self, vector_nul):
-        return self.scalar(vector_nul)
+    def get_angle_cos(self, vector_nul):
+        return self.scalar(vector_nul) / (self.d * vector_nul.d)
+
+    def find_k(self, vector_nul):
+        """
+        k это отношение длинн между вектором и проекцией другого вектора на него
+        v*cos(x)/d
+        :return: k
+        """
+        k = self.d * self.get_angle_cos(vector_nul) / vector_nul.d
+        return k
+
+    def get_vector(self, vector_nul):
+        """
+        получение воктора для вывода на камеру
+        :param vector_nul:
+        :return:
+        """
+        k = self.find_k(vector_nul)
+        dx = self.dx / k - vector_nul.dx
+        dy = self.dy / k - vector_nul.dy
+        dz = self.dz / k - vector_nul.dz
+        return Vector(dx0=dx, dy0=dy, dz0=dz)
+
+    def rotate_vector(self, fi_xy=0.0, fi_zx=0.0):
+        self.dx = self.dx * cos(fi_xy) - self.dy * sin(fi_xy)
+        self.dy = self.dx * sin(fi_xy) + self.dy * cos(fi_xy)
+        self.dx = self.dx * cos(fi_zx) + self.dz * sin(fi_zx)
+        self.dz = - self.dx * sin(fi_zx) + self.dz * cos(fi_zx)
+
+    def coords_to_cam(self):
+        self.rotate_vector(-self.an_xy, self.an_xz)
+        self.rotate_vector(fi_xy=pi/2)
+        return self.dx - WIDTH/2, self.dy - HEIGHT/2
+
+
