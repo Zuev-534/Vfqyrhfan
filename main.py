@@ -11,7 +11,8 @@ while True:
     clock.tick(FPS)
     screen.fill(GREY1)
     for event in pygame.event.get():
-        Victor.control(*interoperate(event))
+        interoperate(event)
+        Victor.control()
     Victor.move()
     coords(screen, Victor)
     pygame.display.update()
