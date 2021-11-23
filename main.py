@@ -2,7 +2,6 @@ from vocabulary import *
 from Camera import *
 
 Victor = Camera()
-
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Test controlling')
