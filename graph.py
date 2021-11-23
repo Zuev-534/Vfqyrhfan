@@ -28,19 +28,22 @@ class Vector:
         self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
 
     def scalar(self, vector_nul):
-        return (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dy * vector_nul.dy)
+        return (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz)
 
     def get_angle_cos(self, vector_nul):
         return self.scalar(vector_nul) / (self.d * vector_nul.d)
 
-    def find_k(self, vector_nul):
+    def find_l(self, vector_nul):
         """
-        k это отношение длинн между вектором и проекцией другого вектора на него
+        l это отношение длинн между вектором и проекцией другого вектора на него
         v*cos(x)/d
-        :return: k
+        :return: l
         """
-        k = self.d * self.get_angle_cos(vector_nul) / vector_nul.d
-        return k
+        self.new_di_in_new_pos(vector_nul)
+        self.set_coords_d_from_di()
+        vector_nul.set_coords_di_from_d()
+        l = self.d * self.get_angle_cos(vector_nul) / vector_nul.d
+        return l
 
     def get_vector(self, vector_nul):
         """
@@ -48,11 +51,13 @@ class Vector:
         :param vector_nul:
         :return:
         """
-        k = self.find_k(vector_nul)
-        dx = self.dx / k - vector_nul.dx
-        dy = self.dy / k - vector_nul.dy
-        dz = self.dz / k - vector_nul.dz
-        return Vector(dx0=dx, dy0=dy, dz0=dz)
+        l = self.find_l(vector_nul)
+        dx = self.dx / l - vector_nul.dx
+        dy = self.dy / l - vector_nul.dy
+        dz = self.dz / l - vector_nul.dz
+        abc = Vector(dx0=dx, dy0=dy, dz0=dz)
+        abc.set_coords_d_from_di()
+        return abc
 
     def rotate_vector(self, fi_xy=0.0, fi_zx=0.0):
         self.dx = self.dx * cos(fi_xy) - self.dy * sin(fi_xy)
@@ -62,5 +67,5 @@ class Vector:
 
     def coords_to_cam(self):
         self.rotate_vector(-self.an_xy, self.an_xz)
-        self.rotate_vector(fi_xy=pi/2)
-        return (self.dx - WIDTH/2, self.dy - HEIGHT/2)
+        self.rotate_vector(fi_xy=pi / 2)
+        return (-(self.dx - WIDTH / 2), -(self.dy - HEIGHT / 2))

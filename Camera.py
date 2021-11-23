@@ -8,6 +8,7 @@ class Camera(Vector):
         self.vx, self.vy, self.vz = vx0, vy0, vz0
         self.ax, self.ay, self.az = ax, ay, g
         self.h = h
+        self.d = 10
         self.controlling = [0, 0, 0, 0, 0, 0, 0]
         # LEFT, RIGHT, BACKWARD, FORWARD, ROTATE, an_xy, an_zx
 

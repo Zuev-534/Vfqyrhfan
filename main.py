@@ -1,7 +1,6 @@
 from vocabulary import *
 from Camera import *
 
-points = (Vector(100, 100, 0), Vector(50, 50, 0), Vector(10, 20, 0), Vector(-10, 20, 0), Vector(10, 10, 10))
 Victor = Camera()
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -16,7 +15,8 @@ while True:
         Victor.control()
     Victor.move()
     coords(screen, Victor)
-    # circle(screen, BLACK, (Victor.x, Victor.y,), 5)
+    circle(screen, BLACK, (Victor.x, Victor.y,), 5)
+    circle(screen, BLACK, (100,100), 5)
+
+    circle(screen, BLACK, Vector(100, 100, 0).get_vector(Victor).coords_to_cam(), 10)
     pygame.display.update()
-    for point in points:
-        pygame.circle(screen, 'green', point.get_vector(Victor), 10)

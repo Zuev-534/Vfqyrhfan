@@ -5,14 +5,15 @@ from pygame.draw import *
 
 WIDTH, HEIGHT = 600, 600
 FPS = 30
-k = 0.01  # Чувствительность мыши
-stopper_acceleration = 0.3  # На сколько ед\с падают составляющие скорости
+k = 0.003  # Чувствительность мыши
+leg_force = 0.1
+stopper_acceleration = 0.3*leg_force  # На сколько ед\с падают составляющие скорости
 gravity = 0
-leg_force = 1
+
 znak1 = [ 1, 1, -1, -1]
 znak2 = [1, -1, -1, 1]
-speed_limit_max = 3
-speed_limit_min = 0.7
+speed_limit_max = 3*leg_force
+speed_limit_min = 0.7*leg_force
 
 
 LEFT = "LEFT"
