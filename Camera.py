@@ -13,10 +13,17 @@ class Camera:
 
     def control(self, order, an_xz = 0, an_xy = 0):
         """
-        Матрица поворота:
-        self.vx = vx * cos(an_xy) - vy * sin(an_xy)
-        self.vy = vx * sin(an_xy) + vy * cos(an_xy)
+        Механика движения камеры.
+        :param order: "приказ" - описание действия.
+        :param an_xz: угол в вертикальной плоскости (нужно уточнить направление)
+        :param an_xy: угол в горизонтальной плоскости
+        :return: ---
         """
+        # Матрица поворота:
+        # self.vx = vx * cos(an_xy) - vy * sin(an_xy)
+        # self.vy = vx * sin(an_xy) + vy * cos(an_xy)
+        self.vx = 0
+        self.vy = 0
         if order == NOTHING:
             pass
         elif order == ROTATE:
@@ -28,10 +35,10 @@ class Camera:
         elif order == RIGHT:
             self.vx += -5 * sin(self.an_xy)
             self.vy += 5 * cos(self.an_xy)
-        elif order == FORWARD:
+        if order == FORWARD:
             self.vx += 5 * cos(self.an_xy)
             self.vy += 5 * sin(self.an_xy)
-        elif order == BACKWARD:
+        if order == BACKWARD:
             self.vx += -5 * cos(self.an_xy)
             self.vy += -5 * sin(self.an_xy)
     def move(self):
