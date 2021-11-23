@@ -13,5 +13,6 @@ while True:
     screen.fill(GREY1)
     for event in pygame.event.get():
         Victor.control(*interoperate(event))
+    Victor.move()
     coords(screen, Victor)
     pygame.display.update()

@@ -22,17 +22,17 @@ class Camera:
         # Матрица поворота:
         # self.vx = vx * cos(an_xy) - vy * sin(an_xy)
         # self.vy = vx * sin(an_xy) + vy * cos(an_xy)
-        self.vx = 0
-        self.vy = 0
+        self.vx = int(int(0.4 * self.vx*100)/100)
+        self.vy = int(int(0.4 * self.vy*100)/100)
         if order == NOTHING:
             pass
-        elif order == ROTATE:
+        if order == ROTATE:
             self.an_xy = (an_xy + self.an_xy) % pi
             self.an_xz = (an_xz + self.an_xz) % pi
-        elif order == LEFT:
+        if order == LEFT:
             self.vx += 5 * sin(self.an_xy)
             self.vy += -5 * cos(self.an_xy)
-        elif order == RIGHT:
+        if order == RIGHT:
             self.vx += -5 * sin(self.an_xy)
             self.vy += 5 * cos(self.an_xy)
         if order == FORWARD:
@@ -68,7 +68,7 @@ def interoperate(input_movement):
             return FORWARD, 0, 0
     elif input_movement.type == pygame.MOUSEMOTION:
         x, y = pygame.mouse.get_pos()
-        x, y =  - k * (x - int(WIDTH / 2)), k * (y - int(HEIGHT / 2)) # x = - delta <= ось с пайгейиои не сходится
+        x, y = - k * (x - int(WIDTH / 2)), k * (y - int(HEIGHT / 2)) # x = - delta <= ось с пайгейиои не сходится
         pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
         return ROTATE, x, y
     else:
