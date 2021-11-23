@@ -1,4 +1,5 @@
 from vocabulary import *
+import pygame
 
 
 class Vector:
@@ -62,6 +63,4 @@ class Vector:
     def coords_to_cam(self):
         self.rotate_vector(-self.an_xy, self.an_xz)
         self.rotate_vector(fi_xy=pi/2)
-        return self.dx - WIDTH/2, self.dy - HEIGHT/2
-
-
+        return (self.dx - WIDTH/2, self.dy - HEIGHT/2)
