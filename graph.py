@@ -1,5 +1,59 @@
 from vocabulary import *
 import pygame
+from numba import njit, prange
+
+def SPEEEED(self, vector_nul):
+    obj = np.array([self.x, self.y, self.z], dtype = float16)
+    kam = np.array([vector_nul.x, vector_nul.y, vector_nul.z], dtype = float16)
+    d_obj = np.zeros(3, dtype=float16)
+    d_kam = np.zeros(3, dtype=float16)
+    return obj, d_obj, kam, d_kam, vector_nul.an_xy, vector_nul.an_xz, vector_nul.d
+
+def get_vector(a, d_a, kam, d_kam, an_xy, an_xz, D):
+    d_a = a - kam
+    d_kam[0] = D * np.cos(an_xy) * np.cos(an_xz)
+    d_kam[1] = D * np.sin(an_xy) * np.cos(an_xz)
+    d_kam[3] = D * np.sin(an_xz)
+    l = (np.sum(d_kam*d_a)/np.square(D))
+    d_a = d_a / l - d_kam
+    D = np.sqrt(np.square(d_a))
+    return d_a[0], d_a[1], d_a[2], D
+
+def coords_to_cam(d_a, an_xy, an_zx, D, WIDTH = 800, HEIGHT = 450):
+    x = d_a[0]
+    y = d_a[1]
+    d_a[0] = x * cos(-an_xy) - y * sin(-an_xy)
+    d_a[1] = x * sin(-an_xy) + y * cos(-an_xy)
+    x = d_a[0]
+    z = d_a[2]
+    d_a[0] = x * cos(an_zx) + z * sin(an_zx)
+    d_a[2] = - x * sin(an_zx) + z * cos(an_zx)
+    x = d_a[0]
+    y = d_a[1]
+    d_a[0] = - y
+    d_a[1] = x
+    return ((d_a[0] * WIDTH / 2 / D + WIDTH / 2), (d_a[2] * HEIGHT / 2 * sqrt(3) / D + HEIGHT / 2))
+
+
+
+
+
+# def get_vector(self, self.d, kam, d_kam, an_xy, an_xz):
+#     self.dx = -vector_nul.x + self.x
+#     self.dy = -vector_nul.y + self.y
+#     self.dz = -vector_nul.z + self.z
+#     self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
+#     vector_nul.dx = vector_nul.d * cos(vector_nul.an_xy) * cos(vector_nul.an_xz)
+#     vector_nul.dy = vector_nul.d * sin(vector_nul.an_xy) * cos(vector_nul.an_xz)
+#     vector_nul.dz = vector_nul.d * sin(vector_nul.an_xz)
+#     self.get_angle_cos(vector_nul)
+#     l = (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz) / (vector_nul.d * vector_nul.d)
+#     dx = self.dx / l - vector_nul.dx
+#     dy = self.dy / l - vector_nul.dy
+#     dz = self.dz / l - vector_nul.dz
+#     abc = Vector(dx0=dx, dy0=dy, dz0=dz)
+#     abc.set_coords_d_from_di()
+#     return abc
 from numba import jit, prange
 
 
@@ -14,7 +68,6 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
-
     def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
         self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
@@ -102,7 +155,7 @@ class Vector:
 
 
 class Cube:
-    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=3):
+    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1):
         self.x = x0
         self.y = y0
         self.z = z0
