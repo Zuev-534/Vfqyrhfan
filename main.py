@@ -10,7 +10,7 @@ clock = pygame.time.Clock()
 Victor.x, Victor.y = 9, 9
 
 u = 15
-cub = Cube(3, 3, 3)
+cubs = [[Cube(15+4*i, 3 + 5 * j, 3) for i in range(10)]for j in range(10)]
 
 while True:
     clock.tick(FPS)
@@ -26,9 +26,12 @@ while True:
 
     circle(screen, BLACK, Vector(10, 100, 0).get_vector(Victor).coords_to_cam(Victor), 10)
     pygame.draw.lines(screen, WHITE, True,
-                      [convert_point((Victor.x, Victor.y, 0), mm_o), convert_point((Victor.x + u * cos(Victor.an_xy), Victor.y + u * sin(Victor.an_xy), 0), mm_o)], 2)
+                      [convert_point((Victor.x, Victor.y, 0), mm_o),
+                       convert_point((Victor.x + u * cos(Victor.an_xy), Victor.y + u * sin(Victor.an_xy), 0), mm_o)], 2)
     circle(screen, BLACK, Vector(100, 111, 2000000).get_vector(Victor).coords_to_cam(Victor), 10)
-    cub.draw_cube(screen, Victor)
+    for cub in cubs:
+        for a in cub:
+            a.draw_cube(screen, Victor)
     pygame.display.update()
 
 pygame.display.update()

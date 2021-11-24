@@ -93,19 +93,20 @@ class Vector:
         self.rotate_vector_z(-cam.an_xy)
         self.rotate_vector_y(cam.an_xz)
         self.rotate_vector_z(fi_xy=pi / 2)
-        self.print_all()
         print(((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2)))
         return ((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2))
 
 
 class Cube:
-    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1 / 2):
+    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1):
         self.x = x0
         self.y = y0
         self.z = z0
         self.color = color
         self.h = h0
         self.points = None
+        self.mas = [[[[0, 0] for j in range(2)] for i in range(2)] for k in range(2)]
+        print(self.mas)
 
     def set_coords_with_move(self):
         self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
@@ -126,6 +127,8 @@ class Cube:
 
     def draw_cube(self, screen, cam):
         self.set_coords_with_move()
+        self.lol(cam)
+
         if cam.x > self.x + self.h / 2:
             self.draw_square(screen, cam, i=3)
         elif cam.x < self.x - self.h / 2:
@@ -139,23 +142,46 @@ class Cube:
         elif cam.z < self.z - self.h / 2:
             self.draw_square(screen, cam, k=2)
 
+    def lol(self, cam):
+        for i in range(2):
+            for j in range(2):
+                for k in range(2):
+                    self.mas[i][j][k][0], self.mas[i][j][k][1] = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
+
     def draw_square(self, screen, cam, i=0, j=0, k=0):
+
         if i == 2 or i == 3:
-            polygon(screen, WHITE,
-                    [self.points[i - 2][0][0].get_vector(cam).coords_to_cam(cam),
-                     self.points[i - 2][0][1].get_vector(cam).coords_to_cam(cam),
-                     self.points[i - 2][1][1].get_vector(cam).coords_to_cam(cam),
-                     self.points[i - 2][1][0].get_vector(cam).coords_to_cam(cam)], 1)
+            # polygon(screen, self.color,
+            #         [self.mas[i - 2][0][0],
+            #          self.mas[i - 2][0][1],
+            #          self.mas[i - 2][1][1],
+            #          self.mas[i - 2][1][0]])
+            polygon(screen, BLACK,
+                    [self.mas[i - 2][0][0],
+                     self.mas[i - 2][0][1],
+                     self.mas[i - 2][1][1],
+                     self.mas[i - 2][1][0]], 1)
 
         if j == 2 or j == 3:
-            polygon(screen, WHITE,
-                    [self.points[0][j - 2][0].get_vector(cam).coords_to_cam(cam),
-                     self.points[0][j - 2][1].get_vector(cam).coords_to_cam(cam),
-                     self.points[1][j - 2][1].get_vector(cam).coords_to_cam(cam),
-                     self.points[1][j - 2][0].get_vector(cam).coords_to_cam(cam)], 1)
+            # polygon(screen, self.color,
+            #         [self.mas[0][j - 2][0],
+            #          self.mas[0][j - 2][1],
+            #          self.mas[1][j - 2][1],
+            #          self.mas[1][j - 2][0]])
+            polygon(screen, BLACK,
+                    [self.mas[0][j - 2][0],
+                     self.mas[0][j - 2][1],
+                     self.mas[1][j - 2][1],
+                     self.mas[1][j - 2][0]], 1)
+
         if k == 2 or k == 3:
-            polygon(screen, WHITE,
-                    [self.points[0][0][k - 2].get_vector(cam).coords_to_cam(cam),
-                     self.points[0][1][k - 2].get_vector(cam).coords_to_cam(cam),
-                     self.points[1][1][k - 2].get_vector(cam).coords_to_cam(cam),
-                     self.points[1][0][k - 2].get_vector(cam).coords_to_cam(cam)], 1)
+            # polygon(screen, self.color,
+            #         [self.mas[0][0][k - 2],
+            #          self.mas[0][1][k - 2],
+            #          self.mas[1][1][k - 2],
+            #          self.mas[1][0][k - 2]])
+            polygon(screen, BLACK,
+                    [self.mas[0][0][k - 2],
+                     self.mas[0][1][k - 2],
+                     self.mas[1][1][k - 2],
+                     self.mas[1][0][k - 2]], 1)
