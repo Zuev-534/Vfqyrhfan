@@ -2,6 +2,8 @@ from vocabulary import *
 import pygame
 from numba import njit, prange
 
+
+
 def SPEEEED(self, vector_nul):
     obj = np.array([self.x, self.y, self.z], dtype = float16)
     kam = np.array([vector_nul.x, vector_nul.y, vector_nul.z], dtype = float16)
@@ -17,7 +19,7 @@ def get_vector(a, d_a, kam, d_kam, an_xy, an_xz, D):
     l = (np.sum(d_kam*d_a)/np.square(D))
     d_a = d_a / l - d_kam
     D = np.sqrt(np.square(d_a))
-    return d_a[0], d_a[1], d_a[2], D
+    return d_a, an_xy, an_xz, D
 
 def coords_to_cam(d_a, an_xy, an_zx, D, WIDTH = 800, HEIGHT = 450):
     x = d_a[0]
@@ -216,7 +218,7 @@ class Cube:
         for i in range(2):
             for j in range(2):
                 for k in range(2):
-                    self.mas[i][j][k][0], self.mas[i][j][k][1] = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
+                    self.mas[i][j][k][0], self.mas[i][j][k][1] = coords_to_cam(get_vector(SPEEEED(self.points[i][j][k], cam)))
 
     def draw_square(self, screen, cam, i=0, j=0, k=0):
 
