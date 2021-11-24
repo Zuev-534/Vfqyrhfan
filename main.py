@@ -25,8 +25,6 @@ cubu = Cube(3, 3, 3)
 cub.set_coords_with_move()
 cubu.set_coords_with_move()
 cub.print_all()
-
->>>>>>> main
 while True:
     clock.tick(FPS)
     screen.fill(GREY1)
@@ -42,3 +40,4 @@ while True:
     pygame.draw.lines(screen, WHITE, True,
                       [convert_point((Victor.x, Victor.y, 0), (mm_o)),
                        convert_point((Victor.x + u * cos(Victor.an_xy), Victor.y + u * sin(Victor.an_xy), 0), (mm_o))], 2)
+    pygame.display.update()
