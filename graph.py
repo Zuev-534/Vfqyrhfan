@@ -125,6 +125,7 @@ class Cube:
                     print(self.points[i][j][k].z)
 
     def draw_cube(self, screen, cam):
+        self.set_coords_with_move()
         if cam.x > self.x + self.h / 2:
             self.draw_square(screen, cam, i=3)
         elif cam.x < self.x - self.h / 2:
