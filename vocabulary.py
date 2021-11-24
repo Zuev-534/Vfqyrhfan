@@ -14,7 +14,7 @@ mm_o = (WIDTH/2, HEIGHT/2, 0) #Точка центра отрисовки мин
 znak1 = [ 1, 1, -1, -1]
 znak2 = [1, -1, -1, 1]
 speed_limit_max = 3*leg_force
-speed_limit_min = 0.7*leg_force
+speed_limit_min = 0.07*leg_force
 
 
 LEFT = "LEFT"

@@ -28,6 +28,14 @@ class Camera(Vector):
         #         self.ax += znak1[i] * 0.5 * cos(self.an_xy)
         #         self.ay += znak2[i] * 0.5 * sin(self.an_xy)
         self.ax, self.ay, self.az = 0, 0, 0
+        if abs(self.vy) > speed_limit_min:
+            self.ay = - sign(self.vy) * stopper_acceleration
+        else:
+            self.ay = 0
+        if abs(self.vx) > speed_limit_min:
+            self.ax = - sign(self.vx) * stopper_acceleration
+        else:
+            self.ax = 0
         if self.controlling[0]:
             self.ax += leg_force * sin(self.an_xy)
             self.ay += -leg_force * cos(self.an_xy)
@@ -42,26 +50,13 @@ class Camera(Vector):
             self.ay += -leg_force * sin(self.an_xy)
 
         if self.controlling[4]:
-            self.an_xy = (self.controlling[5] + self.an_xy+pi) % (pi*2)-pi
+            self.an_xy = (self.controlling[5] + self.an_xy + pi) % (pi * 2) - pi
             self.an_xz = (self.controlling[6] + self.an_xz)
-            if self.an_xz > pi/2 :
-                self.an_xz = pi/2
+            if self.an_xz > pi / 2:
+                self.an_xz = pi / 2
             if self.an_xz < -pi / 2:
                 self.an_xz = -pi / 2
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
-
-        if not (self.controlling[0]) and not (self.controlling[1]) and not (self.controlling[2]) and not (
-                self.controlling[3]):
-            if abs(self.vy) > speed_limit_min:
-                self.ay = - sign(self.vy) * stopper_acceleration
-            else:
-                self.ay = 0
-            if abs(self.vx) > speed_limit_min:
-                self.ax = - sign(self.vx) * stopper_acceleration
-            else:
-                self.ax = 0
-
-
 
     def move(self):
         self.x += self.vx
@@ -70,10 +65,9 @@ class Camera(Vector):
         self.vx += self.ax
         self.vy += self.ay
         self.vz += self.az
-        if abs(self.vx) > speed_limit_max:
-            self.vx = speed_limit_max * sign(self.vx)
-        if abs(self.vy) > speed_limit_max:
-            self.vy = speed_limit_max * sign(self.vy)
+        if sqrt(self.vx**2 +self.vy**2) > speed_limit_max:
+            self.vx *= speed_limit_max / sqrt(self.vx**2 +self.vy**2)
+            self.vy *= speed_limit_max / sqrt(self.vx**2 +self.vy**2)
         if abs(self.vx) <= speed_limit_min:
             self.vx = 0
         if abs(self.vy) <= speed_limit_min:
