@@ -30,3 +30,5 @@ while True:
     circle(screen, BLACK, Vector(100, 111, 2000000).get_vector(Victor).coords_to_cam(Victor), 10)
     cub.draw_cube(screen, Victor)
     pygame.display.update()
+
+pygame.display.update()
