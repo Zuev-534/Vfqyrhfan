@@ -2,7 +2,7 @@ from math import *
 import numpy as np
 import pygame
 from numpy import sign
-from numpy import float16
+from numpy import float32
 from pygame.draw import *
 
 
