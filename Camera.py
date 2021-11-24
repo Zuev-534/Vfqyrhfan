@@ -123,4 +123,3 @@ def coords(screen, cam):
     text_render(screen, "an_xy = " + str(cam.an_xy)[:4], 50, 300)
     text_render(screen, "an_xz = " + str(cam.an_xz)[:4], 50, 330)
     text_render(screen, str(cam.controlling), 50, 360)
-
