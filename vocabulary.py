@@ -36,8 +36,8 @@ GREY1 = (180, 180, 180)
 # -------------------------------------------------------------------
 import pygame
 from pygame.draw import *
-
-
+from decimal import *
+getcontext().prec=4
 def text_render(scrn, nm, point_x, point_y):
     """
     Функция, отрисовывающая текст

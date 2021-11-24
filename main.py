@@ -11,6 +11,9 @@ Victor.x, Victor.y = 9, 9
 
 u = 15
 cubs = [[Cube(15+4*i, 3 + 5 * j, 3) for i in range(10)]for j in range(10)]
+for i in cubs:
+    for t in i:
+        t.set_coords_with_move()
 
 while True:
     clock.tick(FPS)

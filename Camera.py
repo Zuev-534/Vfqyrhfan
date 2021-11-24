@@ -59,6 +59,7 @@ class Camera(Vector):
                 self.an_xz = -pi / 2
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
 
+
     def move(self):
         self.x += self.vx
         self.y += self.vy

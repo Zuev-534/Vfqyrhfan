@@ -1,5 +1,7 @@
 from vocabulary import *
 import pygame
+from numba import njit, prange
+
 
 
 class Vector:
@@ -13,7 +15,6 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
-
     def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
         self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
@@ -126,9 +127,7 @@ class Cube:
                     print(self.points[i][j][k].z)
 
     def draw_cube(self, screen, cam):
-        self.set_coords_with_move()
         self.lol(cam)
-
         if cam.x > self.x + self.h / 2:
             self.draw_square(screen, cam, i=3)
         elif cam.x < self.x - self.h / 2:
