@@ -1,7 +1,10 @@
 from math import *
+import numpy as np
 import pygame
 from numpy import sign
+from numpy import float16
 from pygame.draw import *
+
 
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
