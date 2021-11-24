@@ -20,13 +20,13 @@ while True:
         Victor.control()
     Victor.move()
     coords(screen, Victor)
-    circle(screen, BLACK, (Victor.x, Victor.y), 5)
-    circle(screen, BLACK, (10, 100), 5)
-    circle(screen, BLACK, (100, 111), 5)
+    circle(screen, BLACK, convert_point((Victor.x, Victor.y, 0), mm_o), 5)
+    circle(screen, BLACK, convert_point((10, 100, 0), mm_o), 5)
+    circle(screen, BLACK, convert_point((100, 111, 0), mm_o), 5)
 
     circle(screen, BLACK, Vector(10, 100, 0).get_vector(Victor).coords_to_cam(Victor), 10)
     pygame.draw.lines(screen, WHITE, True,
-                      [(Victor.x, Victor.y), (Victor.x + u * cos(Victor.an_xy), Victor.y + u * sin(Victor.an_xy))], 2)
+                      [convert_point((Victor.x, Victor.y, 0), mm_o), (Victor.x + u * cos(Victor.an_xy), Victor.y + u * sin(Victor.an_xy))], 2)
     circle(screen, BLACK, Vector(100, 111, 2000000).get_vector(Victor).coords_to_cam(Victor), 10)
     cub.draw_cube(screen, Victor)
     pygame.display.update()
