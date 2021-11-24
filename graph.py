@@ -1,6 +1,5 @@
 from vocabulary import *
 import pygame
-from numba import njit, prange
 
 
 
@@ -13,7 +12,6 @@ def get_vector(a, d_a, kam, d_kam, an_xy, an_xz, D):
     d_kam[2] = D * np.sin(an_xz)
     l = (np.sum(d_kam * d_a) / np.square(D))
     d_a = d_a / l - d_kam
-    D = np.sqrt(np.sum(np.square(d_a)))
     return (d_a, an_xy, an_xz, D)
 
 
@@ -51,8 +49,6 @@ def coords_to_cam(d_a, an_xy, an_zx, D, WIDTH=800, HEIGHT=450):
 #     abc = Vector(dx0=dx, dy0=dy, dz0=dz)
 #     abc.set_coords_d_from_di()
 #     return abc
-from numba import jit, prange
-
 
 class Vector:
     def __init__(self, x0=0, y0=0, z0=0, d0=0, dx0=0, dy0=0, dz0=0, an_xy0=0, an_xz0=0):
