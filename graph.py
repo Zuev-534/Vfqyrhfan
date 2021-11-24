@@ -1,7 +1,6 @@
 from vocabulary import *
 import pygame
-from numba import njit, prange
-
+from numba import jit, prange
 
 
 class Vector:
@@ -15,6 +14,7 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
+
     def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
         self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
@@ -47,12 +47,15 @@ class Vector:
         return l
 
     def get_vector(self, vector_nul):
-        """
-        получение воктора для вывода на камеру
-        :param vector_nul:
-        :return:
-        """
-        l = self.find_l(vector_nul)
+        self.dx = -vector_nul.x + self.x
+        self.dy = -vector_nul.y + self.y
+        self.dz = -vector_nul.z + self.z
+        self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
+        vector_nul.dx = vector_nul.d * cos(vector_nul.an_xy) * cos(vector_nul.an_xz)
+        vector_nul.dy = vector_nul.d * sin(vector_nul.an_xy) * cos(vector_nul.an_xz)
+        vector_nul.dz = vector_nul.d * sin(vector_nul.an_xz)
+        l = (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz) / (
+                vector_nul.d * vector_nul.d)
         dx = self.dx / l - vector_nul.dx
         dy = self.dy / l - vector_nul.dy
         dz = self.dz / l - vector_nul.dz
@@ -94,12 +97,12 @@ class Vector:
         self.rotate_vector_z(-cam.an_xy)
         self.rotate_vector_y(cam.an_xz)
         self.rotate_vector_z(fi_xy=pi / 2)
-        print(((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2)))
+
         return ((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2))
 
 
 class Cube:
-    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1):
+    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=3):
         self.x = x0
         self.y = y0
         self.z = z0
@@ -107,7 +110,9 @@ class Cube:
         self.h = h0
         self.points = None
         self.mas = [[[[0, 0] for j in range(2)] for i in range(2)] for k in range(2)]
-        print(self.mas)
+
+        self.vizible = 1
+        self.main = Vector(x0, y0, z0)
 
     def set_coords_with_move(self):
         self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
@@ -126,20 +131,33 @@ class Cube:
                     print(self.points[i][j][k].y)
                     print(self.points[i][j][k].z)
 
+    def cub_are_vis_or(self, cam):
+        global counter
+        self.main.new_di_in_new_pos(cam)
+        self.main.set_coords_d_from_di()
+        if self.main.get_angle_cos(cam) > 1 / 2 and self.main.d > cam.d/2 and self.main.d < 50:
+            self.vizible = 1
+        else:
+            self.vizible = 0
+
     def draw_cube(self, screen, cam):
-        self.lol(cam)
-        if cam.x > self.x + self.h / 2:
-            self.draw_square(screen, cam, i=3)
-        elif cam.x < self.x - self.h / 2:
-            self.draw_square(screen, cam, i=2)
-        if cam.y > self.y + self.h / 2:
-            self.draw_square(screen, cam, j=3)
-        elif cam.y < self.y - self.h / 2:
-            self.draw_square(screen, cam, j=2)
-        if cam.z > self.z + self.h / 2:
-            self.draw_square(screen, cam, k=3)
-        elif cam.z < self.z - self.h / 2:
-            self.draw_square(screen, cam, k=2)
+        self.cub_are_vis_or(cam)
+        if self.vizible == 1:
+            self.lol(cam)
+            if cam.x > self.x + self.h / 2:
+                self.draw_square(screen, cam, i=3)
+            elif cam.x < self.x - self.h / 2:
+                self.draw_square(screen, cam, i=2)
+            if cam.y > self.y + self.h / 2:
+                self.draw_square(screen, cam, j=3)
+            elif cam.y < self.y - self.h / 2:
+                self.draw_square(screen, cam, j=2)
+            if cam.z > self.z + self.h / 2:
+                self.draw_square(screen, cam, k=3)
+            elif cam.z < self.z - self.h / 2:
+                self.draw_square(screen, cam, k=2)
+        else:
+            pass
 
     def lol(self, cam):
         for i in range(2):

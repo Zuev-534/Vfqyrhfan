@@ -1,7 +1,6 @@
 from vocabulary import *
 from graph import *
 
-
 class Camera(Vector):
     def __init__(self, vx0=0, vy0=0, vz0=0, ax=0, ay=0, g=gravity, h=1.75):
         super(Camera, self).__init__()
@@ -33,8 +32,8 @@ class Camera(Vector):
             #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
             # self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
             #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
-            self.ay = - self.vy/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
-            self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
+            self.ay = - self.vy / sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
+            self.ax = - self.vx / sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
         else:
             self.ax = 0
         if self.controlling[0]:
@@ -58,7 +57,6 @@ class Camera(Vector):
             if self.an_xz < -pi / 2:
                 self.an_xz = -pi / 2
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
-
 
     def move(self):
         self.x += self.vx
@@ -90,6 +88,11 @@ class Camera(Vector):
                 self.controlling[2] = 1
             if input_movement.key == pygame.K_w:
                 self.controlling[3] = 1
+            if input_movement.key == pygame.K_SPACE:
+                self.z -= 1
+            if input_movement.key == pygame.K_z:
+                self.z += 1
+
         elif input_movement.type == pygame.KEYUP:
             if input_movement.key == pygame.K_d:
                 self.controlling[0] = 0
@@ -106,7 +109,8 @@ class Camera(Vector):
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, x, y
 
 
-def coords(screen, cam):
+def coords(screen, cam, fps):
+    text_render(screen, "FPS = " + str(fps)[:4], 50, 10)
     text_render(screen, "x = " + str(cam.x)[:4], 50, 30)
     text_render(screen, "y = " + str(cam.y)[:4], 50, 60)
     text_render(screen, "z = " + str(cam.z)[:4], 50, 90)
