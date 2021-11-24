@@ -7,7 +7,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Test controlling')
 pygame.mouse.set_visible(False)
 clock = pygame.time.Clock()
-Victor.x, Victor.y = 90, 90
+Victor.x, Victor.y = 9, 9
 
 u = 15
 cub = Cube(3, 3, 3)
@@ -17,7 +17,7 @@ while True:
     screen.fill(GREY1)
     for event in pygame.event.get():
         Victor.interoperate(event)
-        Victor.control()
+    Victor.control()
     Victor.move()
     coords(screen, Victor)
     circle(screen, BLACK, convert_point((Victor.x, Victor.y, 0), mm_o), 5)

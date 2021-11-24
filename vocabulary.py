@@ -6,15 +6,15 @@ from pygame.draw import *
 WIDTH, HEIGHT = 800, 450
 FPS = 60
 k = 0.001  # Чувствительность мыши
-leg_force = 0.1
-stopper_acceleration = 0.15*leg_force  # На сколько ед\с падают составляющие скорости
+leg_force = 0.01
+stopper_acceleration = 0.19*leg_force  # На сколько ед\с падают составляющие скорости
 gravity = 0
 mm_o = (WIDTH/2, HEIGHT/2, 0) #Точка центра отрисовки миникарты в окне
 
 znak1 = [ 1, 1, -1, -1]
 znak2 = [1, -1, -1, 1]
-speed_limit_max = 3*leg_force
-speed_limit_min = 0.07*leg_force
+speed_limit_max = 6*leg_force
+speed_limit_min = 0.2*leg_force
 
 
 LEFT = "LEFT"

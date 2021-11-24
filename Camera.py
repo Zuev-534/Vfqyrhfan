@@ -28,12 +28,13 @@ class Camera(Vector):
         #         self.ax += znak1[i] * 0.5 * cos(self.an_xy)
         #         self.ay += znak2[i] * 0.5 * sin(self.an_xy)
         self.ax, self.ay, self.az = 0, 0, 0
-        if abs(self.vy) > speed_limit_min:
-            self.ay = - sign(self.vy) * stopper_acceleration
-        else:
-            self.ay = 0
-        if abs(self.vx) > speed_limit_min:
-            self.ax = - sign(self.vx) * stopper_acceleration
+        if abs(sqrt(self.vx ** 2 + self.vy ** 2)) > speed_limit_min:
+            # self.ay = - self.vy/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
+            #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
+            # self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
+            #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
+            self.ay = - self.vy/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
+            self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
         else:
             self.ax = 0
         if self.controlling[0]:
@@ -65,9 +66,9 @@ class Camera(Vector):
         self.vx += self.ax
         self.vy += self.ay
         self.vz += self.az
-        if sqrt(self.vx**2 +self.vy**2) > speed_limit_max:
-            self.vx *= speed_limit_max / sqrt(self.vx**2 +self.vy**2)
-            self.vy *= speed_limit_max / sqrt(self.vx**2 +self.vy**2)
+        if sqrt(self.vx ** 2 + self.vy ** 2) > speed_limit_max:
+            self.vx *= speed_limit_max / sqrt(self.vx ** 2 + self.vy ** 2)
+            self.vy *= speed_limit_max / sqrt(self.vx ** 2 + self.vy ** 2)
         if abs(self.vx) <= speed_limit_min:
             self.vx = 0
         if abs(self.vy) <= speed_limit_min:
@@ -80,22 +81,22 @@ class Camera(Vector):
         elif input_movement.type == pygame.KEYDOWN:
             if input_movement.key == pygame.K_ESCAPE:
                 pygame.quit()
-            elif input_movement.key == pygame.K_d:
+            if input_movement.key == pygame.K_d:
                 self.controlling[0] = 1
-            elif input_movement.key == pygame.K_a:
+            if input_movement.key == pygame.K_a:
                 self.controlling[1] = 1
-            elif input_movement.key == pygame.K_s:
+            if input_movement.key == pygame.K_s:
                 self.controlling[2] = 1
-            elif input_movement.key == pygame.K_w:
+            if input_movement.key == pygame.K_w:
                 self.controlling[3] = 1
         elif input_movement.type == pygame.KEYUP:
             if input_movement.key == pygame.K_d:
                 self.controlling[0] = 0
-            elif input_movement.key == pygame.K_a:
+            if input_movement.key == pygame.K_a:
                 self.controlling[1] = 0
-            elif input_movement.key == pygame.K_s:
+            if input_movement.key == pygame.K_s:
                 self.controlling[2] = 0
-            elif input_movement.key == pygame.K_w:
+            if input_movement.key == pygame.K_w:
                 self.controlling[3] = 0
         elif input_movement.type == pygame.MOUSEMOTION:
             x, y = pygame.mouse.get_pos()
@@ -108,12 +109,12 @@ def coords(screen, cam):
     text_render(screen, "x = " + str(cam.x)[:4], 50, 30)
     text_render(screen, "y = " + str(cam.y)[:4], 50, 60)
     text_render(screen, "z = " + str(cam.z)[:4], 50, 90)
-    text_render(screen, "vx = " + str(cam.vx)[:4], 50, 120)
-    text_render(screen, "vy = " + str(cam.vy)[:4], 50, 150)
-    text_render(screen, "vz = " + str(cam.vz)[:4], 50, 180)
-    text_render(screen, "ax = " + str(cam.ax)[:4], 50, 210)
-    text_render(screen, "ay = " + str(cam.ay)[:4], 50, 240)
-    text_render(screen, "az = " + str(cam.az)[:4], 50, 270)
+    text_render(screen, "vx = " + str(cam.vx * 10)[:4], 50, 120)
+    text_render(screen, "vy = " + str(cam.vy * 10)[:4], 50, 150)
+    text_render(screen, "vz = " + str(cam.vz * 10)[:4], 50, 180)
+    text_render(screen, "ax = " + str(cam.ax * 100)[:4], 50, 210)
+    text_render(screen, "ay = " + str(cam.ay * 100)[:4], 50, 240)
+    text_render(screen, "az = " + str(cam.az * 100)[:4], 50, 270)
     text_render(screen, "an_xy = " + str(cam.an_xy)[:4], 50, 300)
     text_render(screen, "an_xz = " + str(cam.an_xz)[:4], 50, 330)
     text_render(screen, str(cam.controlling), 50, 360)
