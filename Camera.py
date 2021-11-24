@@ -27,20 +27,7 @@ class Camera(Vector):
         #     if self.controlling[i]:
         #         self.ax += znak1[i] * 0.5 * cos(self.an_xy)
         #         self.ay += znak2[i] * 0.5 * sin(self.an_xy)
-        self.ax, self.ay = 0, 0
-        if not (self.controlling[0]) and not (self.controlling[1]) and not (self.controlling[2]) and not (
-                self.controlling[3]):
-            if abs(self.vx) > speed_limit_min:
-                self.ax = - sign(self.vx) * stopper_acceleration
-            else:
-                self.ax = 0
-
-        if not (self.controlling[0]) and not (self.controlling[1]) and not (self.controlling[2]) and not (
-                self.controlling[3]):
-            if abs(self.vy) > speed_limit_min:
-                self.ay = - sign(self.vy) * stopper_acceleration
-            else:
-                self.ay = 0
+        self.ax, self.ay, self.az = 0, 0, 0
         if self.controlling[0]:
             self.ax += leg_force * sin(self.an_xy)
             self.ay += -leg_force * cos(self.an_xy)
@@ -56,8 +43,24 @@ class Camera(Vector):
 
         if self.controlling[4]:
             self.an_xy = (self.controlling[5] + self.an_xy+pi) % (pi*2)-pi
-            self.an_xz = (self.controlling[6] + self.an_xz+pi/2) % (pi)-pi/2
+            self.an_xz = (self.controlling[6] + self.an_xz)
+            if self.an_xz > pi/2 :
+                self.an_xz = pi/2
+            if self.an_xz < -pi / 2:
+                self.an_xz = -pi / 2
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
+
+        if not (self.controlling[0]) and not (self.controlling[1]) and not (self.controlling[2]) and not (
+                self.controlling[3]):
+            if abs(self.vy) > speed_limit_min:
+                self.ay = - sign(self.vy) * stopper_acceleration
+            else:
+                self.ay = 0
+            if abs(self.vx) > speed_limit_min:
+                self.ax = - sign(self.vx) * stopper_acceleration
+            else:
+                self.ax = 0
+
 
 
     def move(self):
@@ -83,18 +86,18 @@ class Camera(Vector):
         elif input_movement.type == pygame.KEYDOWN:
             if input_movement.key == pygame.K_ESCAPE:
                 pygame.quit()
-            elif input_movement.key == pygame.K_a:
-                self.controlling[0] = 1
             elif input_movement.key == pygame.K_d:
+                self.controlling[0] = 1
+            elif input_movement.key == pygame.K_a:
                 self.controlling[1] = 1
             elif input_movement.key == pygame.K_s:
                 self.controlling[2] = 1
             elif input_movement.key == pygame.K_w:
                 self.controlling[3] = 1
         elif input_movement.type == pygame.KEYUP:
-            if input_movement.key == pygame.K_a:
+            if input_movement.key == pygame.K_d:
                 self.controlling[0] = 0
-            elif input_movement.key == pygame.K_d:
+            elif input_movement.key == pygame.K_a:
                 self.controlling[1] = 0
             elif input_movement.key == pygame.K_s:
                 self.controlling[2] = 0
@@ -108,16 +111,16 @@ class Camera(Vector):
 
 
 def coords(screen, cam):
-    text_render(screen, "x = " + str(cam.x), 50, 50)
-    text_render(screen, "y = " + str(cam.y), 50, 90)
-    text_render(screen, "z = " + str(cam.z), 50, 130)
-    text_render(screen, "vx = " + str(cam.vx), 50, 170)
-    text_render(screen, "vy = " + str(cam.vy), 50, 210)
-    text_render(screen, "vz = " + str(cam.vz), 50, 250)
-    text_render(screen, "ax = " + str(cam.ax), 50, 290)
-    text_render(screen, "ay = " + str(cam.ay), 50, 330)
-    text_render(screen, "az = " + str(cam.az), 50, 370)
-    text_render(screen, "an_xy = " + str(cam.an_xy), 50, 410)
-    text_render(screen, "an_xz = " + str(cam.an_xz), 50, 450)
-    text_render(screen, str(cam.controlling), 50, 490)
+    text_render(screen, "x = " + str(cam.x)[:4], 50, 30)
+    text_render(screen, "y = " + str(cam.y)[:4], 50, 60)
+    text_render(screen, "z = " + str(cam.z)[:4], 50, 90)
+    text_render(screen, "vx = " + str(cam.vx)[:4], 50, 120)
+    text_render(screen, "vy = " + str(cam.vy)[:4], 50, 150)
+    text_render(screen, "vz = " + str(cam.vz)[:4], 50, 180)
+    text_render(screen, "ax = " + str(cam.ax)[:4], 50, 210)
+    text_render(screen, "ay = " + str(cam.ay)[:4], 50, 240)
+    text_render(screen, "az = " + str(cam.az)[:4], 50, 270)
+    text_render(screen, "an_xy = " + str(cam.an_xy)[:4], 50, 300)
+    text_render(screen, "an_xz = " + str(cam.an_xz)[:4], 50, 330)
+    text_render(screen, str(cam.controlling), 50, 360)
 
