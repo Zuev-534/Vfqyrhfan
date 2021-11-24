@@ -105,16 +105,16 @@ class Cube:
         self.z = z0
         self.color = color
         self.h = h0
-        self.points=None
+        self.points = None
 
     def set_coords_with_move(self):
         self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
         for i in range(2):
             for j in range(2):
                 for k in range(2):
-                    self.points[i][j][k].x = self.x + (-1) ** i * self.h / 2
-                    self.points[i][j][k].y = self.y + (-1) ** j * self.h / 2
-                    self.points[i][j][k].z = self.z + (-1) ** k * self.h / 2
+                    self.points[i][j][k].x = self.x + (-1) ** (i + 1) * self.h / 2
+                    self.points[i][j][k].y = self.y + (-1) ** (j + 1) * self.h / 2
+                    self.points[i][j][k].z = self.z + (-1) ** (k + 1) * self.h / 2
 
     def print_all(self):
         for i in range(2):
@@ -124,5 +124,37 @@ class Cube:
                     print(self.points[i][j][k].y)
                     print(self.points[i][j][k].z)
 
-    def draw_cube(self, camera):
-            pass
+    def draw_cube(self, screen, cam):
+        if cam.x > self.x + self.h / 2:
+            self.draw_square(screen, cam, i=3)
+        elif cam.x < self.x - self.h / 2:
+            self.draw_square(screen, cam, i=2)
+        if cam.y > self.y + self.h / 2:
+            self.draw_square(screen, cam, j=3)
+        elif cam.y < self.y - self.h / 2:
+            self.draw_square(screen, cam, j=2)
+        if cam.z > self.z + self.h / 2:
+            self.draw_square(screen, cam, k=3)
+        elif cam.z < self.z - self.h / 2:
+            self.draw_square(screen, cam, k=2)
+
+    def draw_square(self, screen, cam, i=0, j=0, k=0):
+        if i == 2 or i == 3:
+            polygon(screen, WHITE,
+                    [self.points[i - 2][0][0].get_vector(cam).coords_to_cam(cam),
+                     self.points[i - 2][0][1].get_vector(cam).coords_to_cam(cam),
+                     self.points[i - 2][1][1].get_vector(cam).coords_to_cam(cam),
+                     self.points[i - 2][1][0].get_vector(cam).coords_to_cam(cam)], 1)
+
+        if j == 2 or j == 3:
+            polygon(screen, WHITE,
+                    [self.points[0][j - 2][0].get_vector(cam).coords_to_cam(cam),
+                     self.points[0][j - 2][1].get_vector(cam).coords_to_cam(cam),
+                     self.points[1][j - 2][1].get_vector(cam).coords_to_cam(cam),
+                     self.points[1][j - 2][0].get_vector(cam).coords_to_cam(cam)], 1)
+        if k == 2 or k == 3:
+            polygon(screen, WHITE,
+                    [self.points[0][0][k - 2].get_vector(cam).coords_to_cam(cam),
+                     self.points[0][1][k - 2].get_vector(cam).coords_to_cam(cam),
+                     self.points[1][1][k - 2].get_vector(cam).coords_to_cam(cam),
+                     self.points[1][0][k - 2].get_vector(cam).coords_to_cam(cam)], 1)
