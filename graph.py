@@ -1,36 +1,36 @@
 from vocabulary import *
 import pygame
-from numba import njit
-
-
-
-@njit(cache=True, parallel=True, fastmath=True)
-def get_vector(a, d_a, kam, d_kam, an_xy, an_xz, D):
-    d_a = a - kam
-    d_kam[0] = D * np.cos(an_xy) * np.cos(an_xz)
-    d_kam[1] = D * np.sin(an_xy) * np.cos(an_xz)
-    d_kam[2] = D * np.sin(an_xz)
-    l = (np.sum(d_kam * d_a) / np.square(D))
-    d_a = d_a / l - d_kam
-    return (d_a, an_xy, an_xz, D)
-
-@njit(cache=True, parallel=True, fastmath=True)
-def coords_to_cam(d_a, an_xy, an_zx, D, WIDTH=800, HEIGHT=450):
-    x = d_a[0]
-    y = d_a[1]
-    d_a[0] = x * cos(-an_xy) - y * sin(-an_xy)
-    d_a[1] = x * sin(-an_xy) + y * cos(-an_xy)
-    x = d_a[0]
-    z = d_a[2]
-    d_a[0] = x * cos(an_zx) + z * sin(an_zx)
-    d_a[2] = - x * sin(an_zx) + z * cos(an_zx)
-    x = d_a[0]
-    y = d_a[1]
-    d_a[0] = - y
-    d_a[1] = x
-
-    return ((d_a[0] * WIDTH / 2 / D + WIDTH / 2), (d_a[2] * HEIGHT / 2 * sqrt(3) / D + HEIGHT / 2))
-
+# from numba import njit
+#
+#
+#
+# @njit(cache=True, parallel=True, fastmath=True)
+# def get_vector(a, d_a, kam, d_kam, an_xy, an_xz, D):
+#     d_a = a - kam
+#     d_kam[0] = D * np.cos(an_xy) * np.cos(an_xz)
+#     d_kam[1] = D * np.sin(an_xy) * np.cos(an_xz)
+#     d_kam[2] = D * np.sin(an_xz)
+#     l = (np.sum(d_kam * d_a) / np.square(D))
+#     d_a = d_a / l - d_kam
+#     return (d_a, an_xy, an_xz, D)
+#
+# # @njit(cache=True, parallel=True, fastmath=True)
+# def coords_to_cam(d_a, an_xy, an_zx, D, WIDTH=800, HEIGHT=450):
+#     x = d_a[0]
+#     y = d_a[1]
+#     d_a[0] = x * cos(-an_xy) - y * sin(-an_xy)
+#     d_a[1] = x * sin(-an_xy) + y * cos(-an_xy)
+#     x = d_a[0]
+#     z = d_a[2]
+#     d_a[0] = x * cos(an_zx) + z * sin(an_zx)
+#     d_a[2] = - x * sin(an_zx) + z * cos(an_zx)
+#     x = d_a[0]
+#     y = d_a[1]
+#     d_a[0] = - y
+#     d_a[1] = x
+#
+#     return ((d_a[0] * WIDTH / 2 / D + WIDTH / 2), (d_a[2] * HEIGHT / 2 * sqrt(3) / D + HEIGHT / 2))
+#
 
 # def get_vector(self, self.d, kam, d_kam, an_xy, an_xz):
 #     self.dx = -vector_nul.x + self.x
@@ -71,12 +71,12 @@ class Vector:
         self.dy = -vector_nul.y + self.y
         self.dz = -vector_nul.z + self.z
 
-    def SPEEEED(self, vector_nul):
-        obj = np.array([self.x, self.y, self.z], dtype=float32)
-        kam = np.array([vector_nul.x, vector_nul.y, vector_nul.z], dtype=float32)
-        d_obj = np.zeros(3, dtype=float32)
-        d_kam = np.zeros(3, dtype=float32)
-        return (obj, d_obj, kam, d_kam, vector_nul.an_xy, vector_nul.an_xz, vector_nul.d)
+    # def SPEEEED(self, vector_nul):
+    #     obj = np.array([self.x, self.y, self.z], dtype=float32)
+    #     kam = np.array([vector_nul.x, vector_nul.y, vector_nul.z], dtype=float32)
+    #     d_obj = np.zeros(3, dtype=float32)
+    #     d_kam = np.zeros(3, dtype=float32)
+    #     return (obj, d_obj, kam, d_kam, vector_nul.an_xy, vector_nul.an_xz, vector_nul.d)
 
     def set_coords_d_from_di(self):
         self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
@@ -216,44 +216,42 @@ class Cube:
         for i in range(2):
             for j in range(2):
                 for k in range(2):
-                    self.mas[i][j][k][0], self.mas[i][j][k][1] = coords_to_cam(
-                        *get_vector(*self.points[i][j][k].SPEEEED(cam)), WIDTH=WIDTH, HEIGHT=HEIGHT)
+                    self.mas[i][j][k][0], self.mas[i][j][k][1] = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
 
     def draw_square(self, screen, cam, i=0, j=0, k=0):
 
-        # if i == 2 or i == 3:
-        #     # polygon(screen, self.color,
-        #     #         [self.mas[i - 2][0][0],
-        #     #          self.mas[i - 2][0][1],
-        #     #          self.mas[i - 2][1][1],
-        #     #          self.mas[i - 2][1][0]])
-        #     polygon(screen, BLACK,
-        #             [self.mas[i - 2][0][0],
-        #              self.mas[i - 2][0][1],
-        #              self.mas[i - 2][1][1],
-        #              self.mas[i - 2][1][0]], 1)
-        #
-        # if j == 2 or j == 3:
-        #     # polygon(screen, self.color,
-        #     #         [self.mas[0][j - 2][0],
-        #     #          self.mas[0][j - 2][1],
-        #     #          self.mas[1][j - 2][1],
-        #     #          self.mas[1][j - 2][0]])
-        #     polygon(screen, BLACK,
-        #             [self.mas[0][j - 2][0],
-        #              self.mas[0][j - 2][1],
-        #              self.mas[1][j - 2][1],
-        #              self.mas[1][j - 2][0]], 1)
-        #
-        # if k == 2 or k == 3:
-        #     # polygon(screen, self.color,
-        #     #         [self.mas[0][0][k - 2],
-        #     #          self.mas[0][1][k - 2],
-        #     #          self.mas[1][1][k - 2],
-        #     #          self.mas[1][0][k - 2]])
-        #     polygon(screen, BLACK,
-        #             [self.mas[0][0][k - 2],
-        #              self.mas[0][1][k - 2],
-        #              self.mas[1][1][k - 2],
-        #              self.mas[1][0][k - 2]], 1)
-        pass
+        if i == 2 or i == 3:
+            polygon(screen, self.color,
+                    [self.mas[i - 2][0][0],
+                     self.mas[i - 2][0][1],
+                     self.mas[i - 2][1][1],
+                     self.mas[i - 2][1][0]])
+            polygon(screen, BLACK,
+                    [self.mas[i - 2][0][0],
+                     self.mas[i - 2][0][1],
+                     self.mas[i - 2][1][1],
+                     self.mas[i - 2][1][0]], 1)
+
+        if j == 2 or j == 3:
+            polygon(screen, self.color,
+                    [self.mas[0][j - 2][0],
+                     self.mas[0][j - 2][1],
+                     self.mas[1][j - 2][1],
+                     self.mas[1][j - 2][0]])
+            polygon(screen, BLACK,
+                    [self.mas[0][j - 2][0],
+                     self.mas[0][j - 2][1],
+                     self.mas[1][j - 2][1],
+                     self.mas[1][j - 2][0]], 1)
+
+        if k == 2 or k == 3:
+            polygon(screen, self.color,
+                    [self.mas[0][0][k - 2],
+                     self.mas[0][1][k - 2],
+                     self.mas[1][1][k - 2],
+                     self.mas[1][0][k - 2]])
+            polygon(screen, BLACK,
+                    [self.mas[0][0][k - 2],
+                     self.mas[0][1][k - 2],
+                     self.mas[1][1][k - 2],
+                     self.mas[1][0][k - 2]], 1)
