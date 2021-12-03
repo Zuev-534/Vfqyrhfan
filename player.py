@@ -1,9 +1,10 @@
 from vocabulary import *
 from graph import *
 
-class Camera(Vector):
+
+class Player(Vector):
     def __init__(self, vx0=0, vy0=0, vz0=0, ax=0, ay=0, g=gravity, h=1.75):
-        super(Camera, self).__init__()
+        super(Player, self).__init__()
         self.vx, self.vy, self.vz = vx0, vy0, vz0
         self.ax, self.ay, self.az = ax, ay, g
         self.h = h
