@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Rasterizer {
+    + set_camera(position, direction)
+    + draw()
+}
+
+class Game {
+    + loop()
+}
+
+class Scene {
+    - objects
+}
+
+class Player {
+    + react(event)
+}
+
+class Cube {
+}
+
+Game o--> Player : react
+Game o--> Rasterizer : draw
+Rasterizer <-o Player : set_camera
+Rasterizer *--> Scene : рисует
+Player *--> Scene : манипулирует
+Scene *--> Cube : хранит
+
+@enduml
