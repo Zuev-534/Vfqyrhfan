@@ -1,5 +1,7 @@
 from vocabulary import *
-from player import *
+from player import Player, coords
+from graph.cube import Cube
+from graph.vector import Vector
 import time
 
 victor = Player()

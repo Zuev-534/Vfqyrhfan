@@ -1,5 +1,5 @@
 from vocabulary import *
-from graph import *
+from graph.vector import Vector
 
 
 class Player(Vector):

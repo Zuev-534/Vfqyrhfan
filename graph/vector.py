@@ -1,5 +1,7 @@
 from vocabulary import *
 import pygame
+
+
 # from numba import njit
 #
 #
@@ -49,7 +51,7 @@ import pygame
 #     abc.set_coords_d_from_di()
 #     return abc
 
-class Camera:
+class Vector:
     def __init__(self, x0=0, y0=0, z0=0, d0=0, dx0=0, dy0=0, dz0=0, an_xy0=0, an_xz0=0):
         self.d = d0
         self.x = x0
@@ -112,7 +114,7 @@ class Camera:
         dx = self.dx / l - vector_nul.dx
         dy = self.dy / l - vector_nul.dy
         dz = self.dz / l - vector_nul.dz
-        abc = Camera(dx0=dx, dy0=dy, dz0=dz)
+        abc = Vector(dx0=dx, dy0=dy, dz0=dz)
         abc.set_coords_d_from_di()
         return abc
 

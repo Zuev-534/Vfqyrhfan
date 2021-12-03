@@ -1,4 +1,4 @@
-from graph.camera import Camera
+from graph.vector import Vector
 from vocabulary import GREEN, BLACK
 from pygame.draw import polygon
 
@@ -14,10 +14,10 @@ class Cube:
         self.mas = [[[[0, 0] for j in range(2)] for i in range(2)] for k in range(2)]
 
         self.vizible = 1
-        self.main = Camera(x0, y0, z0)
+        self.main = Vector(x0, y0, z0)
 
     def set_coords_with_move(self):
-        self.points = [[[Camera(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
+        self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
         for i in range(2):
             for j in range(2):
                 for k in range(2):
