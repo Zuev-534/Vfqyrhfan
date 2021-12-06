@@ -15,7 +15,8 @@ class Scene {
 
 class Player {
     + get_camera() -> Vector
-    + react(event)
+    + update(event)
+    + move()
 }
 
 class Vector {
@@ -24,7 +25,7 @@ class Vector {
 class Cube {
 }
 
-Game o--> Player : react
+Game o--> Player : update, move
 Game o--> Rasterizer : draw
 Rasterizer o-> Player : get_camera
 Rasterizer *--> Scene : рисует

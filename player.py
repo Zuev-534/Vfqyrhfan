@@ -6,17 +6,23 @@ import pygame
 class Player:
     def __init__(self, r: pygame.Vector3, g: float):
         self.vector = Vector(x0=r.x, y0=r.y, z0=r.z)
+        self.r = r
         self.v = pygame.Vector3()
         self.a = pygame.Vector3(0, 0, g)
         self.h = 1.75
         self.vector.d = 10
-        self.controlling = [0, 0, 0, 0, 0, 0, 0]
-        # LEFT, RIGHT, BACKWARD, FORWARD, ROTATE, an_xy, an_zx
+
+        self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d]
+        self.pressed_keys = []
 
     def get_camera(self) -> Vector:
+        self.vector.x = self.r.x
+        self.vector.y = self.r.y
+        self.vector.z = self.r.z
+        self.vector.d = 10
         return self.vector
 
-    def control(self, an_xz=0, an_xy=0):
+    def control(self):
         """
         Механика движения камеры.
         :param an_xz: угол в вертикальной плоскости (нужно уточнить направление)
@@ -27,49 +33,32 @@ class Player:
         # self.vx = vx * cos(an_xy) - vy * sin(an_xy)
         # self.vy = vx * sin(an_xy) + vy * cos(an_xy)
 
-        # for i in range(3):
-        #     if self.controlling[i]:
-        #         self.ax += znak1[i] * 0.5 * cos(self.an_xy)
-        #         self.ay += znak2[i] * 0.5 * sin(self.an_xy)
+    def move(self):
         self.a = pygame.Vector3()
         v_horizontal = self.v.xy.length()
         if v_horizontal > speed_limit_min:
-            # self.ay = - self.vy/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
-            #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
-            # self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
-            #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
             self.a.y = -self.v.y / v_horizontal * stopper_acceleration
             self.a.x = -self.v.x / v_horizontal * stopper_acceleration
         else:
             self.a.x = 0
             self.a.y = 0
-        if self.controlling[0]:
-            self.a.x += leg_force * sin(self.vector.an_xy)
-            self.a.y += -leg_force * cos(self.vector.an_xy)
-        if self.controlling[1]:
-            self.a.x += -leg_force * sin(self.vector.an_xy)
-            self.a.y += leg_force * cos(self.vector.an_xy)
-        if self.controlling[3]:
-            self.a.x += leg_force * cos(self.vector.an_xy)
-            self.a.y += leg_force * sin(self.vector.an_xy)
-        if self.controlling[2]:
-            self.a.x += -leg_force * cos(self.vector.an_xy)
-            self.a.y += -leg_force * sin(self.vector.an_xy)
-        if self.controlling[4]:
-            self.vector.an_xy = (self.controlling[5] + self.vector.an_xy + pi) % (pi * 2) - pi
-            self.vector.an_xz = (self.controlling[6] + self.vector.an_xz)
-            if self.vector.an_xz > pi / 2:
-                self.vector.an_xz = pi / 2
-            if self.vector.an_xz < -pi / 2:
-                self.vector.an_xz = -pi / 2
-            self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
 
-    def move(self):
-        self.vector.x += self.v.x
-        self.vector.y += self.v.y
-        self.vector.z += self.v.z
+        for key in self.pressed_keys:
+            if key == pygame.K_d:
+                self.a.x += +leg_force * sin(self.vector.an_xy)
+                self.a.y += -leg_force * cos(self.vector.an_xy)
+            elif key == pygame.K_a:
+                self.a.x += -leg_force * sin(self.vector.an_xy)
+                self.a.y += +leg_force * cos(self.vector.an_xy)
+            elif key == pygame.K_s:
+                self.a.x += -leg_force * cos(self.vector.an_xy)
+                self.a.y += -leg_force * sin(self.vector.an_xy)
+            elif key == pygame.K_w:
+                self.a.x += +leg_force * cos(self.vector.an_xy)
+                self.a.y += +leg_force * sin(self.vector.an_xy)
+
+        self.r += self.v
         self.v += self.a
-        v_horizontal = self.v.xy.length()
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
@@ -78,40 +67,32 @@ class Player:
         if abs(self.v.y) <= speed_limit_min:
             self.v.y = 0
 
-    def interoperate(self, input_movement):
-        # LEFT, RIGHT, BACKWARD, FORWARD, ROTATE, an_xy, an_xz - controlling
-        if input_movement.type == pygame.QUIT:
+    def update(self, event):
+        if event.type == pygame.QUIT:
             pygame.quit()
-        elif input_movement.type == pygame.KEYDOWN:
-            if input_movement.key == pygame.K_ESCAPE:
+        elif event.type == pygame.KEYDOWN:
+            if event.key in self.control_keys:
+                self.pressed_keys.append(event.key)
+            if event.key == pygame.K_ESCAPE:
                 pygame.quit()
-            if input_movement.key == pygame.K_d:
-                self.controlling[0] = 1
-            if input_movement.key == pygame.K_a:
-                self.controlling[1] = 1
-            if input_movement.key == pygame.K_s:
-                self.controlling[2] = 1
-            if input_movement.key == pygame.K_w:
-                self.controlling[3] = 1
-            if input_movement.key == pygame.K_SPACE:
+            if event.key == pygame.K_SPACE:
                 self.vector.z -= 1
-            if input_movement.key == pygame.K_z:
+            if event.key == pygame.K_z:
                 self.vector.z += 1
-
-        elif input_movement.type == pygame.KEYUP:
-            if input_movement.key == pygame.K_d:
-                self.controlling[0] = 0
-            if input_movement.key == pygame.K_a:
-                self.controlling[1] = 0
-            if input_movement.key == pygame.K_s:
-                self.controlling[2] = 0
-            if input_movement.key == pygame.K_w:
-                self.controlling[3] = 0
-        elif input_movement.type == pygame.MOUSEMOTION:
-            x, y = pygame.mouse.get_pos()
-            x, y = - k * (x - int(WIDTH / 2)), k * (y - int(HEIGHT / 2))  # x = - delta <= ось с пайгейиои не сходится
+        elif event.type == pygame.KEYUP:
+            if event.key in self.control_keys:
+                self.pressed_keys.remove(event.key)
+        elif event.type == pygame.MOUSEMOTION:
+            mx, my = pygame.mouse.get_pos()
+            # x = - delta <= ось с пайгеймой не сходится
+            x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
             pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
-            self.controlling[4], self.controlling[5], self.controlling[6] = 1, x, y
+            self.vector.an_xy = (x + self.vector.an_xy + pi) % (pi * 2) - pi
+            self.vector.an_xz = (y + self.vector.an_xz)
+            if self.vector.an_xz > pi / 2:
+                self.vector.an_xz = pi / 2
+            if self.vector.an_xz < -pi / 2:
+                self.vector.an_xz = -pi / 2
 
 
 def coords(screen, player: Player, fps):

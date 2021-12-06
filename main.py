@@ -27,8 +27,7 @@ while True:
     clock.tick(FPS)
     screen.fill(GREY1)
     for event in pygame.event.get():
-        victor.interoperate(event)
-    victor.control()
+        victor.update(event)
     victor.move()
 
     circle(screen, BLACK, convert_point((victor.vector.x, victor.vector.y, 0), mm_o), 5)

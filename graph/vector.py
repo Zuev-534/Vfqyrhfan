@@ -155,4 +155,4 @@ class Vector:
         self.rotate_vector_y(cam.an_xz)
         self.rotate_vector_z(fi_xy=pi / 2)
 
-        return ((self.dx * WIDTH / 2 / cam.d + WIDTH / 2), (self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2))
+        return self.dx * WIDTH / 2 / cam.d + WIDTH / 2, self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2
