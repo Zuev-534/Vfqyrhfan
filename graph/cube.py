@@ -42,7 +42,7 @@ class Cube:
         else:
             self.vizible = 0
 
-    def draw_cube(self, screen, cam):
+    def draw_cube(self, screen, cam: Vector):
         self.cub_are_vis_or(cam)
         if self.vizible == 1:
             self.lol(cam)

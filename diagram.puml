@@ -2,7 +2,6 @@
 'https://plantuml.com/class-diagram
 
 class Rasterizer {
-    + set_camera(position, direction)
     + draw()
 }
 
@@ -15,7 +14,11 @@ class Scene {
 }
 
 class Player {
+    + get_camera() -> Vector
     + react(event)
+}
+
+class Vector {
 }
 
 class Cube {
@@ -23,7 +26,7 @@ class Cube {
 
 Game o--> Player : react
 Game o--> Rasterizer : draw
-Rasterizer <-o Player : set_camera
+Rasterizer o-> Player : get_camera
 Rasterizer *--> Scene : рисует
 Player *--> Scene : манипулирует
 Scene *--> Cube : хранит

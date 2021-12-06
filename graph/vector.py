@@ -1,3 +1,4 @@
+from __future__ import annotations
 from vocabulary import *
 import pygame
 
@@ -51,8 +52,9 @@ import pygame
 #     abc.set_coords_d_from_di()
 #     return abc
 
+
 class Vector:
-    def __init__(self, x0=0, y0=0, z0=0, d0=0, dx0=0, dy0=0, dz0=0, an_xy0=0, an_xz0=0):
+    def __init__(self, x0=0.0, y0=0.0, z0=0.0, d0=0.0, dx0=0.0, dy0=0.0, dz0=0.0, an_xy0=0.0, an_xz0=0.0):
         self.d = d0
         self.x = x0
         self.y = y0
@@ -84,12 +86,12 @@ class Vector:
         self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
 
     def scalar(self, vector_nul):
-        return (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz)
+        return self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz
 
     def get_angle_cos(self, vector_nul):
         return self.scalar(vector_nul) / (self.d * vector_nul.d)
 
-    def find_l(self, vector_nul):
+    def find_l(self, vector_nul: Vector):
         """
         l это отношение длинн между вектором и проекцией другого вектора на него
         v*cos(x)/d
@@ -101,7 +103,7 @@ class Vector:
         l = self.d * self.get_angle_cos(vector_nul) / vector_nul.d
         return l
 
-    def get_vector(self, vector_nul):
+    def get_vector(self, vector_nul: Vector) -> Vector:
         self.dx = -vector_nul.x + self.x
         self.dy = -vector_nul.y + self.y
         self.dz = -vector_nul.z + self.z
@@ -109,8 +111,8 @@ class Vector:
         vector_nul.dx = vector_nul.d * cos(vector_nul.an_xy) * cos(vector_nul.an_xz)
         vector_nul.dy = vector_nul.d * sin(vector_nul.an_xy) * cos(vector_nul.an_xz)
         vector_nul.dz = vector_nul.d * sin(vector_nul.an_xz)
-        l = (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz) / (
-                vector_nul.d * vector_nul.d)
+        l = (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz) \
+            / (vector_nul.d * vector_nul.d)
         dx = self.dx / l - vector_nul.dx
         dy = self.dy / l - vector_nul.dy
         dz = self.dz / l - vector_nul.dz
@@ -148,7 +150,7 @@ class Vector:
         print("an_xy = ", self.an_xy)
         print("an_xy = ", self.an_xz)
 
-    def coords_to_cam(self, cam):
+    def coords_to_cam(self, cam: Vector):
         self.rotate_vector_z(-cam.an_xy)
         self.rotate_vector_y(cam.an_xz)
         self.rotate_vector_z(fi_xy=pi / 2)

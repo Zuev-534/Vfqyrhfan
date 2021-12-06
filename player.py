@@ -1,16 +1,20 @@
 from vocabulary import *
-from graph.vector import Vector
+from graph import Vector
+import pygame
 
 
-class Player(Vector):
-    def __init__(self, vx0=0, vy0=0, vz0=0, ax=0, ay=0, g=gravity, h=1.75):
-        super(Player, self).__init__()
-        self.vx, self.vy, self.vz = vx0, vy0, vz0
-        self.ax, self.ay, self.az = ax, ay, g
-        self.h = h
-        self.d = 10
+class Player:
+    def __init__(self, r: pygame.Vector3, g: float):
+        self.vector = Vector(x0=r.x, y0=r.y, z0=r.z)
+        self.v = pygame.Vector3()
+        self.a = pygame.Vector3(0, 0, g)
+        self.h = 1.75
+        self.vector.d = 10
         self.controlling = [0, 0, 0, 0, 0, 0, 0]
         # LEFT, RIGHT, BACKWARD, FORWARD, ROTATE, an_xy, an_zx
+
+    def get_camera(self) -> Vector:
+        return self.vector
 
     def control(self, an_xz=0, an_xy=0):
         """
@@ -27,52 +31,52 @@ class Player(Vector):
         #     if self.controlling[i]:
         #         self.ax += znak1[i] * 0.5 * cos(self.an_xy)
         #         self.ay += znak2[i] * 0.5 * sin(self.an_xy)
-        self.ax, self.ay, self.az = 0, 0, 0
-        if abs(sqrt(self.vx ** 2 + self.vy ** 2)) > speed_limit_min:
+        self.a = pygame.Vector3()
+        v_horizontal = self.v.xy.length()
+        if v_horizontal > speed_limit_min:
             # self.ay = - self.vy/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
             #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
             # self.ax = - self.vx/sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration * 10 ** (
             #             sqrt(self.vx ** 2 + self.vy ** 2) / speed_limit_max / 100 + 0.05)
-            self.ay = - self.vy / sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
-            self.ax = - self.vx / sqrt(self.vx ** 2 + self.vy ** 2) * stopper_acceleration
+            self.a.y = -self.v.y / v_horizontal * stopper_acceleration
+            self.a.x = -self.v.x / v_horizontal * stopper_acceleration
         else:
-            self.ax = 0
+            self.a.x = 0
+            self.a.y = 0
         if self.controlling[0]:
-            self.ax += leg_force * sin(self.an_xy)
-            self.ay += -leg_force * cos(self.an_xy)
+            self.a.x += leg_force * sin(self.vector.an_xy)
+            self.a.y += -leg_force * cos(self.vector.an_xy)
         if self.controlling[1]:
-            self.ax += -leg_force * sin(self.an_xy)
-            self.ay += leg_force * cos(self.an_xy)
+            self.a.x += -leg_force * sin(self.vector.an_xy)
+            self.a.y += leg_force * cos(self.vector.an_xy)
         if self.controlling[3]:
-            self.ax += leg_force * cos(self.an_xy)
-            self.ay += leg_force * sin(self.an_xy)
+            self.a.x += leg_force * cos(self.vector.an_xy)
+            self.a.y += leg_force * sin(self.vector.an_xy)
         if self.controlling[2]:
-            self.ax += -leg_force * cos(self.an_xy)
-            self.ay += -leg_force * sin(self.an_xy)
-
+            self.a.x += -leg_force * cos(self.vector.an_xy)
+            self.a.y += -leg_force * sin(self.vector.an_xy)
         if self.controlling[4]:
-            self.an_xy = (self.controlling[5] + self.an_xy + pi) % (pi * 2) - pi
-            self.an_xz = (self.controlling[6] + self.an_xz)
-            if self.an_xz > pi / 2:
-                self.an_xz = pi / 2
-            if self.an_xz < -pi / 2:
-                self.an_xz = -pi / 2
+            self.vector.an_xy = (self.controlling[5] + self.vector.an_xy + pi) % (pi * 2) - pi
+            self.vector.an_xz = (self.controlling[6] + self.vector.an_xz)
+            if self.vector.an_xz > pi / 2:
+                self.vector.an_xz = pi / 2
+            if self.vector.an_xz < -pi / 2:
+                self.vector.an_xz = -pi / 2
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, 0, 0
 
     def move(self):
-        self.x += self.vx
-        self.y += self.vy
-        self.z += self.vz
-        self.vx += self.ax
-        self.vy += self.ay
-        self.vz += self.az
-        if sqrt(self.vx ** 2 + self.vy ** 2) > speed_limit_max:
-            self.vx *= speed_limit_max / sqrt(self.vx ** 2 + self.vy ** 2)
-            self.vy *= speed_limit_max / sqrt(self.vx ** 2 + self.vy ** 2)
-        if abs(self.vx) <= speed_limit_min:
-            self.vx = 0
-        if abs(self.vy) <= speed_limit_min:
-            self.vy = 0
+        self.vector.x += self.v.x
+        self.vector.y += self.v.y
+        self.vector.z += self.v.z
+        self.v += self.a
+        v_horizontal = self.v.xy.length()
+        if v_horizontal > speed_limit_max:
+            self.v.x *= speed_limit_max / v_horizontal
+            self.v.y *= speed_limit_max / v_horizontal
+        if abs(self.v.x) <= speed_limit_min:
+            self.v.x = 0
+        if abs(self.v.y) <= speed_limit_min:
+            self.v.y = 0
 
     def interoperate(self, input_movement):
         # LEFT, RIGHT, BACKWARD, FORWARD, ROTATE, an_xy, an_xz - controlling
@@ -90,9 +94,9 @@ class Player(Vector):
             if input_movement.key == pygame.K_w:
                 self.controlling[3] = 1
             if input_movement.key == pygame.K_SPACE:
-                self.z -= 1
+                self.vector.z -= 1
             if input_movement.key == pygame.K_z:
-                self.z += 1
+                self.vector.z += 1
 
         elif input_movement.type == pygame.KEYUP:
             if input_movement.key == pygame.K_d:
@@ -110,17 +114,17 @@ class Player(Vector):
             self.controlling[4], self.controlling[5], self.controlling[6] = 1, x, y
 
 
-def coords(screen, cam, fps):
+def coords(screen, player: Player, fps):
     text_render(screen, "FPS = " + str(fps)[:4], 50, 10)
-    text_render(screen, "x = " + str(cam.x)[:4], 50, 30)
-    text_render(screen, "y = " + str(cam.y)[:4], 50, 60)
-    text_render(screen, "z = " + str(cam.z)[:4], 50, 90)
-    text_render(screen, "vx = " + str(cam.vx * 10)[:4], 50, 120)
-    text_render(screen, "vy = " + str(cam.vy * 10)[:4], 50, 150)
-    text_render(screen, "vz = " + str(cam.vz * 10)[:4], 50, 180)
-    text_render(screen, "ax = " + str(cam.ax * 100)[:4], 50, 210)
-    text_render(screen, "ay = " + str(cam.ay * 100)[:4], 50, 240)
-    text_render(screen, "az = " + str(cam.az * 100)[:4], 50, 270)
-    text_render(screen, "an_xy = " + str(cam.an_xy)[:4], 50, 300)
-    text_render(screen, "an_xz = " + str(cam.an_xz)[:4], 50, 330)
-    text_render(screen, str(cam.controlling), 50, 360)
+    text_render(screen, "x = " + str(player.vector.x)[:4], 50, 30)
+    text_render(screen, "y = " + str(player.vector.y)[:4], 50, 60)
+    text_render(screen, "z = " + str(player.vector.z)[:4], 50, 90)
+    text_render(screen, "vx = " + str(player.v.x * 10)[:4], 50, 120)
+    text_render(screen, "vy = " + str(player.v.y * 10)[:4], 50, 150)
+    text_render(screen, "vz = " + str(player.v.z * 10)[:4], 50, 180)
+    text_render(screen, "ax = " + str(player.a.x * 100)[:4], 50, 210)
+    text_render(screen, "ay = " + str(player.a.y * 100)[:4], 50, 240)
+    text_render(screen, "az = " + str(player.a.z * 100)[:4], 50, 270)
+    text_render(screen, "an_xy = " + str(player.vector.an_xy)[:4], 50, 300)
+    text_render(screen, "an_xz = " + str(player.vector.an_xz)[:4], 50, 330)
+    text_render(screen, str(player.controlling), 50, 360)
