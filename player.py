@@ -10,7 +10,6 @@ class Player:
         self.v = pygame.Vector3()
         self.a = pygame.Vector3(0, 0, g)
         self.h = 1.75
-        self.vector.d = 10
 
         self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d]
         self.pressed_keys = []
@@ -108,4 +107,3 @@ def coords(screen, player: Player, fps):
     text_render(screen, "az = " + str(player.a.z * 100)[:4], 50, 270)
     text_render(screen, "an_xy = " + str(player.vector.an_xy)[:4], 50, 300)
     text_render(screen, "an_xz = " + str(player.vector.an_xz)[:4], 50, 330)
-    text_render(screen, str(player.controlling), 50, 360)
