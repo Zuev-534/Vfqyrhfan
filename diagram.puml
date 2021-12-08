@@ -2,7 +2,7 @@
 'https://plantuml.com/class-diagram
 
 class Rasterizer {
-    + draw()
+    + draw(screen, scene, camera)
 }
 
 class Game {
@@ -25,9 +25,8 @@ class Vector {
 class Cube {
 }
 
-Game o--> Player : update, move
+Game o--> Player : update, move, get_camera
 Game o--> Rasterizer : draw
-Rasterizer o-> Player : get_camera
 Rasterizer *--> Scene : рисует
 Player *--> Scene : манипулирует
 Scene *--> Cube : хранит
