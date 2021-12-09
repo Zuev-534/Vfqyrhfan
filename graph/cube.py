@@ -39,7 +39,7 @@ class Cube:
         global counter
         self.main.new_di_in_new_pos(cam)
         self.main.set_coords_d_from_di()
-        if self.main.get_angle_cos(cam) > 1 / 2 and self.main.d > cam.d / 2 and self.main.d < 50:
+        if self.main.get_angle_cos(cam) > 1 / 2 and cam.d / 2 < self.main.d < 50:
             self.vizible = 1
         else:
             self.vizible = 0

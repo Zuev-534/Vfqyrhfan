@@ -23,11 +23,13 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.scene = Scene(
-            list(chain.from_iterable([[Cube(15 + 4 * i, 3 + 5 * j, 3) for i in range(20)] for j in range(30)] +
-                                     [[Cube(15 + 4 * i, 3 + 5 * j, 8) for i in range(20)] for j in range(30)])),
-        )
-        self.player = Player(pygame.Vector3(50, 50, 10), self.gravity)
+        self.scene = Scene([[[0 for k in range(10)] for j in range(100)] for i in range(100)])
+        cubes_iter = chain.from_iterable([[(i, j, 3) for i in range(24)] for j in range(33)])
+                                         # [[(i, j, 8) for i in range(24)] for j in range(33)])
+        for pos in cubes_iter:
+            self.scene.cubes[pos[0]][pos[1]][pos[2]] = 1
+
+        self.player = Player(pygame.Vector3(0, 0, 10), self.gravity)
         self.rasterizer = Rasterizer()
 
     def loop(self):
