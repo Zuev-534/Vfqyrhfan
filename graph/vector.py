@@ -70,6 +70,9 @@ class Vector:
         vector.set_coords_di_from_d()
         return vector
 
+    # @staticmethod
+    # def from_decart
+
     def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
         self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
@@ -160,4 +163,4 @@ class Vector:
         self.rotate_vector_y(cam.an_xz)
         self.rotate_vector_z(fi_xy=pi / 2)
 
-        return self.dx * WIDTH / 2 / cam.d + WIDTH / 2, self.dz * HEIGHT / 2 * sqrt(3) / cam.d + HEIGHT / 2
+        return WIDTH * (self.dx / 2 / cam.d + 1 / 2), HEIGHT * (1 - (self.dz / 2 * sqrt(3) / cam.d + 1 / 2))

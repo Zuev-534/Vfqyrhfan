@@ -27,7 +27,7 @@ class Game:
             list(chain.from_iterable([[Cube(15 + 4 * i, 3 + 5 * j, 3) for i in range(20)] for j in range(30)] +
                                      [[Cube(15 + 4 * i, 3 + 5 * j, 8) for i in range(20)] for j in range(30)])),
         )
-        self.player = Player(pygame.Vector3(9, 9, 0), self.gravity)
+        self.player = Player(pygame.Vector3(50, 50, 10), self.gravity)
         self.rasterizer = Rasterizer()
 
     def loop(self):

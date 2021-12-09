@@ -11,7 +11,7 @@ class Cube:
         self.color = color
         self.h = h0
         self.points = None
-        self.mas = [[[[0, 0] for j in range(2)] for i in range(2)] for k in range(2)]
+        self.coords_2d = [[[(0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
 
         self.vizible = 1
         self.main = Vector(x0, y0, z0)
@@ -47,7 +47,13 @@ class Cube:
     def draw_cube(self, screen, cam: Vector):
         self.cub_are_vis_or(cam)
         if self.vizible == 1:
-            self.lol(cam)
+
+            for i in range(2):
+                for j in range(2):
+                    for k in range(2):
+                        x, y = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
+                        self.coords_2d[i][j][k] = (x, y)
+
             if cam.x > self.x + self.h / 2:
                 self.draw_square(screen, cam, i=3)
             elif cam.x < self.x - self.h / 2:
@@ -63,46 +69,40 @@ class Cube:
         else:
             pass
 
-    def lol(self, cam):
-        for i in range(2):
-            for j in range(2):
-                for k in range(2):
-                    self.mas[i][j][k][0], self.mas[i][j][k][1] = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
-
     def draw_square(self, screen, cam, i=0, j=0, k=0):
 
         if i == 2 or i == 3:
             polygon(screen, self.color,
-                    [self.mas[i - 2][0][0],
-                     self.mas[i - 2][0][1],
-                     self.mas[i - 2][1][1],
-                     self.mas[i - 2][1][0]])
+                    [self.coords_2d[i - 2][0][0],
+                     self.coords_2d[i - 2][0][1],
+                     self.coords_2d[i - 2][1][1],
+                     self.coords_2d[i - 2][1][0]])
             polygon(screen, BLACK,
-                    [self.mas[i - 2][0][0],
-                     self.mas[i - 2][0][1],
-                     self.mas[i - 2][1][1],
-                     self.mas[i - 2][1][0]], 1)
+                    [self.coords_2d[i - 2][0][0],
+                     self.coords_2d[i - 2][0][1],
+                     self.coords_2d[i - 2][1][1],
+                     self.coords_2d[i - 2][1][0]], 1)
 
         if j == 2 or j == 3:
             polygon(screen, self.color,
-                    [self.mas[0][j - 2][0],
-                     self.mas[0][j - 2][1],
-                     self.mas[1][j - 2][1],
-                     self.mas[1][j - 2][0]])
+                    [self.coords_2d[0][j - 2][0],
+                     self.coords_2d[0][j - 2][1],
+                     self.coords_2d[1][j - 2][1],
+                     self.coords_2d[1][j - 2][0]])
             polygon(screen, BLACK,
-                    [self.mas[0][j - 2][0],
-                     self.mas[0][j - 2][1],
-                     self.mas[1][j - 2][1],
-                     self.mas[1][j - 2][0]], 1)
+                    [self.coords_2d[0][j - 2][0],
+                     self.coords_2d[0][j - 2][1],
+                     self.coords_2d[1][j - 2][1],
+                     self.coords_2d[1][j - 2][0]], 1)
 
         if k == 2 or k == 3:
             polygon(screen, self.color,
-                    [self.mas[0][0][k - 2],
-                     self.mas[0][1][k - 2],
-                     self.mas[1][1][k - 2],
-                     self.mas[1][0][k - 2]])
+                    [self.coords_2d[0][0][k - 2],
+                     self.coords_2d[0][1][k - 2],
+                     self.coords_2d[1][1][k - 2],
+                     self.coords_2d[1][0][k - 2]])
             polygon(screen, BLACK,
-                    [self.mas[0][0][k - 2],
-                     self.mas[0][1][k - 2],
-                     self.mas[1][1][k - 2],
-                     self.mas[1][0][k - 2]], 1)
+                    [self.coords_2d[0][0][k - 2],
+                     self.coords_2d[0][1][k - 2],
+                     self.coords_2d[1][1][k - 2],
+                     self.coords_2d[1][0][k - 2]], 1)

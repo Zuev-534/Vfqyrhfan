@@ -5,19 +5,17 @@ from numpy import sign
 from numpy import float32
 from pygame.draw import *
 
-
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
 k = 0.001  # Чувствительность мыши
 leg_force = 0.01
-stopper_acceleration = 0.19*leg_force  # На сколько ед\с падают составляющие скорости
-mm_o = (WIDTH/2, HEIGHT/2, 0) #Точка центра отрисовки миникарты в окне
+stopper_acceleration = 0.19 * leg_force  # На сколько ед\с падают составляющие скорости
+mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки миникарты в окне
 
-znak1 = [ 1, 1, -1, -1]
+znak1 = [1, 1, -1, -1]
 znak2 = [1, -1, -1, 1]
-speed_limit_max = 6*leg_force
-speed_limit_min = 0.2*leg_force
-
+speed_limit_max = 6 * leg_force
+speed_limit_min = 0.2 * leg_force
 
 LEFT = "LEFT"
 RIGHT = "RIGHT"
@@ -39,7 +37,10 @@ GREY1 = (180, 180, 180)
 import pygame
 from pygame.draw import *
 from decimal import *
-getcontext().prec=4
+
+getcontext().prec = 4
+
+
 def text_render(scrn, nm, point_x, point_y):
     """
     Функция, отрисовывающая текст
@@ -53,6 +54,7 @@ def text_render(scrn, nm, point_x, point_y):
     realtime_name_texture = realtime_name_font.render(nm, False, BLACK)
     scrn.blit(realtime_name_texture, (point_x, point_y))
 
+
 def convert_point(point, O_start):
     """
     Функция, переводящая реальные координаты в пайгеймовские.
@@ -64,7 +66,7 @@ def convert_point(point, O_start):
     :param O_start: центр координат в окне пайгейма
     :return: только абсцисса и ордината, так преобразованные, чтобы описание функции было верно
     """
-    x, y, z= point
+    x, y, z = point
     a, b, c = O_start
     x = x + a
     y = -y + b
