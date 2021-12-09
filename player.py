@@ -36,8 +36,8 @@ class Player:
             # x = - delta <= ось с пайгеймой не сходится
             x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
             pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
-            self.lng = (x + self.lng + pi) % (pi * 2) - pi
-            self.lat = (y + self.lat)
+            self.lng = (self.lng + x + pi) % (pi * 2) - pi
+            self.lat = (self.lat - y)
             if self.lat > pi / 2:
                 self.lat = pi / 2
             if self.lat < -pi / 2:
