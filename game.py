@@ -50,8 +50,8 @@ class Game:
     def update(self, event):
         if event.type == pygame.QUIT:
             self.running = False
-        if event.type == pygame.VIDEORESIZE:
-            pass
+        elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
+            self.running = False
 
     def log(self):
 
