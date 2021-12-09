@@ -19,6 +19,7 @@ class Player:
         self.vector.y = self.r.y
         self.vector.z = self.r.z
         self.vector.d = 10
+        self.vector.set_coords_di_from_d()
         return self.vector
 
     def control(self):
@@ -67,17 +68,15 @@ class Player:
             self.v.y = 0
 
     def update(self, event):
-        if event.type == pygame.QUIT:
-            pygame.quit()
-        elif event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN:
             if event.key in self.control_keys:
                 self.pressed_keys.append(event.key)
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
             if event.key == pygame.K_SPACE:
-                self.vector.z -= 1
+                self.r.z -= 1
             if event.key == pygame.K_z:
-                self.vector.z += 1
+                self.r.z += 1
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
