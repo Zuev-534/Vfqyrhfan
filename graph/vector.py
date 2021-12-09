@@ -1,6 +1,5 @@
 from __future__ import annotations
 from vocabulary import *
-import pygame
 
 
 # from numba import njit
@@ -64,6 +63,12 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
+
+    @staticmethod
+    def from_polar(x, y, z, lng, lat, r):
+        vector = Vector(x0=x, y0=y, z0=z, d0=r, an_xy0=lng, an_xz0=lat)
+        vector.set_coords_di_from_d()
+        return vector
 
     def set_coords_di_from_d(self):
         self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
