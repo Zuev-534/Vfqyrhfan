@@ -25,9 +25,11 @@ class Player:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
             if event.key == pygame.K_SPACE:
-                self.r.z -= 1
-            if event.key == pygame.K_z:
-                self.r.z += 1
+                if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                    self.r.z -= 1
+                else:
+                    self.r.z += 1
+
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
