@@ -25,10 +25,11 @@ class Vector {
 class Cube {
 }
 
-Game o--> Player : update, move, get_camera
-Game o--> Rasterizer : draw
-Rasterizer *--> Scene : рисует
-Player *--> Scene : манипулирует
+Game *--> Rasterizer : draw
+Game *--> Scene : хранит
+Game *--> Player : update, move, get_camera
+Rasterizer o-> Scene : рисует
+Scene <-* Player: манипулирует
 Scene *--> Cube : хранит
 
 @enduml
