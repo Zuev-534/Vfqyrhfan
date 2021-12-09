@@ -42,9 +42,8 @@ class Game:
             self.rasterizer.draw(self.screen, self.scene, self.player.get_camera())
 
             self.log()
-
+            
             pygame.display.update()
-
 
         pygame.quit()
 
@@ -55,17 +54,18 @@ class Game:
             pass
 
     def log(self):
+
+        circle(self.screen, BLACK,
+               Vector(10, 100, 0).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
+        circle(self.screen, BLACK, Vector(100, 111, 2000000).get_vector(self.player.get_camera()).coords_to_cam(
+            self.player.get_camera()), 10)
+
         clip = self.screen.get_clip()
         center = (clip.w / 2, clip.h / 2, 0)
 
         circle(self.screen, BLACK, convert_point((self.player.vector.x, self.player.vector.y, 0), center), 5)
         circle(self.screen, BLACK, convert_point((10, 100, 0), center), 5)
         circle(self.screen, BLACK, convert_point((100, 111, 0), center), 5)
-
-        # TODO: Почему без этой строчки не рисуется сцена? Почему при вынесении её в начало персонаж перестаёт
-        #  двигаться? Нуждается в рефакторинге.
-        circle(self.screen, BLACK,
-               Vector(10, 100, 0).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
 
         u = 15
         pygame.draw.lines(self.screen, WHITE, True, [
@@ -76,7 +76,5 @@ class Game:
                 0,
             ), center),
         ], 2)
-        circle(self.screen, BLACK, Vector(100, 111, 2000000).get_vector(self.player.get_camera()).coords_to_cam(
-            self.player.get_camera()), 10)
 
         coords(self.screen, self.player, self.clock.get_fps())
