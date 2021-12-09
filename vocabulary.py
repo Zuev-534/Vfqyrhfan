@@ -11,7 +11,6 @@ FPS = 60
 k = 0.001  # Чувствительность мыши
 leg_force = 0.01
 stopper_acceleration = 0.19*leg_force  # На сколько ед\с падают составляющие скорости
-gravity = 0
 mm_o = (WIDTH/2, HEIGHT/2, 0) #Точка центра отрисовки миникарты в окне
 
 znak1 = [ 1, 1, -1, -1]
@@ -51,7 +50,7 @@ def text_render(scrn, nm, point_x, point_y):
     :return: ---
     """
     realtime_name_font = pygame.font.SysFont("", 30)
-    realtime_name_texture = realtime_name_font.render(nm, False, GREEN)
+    realtime_name_texture = realtime_name_font.render(nm, False, BLACK)
     scrn.blit(realtime_name_texture, (point_x, point_y))
 
 def convert_point(point, O_start):
