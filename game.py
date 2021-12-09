@@ -42,7 +42,7 @@ class Game:
             self.rasterizer.draw(self.screen, self.scene, self.player.get_camera())
 
             self.log()
-            
+
             pygame.display.update()
 
         pygame.quit()
@@ -63,16 +63,17 @@ class Game:
         clip = self.screen.get_clip()
         center = (clip.w / 2, clip.h / 2, 0)
 
-        circle(self.screen, BLACK, convert_point((self.player.vector.x, self.player.vector.y, 0), center), 5)
+        camera = self.player.get_camera()
+        circle(self.screen, BLACK, convert_point((camera.x, camera.y, 0), center), 5)
         circle(self.screen, BLACK, convert_point((10, 100, 0), center), 5)
         circle(self.screen, BLACK, convert_point((100, 111, 0), center), 5)
 
         u = 15
         pygame.draw.lines(self.screen, WHITE, True, [
-            convert_point((self.player.vector.x, self.player.vector.y, 0), center),
+            convert_point((camera.x, camera.y, 0), center),
             convert_point((
-                self.player.vector.x + u * cos(self.player.vector.an_xy),
-                self.player.vector.y + u * sin(self.player.vector.an_xy),
+                camera.x + u * cos(camera.an_xy),
+                camera.y + u * sin(camera.an_xy),
                 0,
             ), center),
         ], 2)
