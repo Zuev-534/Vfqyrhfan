@@ -18,6 +18,31 @@ class Player:
     def get_camera(self) -> Vector:
         return Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 10)
 
+    def update(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key in self.control_keys:
+                self.pressed_keys.append(event.key)
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+            if event.key == pygame.K_SPACE:
+                self.r.z -= 1
+            if event.key == pygame.K_z:
+                self.r.z += 1
+        elif event.type == pygame.KEYUP:
+            if event.key in self.control_keys:
+                self.pressed_keys.remove(event.key)
+        elif event.type == pygame.MOUSEMOTION:
+            mx, my = pygame.mouse.get_pos()
+            # x = - delta <= ось с пайгеймой не сходится
+            x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
+            pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
+            self.lng = (x + self.lng + pi) % (pi * 2) - pi
+            self.lat = (y + self.lat)
+            if self.lat > pi / 2:
+                self.lat = pi / 2
+            if self.lat < -pi / 2:
+                self.lat = -pi / 2
+
     def move(self):
         self.a = pygame.Vector3()
         v_horizontal = self.v.xy.length()
@@ -51,31 +76,6 @@ class Player:
             self.v.x = 0
         if abs(self.v.y) <= speed_limit_min:
             self.v.y = 0
-
-    def update(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key in self.control_keys:
-                self.pressed_keys.append(event.key)
-            if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-            if event.key == pygame.K_SPACE:
-                self.r.z -= 1
-            if event.key == pygame.K_z:
-                self.r.z += 1
-        elif event.type == pygame.KEYUP:
-            if event.key in self.control_keys:
-                self.pressed_keys.remove(event.key)
-        elif event.type == pygame.MOUSEMOTION:
-            mx, my = pygame.mouse.get_pos()
-            # x = - delta <= ось с пайгеймой не сходится
-            x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
-            pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
-            self.lng = (x + self.lng + pi) % (pi * 2) - pi
-            self.lat = (y + self.lat)
-            if self.lat > pi / 2:
-                self.lat = pi / 2
-            if self.lat < -pi / 2:
-                self.lat = -pi / 2
 
 
 def coords(screen, player: Player, fps):
