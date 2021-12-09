@@ -5,31 +5,36 @@ import numpy as np
 import math
 
 
-
-
-
-
+@njit(fastmath=True)
+def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_an_xz, vector_nul_an_xy,
+          vector_nul_d):
+    self_dx = -vector_nul_x + self_x
+    self_dy = -vector_nul_y + self_y
+    self_dz = -vector_nul_z + self_z
+    vector_nul_dx = vector_nul_d * cos(vector_nul_an_xy) * cos(vector_nul_an_xz)
+    vector_nul_dy = vector_nul_d * sin(vector_nul_an_xy) * cos(vector_nul_an_xz)
+    vector_nul_dz = vector_nul_d * sin(vector_nul_an_xz)
+    l = (self_dx * vector_nul_dx + self_dy * vector_nul_dy + self_dz * vector_nul_dz) \
+        / (vector_nul_d * vector_nul_d)
+    dx = self_dx / l - vector_nul_dx
+    dy = self_dy / l - vector_nul_dy
+    dz = self_dz / l - vector_nul_dz
+    return dx, dy, dz
 
 
 @njit(fastmath=True)
 def r_v_z(x, y, fi_xy=0.0):
     return x * cos(fi_xy) - y * sin(fi_xy), x * sin(fi_xy) + y * cos(fi_xy)
 
+
 @njit(fastmath=True)
 def r_v_y(x, z, fi_zx=0.0):
     return x * cos(fi_zx) + z * sin(fi_zx), - x * sin(fi_zx) + z * cos(fi_zx)
 
+
 @njit(fastmath=True)
 def r_v_x(z, y, fi_yz=0.0):
     return y * sin(fi_yz) + z * cos(fi_yz), y * cos(fi_yz) - z * sin(fi_yz)
-
-
-
-
-
-
-
-
 
 
 class Vector:
@@ -92,18 +97,8 @@ class Vector:
         return l
 
     def get_vector(self, vector_nul: Vector) -> Vector:
-        self.dx = -vector_nul.x + self.x
-        self.dy = -vector_nul.y + self.y
-        self.dz = -vector_nul.z + self.z
-        self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
-        vector_nul.dx = vector_nul.d * cos(vector_nul.an_xy) * cos(vector_nul.an_xz)
-        vector_nul.dy = vector_nul.d * sin(vector_nul.an_xy) * cos(vector_nul.an_xz)
-        vector_nul.dz = vector_nul.d * sin(vector_nul.an_xz)
-        l = (self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz) \
-            / (vector_nul.d * vector_nul.d)
-        dx = self.dx / l - vector_nul.dx
-        dy = self.dy / l - vector_nul.dy
-        dz = self.dz / l - vector_nul.dz
+        dx, dy, dz = gt_vr(self.x, self.y, self.z, vector_nul.x, vector_nul.y, vector_nul.z,
+                           vector_nul.an_xz, vector_nul.an_xy, vector_nul.d)
         abc = Vector(dx0=dx, dy0=dy, dz0=dz)
         abc.set_coords_d_from_di()
         return abc
