@@ -23,13 +23,11 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.scene = Scene([[[0 for k in range(10)] for j in range(100)] for i in range(100)])
-        cubes_iter = chain.from_iterable([[(i, j, 3) for i in range(24)] for j in range(33)])
-                                         # [[(i, j, 8) for i in range(24)] for j in range(33)])
-        for pos in cubes_iter:
-            self.scene.cubes[pos[0]][pos[1]][pos[2]] = 1
+        self.scene = Scene()
+        self.scene.test()
 
-        self.player = Player(pygame.Vector3(0, 0, 10), self.gravity)
+
+        self.player = Player(pygame.Vector3(20, 20, 10), self.gravity)
         self.rasterizer = Rasterizer()
 
     def loop(self):
@@ -58,7 +56,7 @@ class Game:
     def log(self):
 
         circle(self.screen, BLACK,
-               Vector(10, 100, 0).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
+               Vector(10, 21, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
         circle(self.screen, BLACK, Vector(100, 111, 2000000).get_vector(self.player.get_camera()).coords_to_cam(
             self.player.get_camera()), 10)
 
@@ -67,7 +65,7 @@ class Game:
 
         camera = self.player.get_camera()
         circle(self.screen, BLACK, convert_point((camera.x, camera.y, 0), center), 5)
-        circle(self.screen, BLACK, convert_point((10, 100, 0), center), 5)
+        circle(self.screen, BLACK, convert_point((10, 21, 10), center), 5)
         circle(self.screen, BLACK, convert_point((100, 111, 0), center), 5)
 
         u = 15

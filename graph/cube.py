@@ -4,7 +4,7 @@ from pygame.draw import polygon
 
 
 class Cube:
-    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1):
+    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1, vis = 1):
         self.x = x0
         self.y = y0
         self.z = z0
@@ -13,7 +13,7 @@ class Cube:
         self.points = None
         self.coords_2d = [[[(0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
 
-        self.vizible = 1
+        self.vizible = vis
         self.main = Vector(x0, y0, z0)
 
         self.set_coords_with_move()
@@ -39,10 +39,10 @@ class Cube:
         global counter
         self.main.new_di_in_new_pos(cam)
         self.main.set_coords_d_from_di()
-        if self.main.get_angle_cos(cam) > 1 / 2 and cam.d / 2 < self.main.d < 50:
-            self.vizible = 1
-        else:
-            self.vizible = 0
+        # if self.main.get_angle_cos(cam) > 1 / 2:
+        #     self.vizible = 1
+        # else:
+        #     self.vizible = 0
 
     def draw_cube(self, screen, cam: Vector):
         self.cub_are_vis_or(cam)
@@ -70,7 +70,6 @@ class Cube:
             pass
 
     def draw_square(self, screen, cam, i=0, j=0, k=0):
-
         if i == 2 or i == 3:
             polygon(screen, self.color,
                     [self.coords_2d[i - 2][0][0],
