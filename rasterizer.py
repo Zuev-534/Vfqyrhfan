@@ -35,8 +35,7 @@ class Rasterizer:
         screen.fill(GREY1)
         temp_order = cut(scene, order, camera)
         for item in temp_order:
-            x, y, z = item
-            draw_cube_func(screen, scene.map[x][y][z], x, y, z, camera.x, camera.y, camera.z, camera.an_xz,
+            draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z, camera.an_xz,
                            camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
                            camera.an_xz_sin, camera.an_xy_cos, camera.an_xz_cos))
 
