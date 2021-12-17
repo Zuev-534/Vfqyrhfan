@@ -4,6 +4,7 @@ import pygame
 from numpy import sign
 from numpy import float32
 from pygame.draw import *
+from decimal import *
 
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
@@ -34,15 +35,15 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY1 = (180, 180, 180)
 # -------------------------------------------------------------------
-import pygame
-from pygame.draw import *
-from decimal import *
 
 getcontext().prec = 4
 
 
 # можно собрать отдельный фвйл-библиотеку блоков
 def get_color(id):
+    """
+    return: цвет
+    """
     if id == 1:
         return WHITE
     if id == 2:
@@ -61,7 +62,6 @@ def get_color(id):
         return YELLOW
 
 
-
 def text_render(scrn, nm, point_x, point_y):
     """
     Функция, отрисовывающая текст
@@ -76,7 +76,7 @@ def text_render(scrn, nm, point_x, point_y):
     scrn.blit(realtime_name_texture, (point_x, point_y))
 
 
-def convert_point(point, O_start):
+def convert_point(point, o_start):
     """
     Функция, переводящая реальные координаты в пайгеймовские.
     Ест координаты в такой СО, что (0,0,0) это O_start;
@@ -84,11 +84,11 @@ def convert_point(point, O_start):
     Ох - возрастает слева направо;
     Oy - возрастает снизу вверх;
     :param point: кортеж трёх координат в СО, приведенной ниже
-    :param O_start: центр координат в окне пайгейма
+    :param o_start: центр координат в окне пайгейма
     :return: только абсцисса и ордината, так преобразованные, чтобы описание функции было верно
     """
     x, y, z = point
-    a, b, c = O_start
+    a, b, c = o_start
     x = x + a
     y = -y + b
     return x, y
