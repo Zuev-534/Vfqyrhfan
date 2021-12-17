@@ -86,10 +86,17 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
+        self.an_xz_cos = 0
+        self.an_xy_cos = 0
+        self.an_xz_sin = 0
+        self.an_xy_sin = 0
 
-    @staticmethod
-    def from_polar(x, y, z, lng, lat, r):
+    def from_polar(self, x, y, z, lng, lat, r):
         vector = Vector(x0=x, y0=y, z0=z, d0=r, an_xy0=lng, an_xz0=lat)
+        self.an_xz_cos = cos(self.an_xz)
+        self.an_xy_cos = cos(self.an_xy)
+        self.an_xz_sin = sin(self.an_xz)
+        self.an_xy_sin = sin(self.an_xy)
         vector.set_coords_di_from_d()
         return vector
 
@@ -97,9 +104,9 @@ class Vector:
     # def from_decart
 
     def set_coords_di_from_d(self):
-        self.dx = self.d * cos(self.an_xy) * cos(self.an_xz)
-        self.dy = self.d * sin(self.an_xy) * cos(self.an_xz)
-        self.dz = self.d * sin(self.an_xz)
+        self.dx = self.d * self.an_xy_cos * self.an_xz_cos
+        self.dy = self.d * self.an_xy_cos * self.an_xz_cos
+        self.dz = self.d * self.an_xz_cos
 
     def new_di_in_new_pos(self, vector_nul):
         self.dx = -vector_nul.x + self.x

@@ -26,7 +26,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player(pygame.Vector3(20, 20, 10), self.gravity)
+        self.player = Player(pygame.Vector3(0, 20, 10), self.gravity)
         self.rasterizer = Rasterizer()
 
     def loop(self):
