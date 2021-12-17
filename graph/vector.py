@@ -51,6 +51,8 @@ def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vect
     self_dx = -vector_nul_x + self_x
     self_dy = -vector_nul_y + self_y
     self_dz = -vector_nul_z + self_z
+
+    self_dx, self_dy, self_dz = ()
     vector_nul_an_xy_sin, vector_nul_an_xz_sin, vector_nul_an_xy_cos, vector_nul_an_xz_cos = trigonometry
     vector_nul_dx = vector_nul_d * vector_nul_an_xy_cos * vector_nul_an_xz_cos
     vector_nul_dy = vector_nul_d * vector_nul_an_xy_sin * vector_nul_an_xz_cos

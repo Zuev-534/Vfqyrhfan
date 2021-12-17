@@ -31,19 +31,23 @@ def draw_bottom(screen, cam):
 
 
 class Rasterizer:
-    def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1):
+    def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1, ):
         screen.fill(GREY1)
         temp_order = cut(scene, order, camera)
+        outline = 1
+        fatline = self.selected_block(camera, scene)
         for item in temp_order:
+            if fatline == item:
+                outline = 3
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
                            camera.an_xz,
                            camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
                                                                                             camera.an_xz_sin,
                                                                                             camera.an_xy_cos,
-                                                                                            camera.an_xz_cos))
+                                                                                            camera.an_xz_cos), outline)
 
     def selected_block(self, player_get_camera, scene):
-        pass
+        return False
 
 
 if __name__ == "__main__":
