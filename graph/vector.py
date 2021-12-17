@@ -113,8 +113,8 @@ class Vector:
         self.an_xz_sin = sin(self.an_xz)
         self.an_xy_sin = sin(self.an_xy)
         self.dx = self.d * self.an_xy_cos * self.an_xz_cos
-        self.dy = self.d * self.an_xy_cos * self.an_xz_cos
-        self.dz = self.d * self.an_xz_cos
+        self.dy = self.d * self.an_xy_sin * self.an_xz_cos
+        self.dz = self.d * self.an_xz_sin
 
     def new_di_in_new_pos(self, vector_nul):
         self.dx = -vector_nul.x + self.x

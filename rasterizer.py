@@ -36,10 +36,11 @@ class Rasterizer:
         temp_order = cut(scene, order, camera)
         outline = 1
         fatline = self.selected_block(camera, scene)
+        print(fatline)
 
         for item in temp_order:
             if fatline == item:
-                outline = 3
+                outline = 2
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
                            camera.an_xz,
                            camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
@@ -55,6 +56,7 @@ class Rasterizer:
             rx += cam.dx / 15 / cam.d
             ry += cam.dy / 15 / cam.d
             rz += cam.dz / 15 / cam.d
+            print(rx, ry, rz)
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 return round(rx), round(ry), round(rz)
 

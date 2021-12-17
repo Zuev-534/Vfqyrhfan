@@ -57,7 +57,7 @@ class Game:
 
         circle(self.screen, BLACK,
                Vector(10, 21, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
-        circle(self.screen, BLACK, Vector(100, 111, 2000000).get_vector(self.player.get_camera()).coords_to_cam(
+        circle(self.screen, BLACK, Vector(100, 111, 2000).get_vector(self.player.get_camera()).coords_to_cam(
             self.player.get_camera()), 10)
 
         clip = self.screen.get_clip()
