@@ -13,7 +13,7 @@ from rasterizer import Rasterizer
 class Game:
     def __init__(self, width, height):
         self.FPS = 60
-        self.gravity = 0
+        self.gravity = -0.003
 
         pygame.init()
         pygame.display.set_caption('Test controlling')
@@ -25,7 +25,6 @@ class Game:
 
         self.scene = Scene()
         self.scene.test()
-
 
         self.player = Player(pygame.Vector3(20, 20, 10), self.gravity)
         self.rasterizer = Rasterizer()
