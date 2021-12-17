@@ -1,5 +1,6 @@
 from graph import *
 from vocabulary import *
+from numba import njit
 
 
 def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy,
@@ -8,16 +9,7 @@ def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_
 
     if cub_are_vis_or_func(cub_id, x, y, z, cam_x, cam_y, cam_z, cam_dx, cam_dy, cam_dz, cam_d):
 
-        coords_2d = [[[[0, 0] for j in range(2)] for i in range(2)] for k in range(2)]
-        for i in range(2):
-            for j in range(2):
-                for k in range(2):
-                    coords_2d[i][j][k] = vector.coords_to_cam_func(
-                        *vector.get_vector_func(points[i][j][k][0], points[i][j][k][1],
-                                                points[i][j][k][2], cam_x, cam_y, cam_z,
-                                                cam_an_xz,
-                                                cam_an_xy,
-                                                cam_d))
+        coords_2d = coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d)
 
         if cam_x > x + cub_h / 2:
             draw_square_func(screen, cub_id, coords_2d, i=3)
@@ -35,6 +27,7 @@ def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_
 
 # проверено(только осмотрел)
 def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0):
+    pass
     if i == 2 or i == 3:
         polygon(screen, get_color(cub_id),
                 [coords_2d[i - 2][0][0],
@@ -85,9 +78,9 @@ def cub_are_vis_or_func(cub_id, x, y, z, cam_x, cam_y, cam_z, cam_dx, cam_dy, ca
     #     return False
 
 
-# проверено(осмотрено)
+@njit(fastmath=True)
 def set_coords_with_move_func(x, y, z, h_cube):
-    points = [[[[0, 0, 0] for i in range(2)] for j in range(2)] for k in range(2)]
+    points = np.zeros((2, 2, 2, 3), dtype=float32)
     for i in range(2):
         for j in range(2):
             for k in range(2):
@@ -99,3 +92,18 @@ def set_coords_with_move_func(x, y, z, h_cube):
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
+
+
+@njit(fastmath=True)
+def coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d):
+    coords_2d = np.zeros((2, 2, 2, 2), dtype=float32)
+    for i in range(2):
+        for j in range(2):
+            for k in range(2):
+                coords_2d[i][j][k] = vector.coords_to_cam_func(
+                    *vector.get_vector_func(points[i][j][k][0], points[i][j][k][1],
+                                            points[i][j][k][2], cam_x, cam_y, cam_z,
+                                            cam_an_xz,
+                                            cam_an_xy,
+                                            cam_d))
+    return coords_2d
