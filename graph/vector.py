@@ -29,16 +29,18 @@ def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y
 
 
 @njit(fastmath=True)
-def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d):
-    dx, dy, dz = gt_vr(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d)
-    return dx, dy, dz, c_an_xy, c_an_xz, c_d
+def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d, trigonometry):
+    dx, dy, dz = gt_vr(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d, trigonometry)
+    return dx, dy, dz, c_an_xy, c_an_xz, c_d, trigonometry
 
 
 @njit(fastmath=True)
-def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d):
-    abc_dx, abc_dy = r_v_z(abc_dx, abc_dy, -cam_an_xy)
-    abc_dx, abc_dz = r_v_y(abc_dx, abc_dz, cam_an_xz)
-    abc_dx, abc_dy = r_v_z(abc_dx, abc_dy, fi_xy=pi / 2)
+def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d, trigonometry):
+    cam_an_xy_sin, cam_an_xz_sin, cam_an_xy_cos, cam_an_xz_cos = trigonometry
+    abc_dx, abc_dy = abc_dx * cam_an_xy_cos + abc_dy * cam_an_xy_sin, (
+        -1) * abc_dx * cam_an_xy_sin + abc_dy * cam_an_xy_cos
+    abc_dx, abc_dz = abc_dx * cam_an_xz_cos + abc_dz * cam_an_xz_sin, - abc_dx * cam_an_xz_sin + abc_dz * cam_an_xz_cos
+    abc_dx, abc_dy = - abc_dy, abc_dx
 
     return WIDTH * (abc_dx / 2 / cam_d + 1 / 2), HEIGHT * (1 - (abc_dz / 2 * sqrt(3) / cam_d + 1 / 2))
 
@@ -49,7 +51,7 @@ def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vect
     self_dx = -vector_nul_x + self_x
     self_dy = -vector_nul_y + self_y
     self_dz = -vector_nul_z + self_z
-    vector_nul_an_xy_sin, vector_nul_an_xz_sin, vector_nul_an_xy_cos, vector_nul_an_xz_cos =  trigonometry
+    vector_nul_an_xy_sin, vector_nul_an_xz_sin, vector_nul_an_xy_cos, vector_nul_an_xz_cos = trigonometry
     vector_nul_dx = vector_nul_d * vector_nul_an_xy_cos * vector_nul_an_xz_cos
     vector_nul_dy = vector_nul_d * vector_nul_an_xy_sin * vector_nul_an_xz_cos
     vector_nul_dz = vector_nul_d * vector_nul_an_xz_sin
@@ -93,7 +95,7 @@ class Vector:
         self.an_xy_sin = 0
 
     @staticmethod
-    def from_polar(self, x, y, z, lng, lat, r):
+    def from_polar(x, y, z, lng, lat, r):
         vector = Vector(x0=x, y0=y, z0=z, d0=r, an_xy0=lng, an_xz0=lat)
         vector.set_coords_di_from_d()
         return vector
@@ -145,7 +147,8 @@ class Vector:
 
     def get_vector(self, vector_nul: Vector) -> Vector:
         dx, dy, dz = gt_vr(self.x, self.y, self.z, vector_nul.x, vector_nul.y, vector_nul.z,
-                           vector_nul.an_xz, vector_nul.an_xy, vector_nul.d)
+                           vector_nul.an_xz, vector_nul.an_xy, vector_nul.d,
+                           (vector_nul.an_xy_sin, vector_nul.an_xz_sin, vector_nul.an_xy_cos, vector_nul.an_xz_cos))
         abc = Vector(dx0=dx, dy0=dy, dz0=dz)
         abc.set_coords_d_from_di()
         return abc

@@ -21,6 +21,15 @@ def cut(scene, order, camera):
     return t_o
 
 
+def draw_bottom(screen, cam):
+    points = [
+        [cam.x + distance * 2, cam.y + distance * 2, 10]
+        [cam.x - distance * 2, cam.y + distance * 2, 10]
+        [cam.x + distance * 2, cam.y - distance * 2, 10]
+        [cam.x - distance * 2, cam.y - distance * 2, 10]
+    ]
+
+
 class Rasterizer:
     def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1):
         screen.fill(GREY1)
@@ -29,7 +38,8 @@ class Rasterizer:
             x, y, z = item
             print(x, y, z)
             draw_cube_func(screen, scene.map[x][y][z], x, y, z, camera.x, camera.y, camera.z, camera.an_xz,
-                           camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h)
+                           camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
+                           camera.an_xz_sin, camera.an_xy_cos, camera.an_xz_cos))
 
 
 if __name__ == "__main__":

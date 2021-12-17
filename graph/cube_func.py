@@ -4,12 +4,12 @@ from numba import njit
 
 
 def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy,
-                   cam_d, cam_dx, cam_dy, cam_dz, cub_h):
+                   cam_d, cam_dx, cam_dy, cam_dz, cub_h, trigonometry):
     points = set_coords_with_move_func(x, y, z, cub_h)
 
     if cub_are_vis_or_func(cub_id, x, y, z, cam_x, cam_y, cam_z, cam_dx, cam_dy, cam_dz, cam_d):
 
-        coords_2d = coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d)
+        coords_2d = coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d, trigonometry)
 
         if cam_x > x + cub_h / 2:
             draw_square_func(screen, cub_id, coords_2d, i=3)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
 
 @njit(fastmath=True)
-def coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d):
+def coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d, trigonometry):
     coords_2d = np.zeros((2, 2, 2, 2), dtype=float32)
     for i in range(2):
         for j in range(2):
@@ -105,5 +105,5 @@ def coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d):
                                             points[i][j][k][2], cam_x, cam_y, cam_z,
                                             cam_an_xz,
                                             cam_an_xy,
-                                            cam_d))
+                                            cam_d, trigonometry))
     return coords_2d
