@@ -23,7 +23,7 @@ def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y
     dz = -vector_nul_z + vec_1_z
     return dx, dy, dz
 
-
+# проверен(в бою)
 def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy,
                     c_d):
     dx, dy, dz = gt_vr(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy,
@@ -31,11 +31,10 @@ def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy,
     return dx, dy, dz, c_an_xy, c_an_xz, c_d
 
 
-def coords_to_cam_func(l):
-    abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d = l
-    r_v_z(abc_dy, abc_dz, -cam_an_xy)
-    r_v_y(abc_dx, abc_dz, cam_an_xz)
-    r_v_z(abc_dx, abc_dy, fi_xy=pi / 2)
+def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d):
+    abc_dx, abc_dy = r_v_z(abc_dx, abc_dy, -cam_an_xy)
+    abc_dx, abc_dz = r_v_y(abc_dx, abc_dz, cam_an_xz)
+    abc_dx, abc_dy = r_v_z(abc_dx, abc_dy, fi_xy=pi / 2)
 
     return WIDTH * (abc_dx / 2 / cam_d + 1 / 2), HEIGHT * (1 - (abc_dz / 2 * sqrt(3) / cam_d + 1 / 2))
 

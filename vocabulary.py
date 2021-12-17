@@ -41,6 +41,27 @@ from decimal import *
 getcontext().prec = 4
 
 
+# можно собрать отдельный фвйл-библиотеку блоков
+def get_color(id):
+    if id == 1:
+        return WHITE
+    if id == 2:
+        return BLACK
+    if id == 3:
+        return RED
+    if id == 4:
+        return GREEN
+    if id == 5:
+        return BLUE
+    if id == 6:
+        return CYAN
+    if id == 7:
+        return MAGENTA
+    if id == 8:
+        return YELLOW
+
+
+
 def text_render(scrn, nm, point_x, point_y):
     """
     Функция, отрисовывающая текст
