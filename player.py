@@ -4,17 +4,16 @@ import pygame
 
 
 class Player:
-    def __init__(self, r: pygame.Vector3, g: float):
+    def __init__(self, r: Vector, g: float):
         self.r = r
-        self.v = pygame.Vector3()
-        self.a = pygame.Vector3()
+        self.v = Vector()
+        self.a = Vector()
         self.h = 1.75
         self.lng = 0  # longitude - долгота угла
         self.lat = 0  # latitude - широта угла
         self.g = g
         self.test_mod = -1
         self.n = 8
-
 
         self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE, pygame.K_c, pygame.K_t]
         self.pressed_keys = []
@@ -24,7 +23,7 @@ class Player:
         """
         return: возвращает вектор евклидовых координат из полярных координат
         """
-        return Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 10)
+        return Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 0.1)
 
     def update(self, event):
         """
@@ -56,8 +55,7 @@ class Player:
         """
         перемещает игрока посредством добавления вектору скорости ускорения
         """
-        self.a = pygame.Vector3()
-        v_horizontal = self.v.xy.length()
+        v_horizontal = sqrt(self.v.x ** 2 + self.v.y ** 2)
         if v_horizontal > speed_limit_min:
             self.a.y = -self.v.y / v_horizontal * stopper_acceleration
             self.a.x = -self.v.x / v_horizontal * stopper_acceleration
@@ -90,8 +88,12 @@ class Player:
         if self.fly_mod == -1:
             self.a.z = self.g
 
-        self.r += self.v
-        self.v += self.a
+        self.r.x += self.v.x
+        self.r.y += self.v.y
+        self.r.z += self.v.z
+        self.v.x += self.a.x
+        self.v.y += self.a.y
+        self.v.z += self.a.z
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
@@ -108,10 +110,11 @@ class Player:
 
     def vizible_block(self):
         r = self.r
-        dr = pygame.Vector3()
+        dr = self.get_camera()
         for i in range(self.n * 15):
-            r.x += dr.x * sin(self.lng)*cos(self.lat) / 15
-            r.y += dr.y * cos(self.lng)*cos(self.lat) / 15
+            r.x += dr.x * sin(self.lng) * cos(self.lat) / 15
+            r.y += dr.y * cos(self.lng) * cos(self.lat) / 15
+
 
 
 def coords(screen, player: Player, fps):
