@@ -25,6 +25,7 @@ FORWARD = "FORWARD"
 ROTATE = "ROTATE"
 NOTHING = "NOTHING"
 
+AIR = (50, 150, 50)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
@@ -44,6 +45,8 @@ def get_color(id):
     """
     return: цвет
     """
+    if id == 0:
+        return AIR
     if id == 1:
         return WHITE
     if id == 2:

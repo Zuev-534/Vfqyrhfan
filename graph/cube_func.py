@@ -4,30 +4,31 @@ from numba import njit
 
 
 def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy,
-                   cam_d, cam_dx, cam_dy, cam_dz, cub_h, trigonometry, outline):
+                   cam_d, cam_dx, cam_dy, cam_dz, cub_h, trigonometry, outline, grnd=False):
     points = set_coords_with_move_func(x, y, z, cub_h)
 
     if cub_are_vis_or_func(cub_id, x, y, z, cam_x, cam_y, cam_z, cam_dx, cam_dy, cam_dz, cam_d):
 
         coords_2d = coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d, trigonometry)
-
-        if cam_x > x + cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, i=3, out_line=outline)
-        elif cam_x < x - cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, i=2, out_line=outline)
-        if cam_y > y + cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, j=3, out_line=outline)
-        elif cam_y < y - cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, j=2, out_line=outline)
-        if cam_z > z + cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, k=3, out_line=outline)
-        elif cam_z < z - cub_h / 2:
-            draw_square_func(screen, cub_id, coords_2d, k=2, out_line=outline)
+        if grnd:
+            draw_square_func(screen, 0, coords_2d, k=3, out_line=outline)
+        else:
+            if cam_x > x + cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, i=3, out_line=outline)
+            elif cam_x < x - cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, i=2, out_line=outline)
+            if cam_y > y + cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, j=3, out_line=outline)
+            elif cam_y < y - cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, j=2, out_line=outline)
+            if cam_z > z + cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, k=3, out_line=outline)
+            elif cam_z < z - cub_h / 2:
+                draw_square_func(screen, cub_id, coords_2d, k=2, out_line=outline)
 
 
 # проверено(только осмотрел)
 def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
-
     if i == 2 or i == 3:
         polygon(screen, get_color(cub_id),
                 [coords_2d[i - 2][0][0],

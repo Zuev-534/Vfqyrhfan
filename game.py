@@ -26,7 +26,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player(Vector(0, 20, 10), self.gravity)
+        self.player = Player(Vector(0, 20, 12), self.gravity)
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
