@@ -7,18 +7,11 @@ def generate_emp(a, b, c):
 
 class Scene:
     def __init__(self):
-        self.map = generate_emp(32, 32, 30)
+        self.map = generate_emp(1000, 1000, 1000)
 
     def test(self):
         self.map[10][21][10] = 4
-        self.map[10][22][10] = 4
-        self.map[10][23][10] = 4
-        self.map[11][21][11] = 5
-        self.map[11][22][11] = 5
-        self.map[11][23][11] = 5
-        self.map[11][21][10] = 3
-        self.map[11][22][10] = 3
-        self.map[11][23][10] = 3
+
 
 
 if __name__ == "__main__":

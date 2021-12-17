@@ -1,7 +1,7 @@
 from cube import *
 
-distance = 16
-h_dis = 10
+distance = 20
+h_dis = 20
 out = open('order_of_output.py', 'w')
 
 
@@ -35,6 +35,3 @@ order = order[:len(order) - 7]
 generate(order[::-1][1:][::-1])
 out.close()
 
-
-if __name__ == "__main__":
-    print("This module is not for direct call!")

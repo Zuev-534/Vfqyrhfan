@@ -13,6 +13,8 @@ class Player:
         self.lat = 0  # latitude - широта угла
         self.g = g
         self.test_mod = -1
+        self.n = 8
+
 
         self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE, pygame.K_c, pygame.K_t]
         self.pressed_keys = []
@@ -103,6 +105,13 @@ class Player:
             self.v.y = 0
         if abs(self.v.z) <= speed_limit_min:
             self.v.z = 0
+
+    def vizible_block(self):
+        r = self.r
+        dr = pygame.Vector3()
+        for i in range(self.n * 15):
+            r.x += dr.x * sin(self.lng)*cos(self.lat) / 15
+            r.y += dr.y * cos(self.lng)*cos(self.lat) / 15
 
 
 def coords(screen, player: Player, fps):
