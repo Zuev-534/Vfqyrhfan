@@ -9,10 +9,10 @@ class Player:
         self.v = pygame.Vector3()
         self.a = pygame.Vector3(0, 0, g)
         self.h = 1.75
-        self.lng = 0 # longitude - долгота угла
-        self.lat = 0 # latitude - широта угла
+        self.lng = 0  # longitude - долгота угла
+        self.lat = 0  # latitude - широта угла
 
-        self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d]
+        self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE]
         self.pressed_keys = []
 
     def get_camera(self) -> Vector:
@@ -22,11 +22,6 @@ class Player:
         if event.type == pygame.KEYDOWN:
             if event.key in self.control_keys:
                 self.pressed_keys.append(event.key)
-            if event.key == pygame.K_SPACE:
-                if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
-                    self.r.z -= 1
-                else:
-                    self.r.z += 1
 
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
@@ -52,6 +47,10 @@ class Player:
         else:
             self.a.x = 0
             self.a.y = 0
+        if abs(self.v.z) > speed_limit_min:
+            self.a.z = - sign(self.v.z) * stopper_acceleration * 2
+        else:
+            self.a.z = 0
 
         for key in self.pressed_keys:
             if key == pygame.K_d:
@@ -66,16 +65,25 @@ class Player:
             elif key == pygame.K_w:
                 self.a.x += +leg_force * cos(self.lng)
                 self.a.y += +leg_force * sin(self.lng)
+            elif key == pygame.K_SPACE:
+                if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
+                    self.a.z += -leg_force
+                else:
+                    self.a.z += +leg_force
 
         self.r += self.v
         self.v += self.a
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
+        if abs(self.v.z) > speed_limit_max:
+            self.v.z *= speed_limit_max / abs(self.v.z)
         if abs(self.v.x) <= speed_limit_min:
             self.v.x = 0
         if abs(self.v.y) <= speed_limit_min:
             self.v.y = 0
+        if abs(self.v.z) <= speed_limit_min:
+            self.v.z = 0
 
 
 def coords(screen, player: Player, fps):
