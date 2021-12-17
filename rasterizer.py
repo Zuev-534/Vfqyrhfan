@@ -9,9 +9,9 @@ def cut(scene, order, camera):
     t_o = []
     for item in order:
         x, y, z = item
-        x += int(camera.x) - int((16 + 1) / 2)
-        y += int(camera.y) - int((16 + 1) / 2)
-        z += int(camera.z) - 5
+        x += int(camera.x + 0.5) - int((distance) / 2)
+        y += int(camera.y + 0.5) - int((distance) / 2)
+        z += int(camera.z + 0.5) - int(h_dis / 2)
         try:
             if scene.map[x][y][z].vizible:
                 t_o.append((x, y, z))
