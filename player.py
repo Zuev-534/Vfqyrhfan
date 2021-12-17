@@ -108,13 +108,6 @@ class Player:
         if abs(self.v.z) <= speed_limit_min:
             self.v.z = 0
 
-    def vizible_block(self):
-        r = self.r
-        dr = self.get_camera()
-        for i in range(self.n * 15):
-            r.x += dr.x * sin(self.lng) * cos(self.lat) / 15
-            r.y += dr.y * cos(self.lng) * cos(self.lat) / 15
-
 
 
 def coords(screen, player: Player, fps):

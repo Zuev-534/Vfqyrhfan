@@ -26,8 +26,9 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player(pygame.Vector3(0, 20, 10), self.gravity)
+        self.player = Player(Vector(0, 20, 10), self.gravity)
         self.rasterizer = Rasterizer()
+        self.player_get_camera = None
 
     def loop(self):
         while self.running:
@@ -37,8 +38,8 @@ class Game:
                 self.update(event)
                 self.player.update(event)
             self.player.move()
-
-            self.rasterizer.draw(self.screen, self.scene, self.player.get_camera())
+            self.player_get_camera = self.player.get_camera()
+            self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
             self.log()
 
