@@ -5,6 +5,41 @@ import numpy as np
 import math
 
 
+def scalar_func(dx, dy, dz, vector_nul_dx, vector_nul_dy, vector_nul_dz):
+    return dx * vector_nul_dx + dy * vector_nul_dy + dz * vector_nul_dz
+
+
+def get_angle_cos_func(dx, dy, dz, d, vector_nul_dx, vector_nul_dy, vector_nul_dz, vector_nul_d):
+    return scalar_func(dx, dy, dz, vector_nul_dx, vector_nul_dy, vector_nul_dz) / (d * vector_nul_d)
+
+
+def set_coords_d_from_di_func(dx, dy, dz):
+    return sqrt(dx ** 2 + dy ** 2 + dz ** 2)
+
+
+def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y, vector_nul_z):
+    dx = -vector_nul_x + vec_1_x
+    dy = -vector_nul_y + vec_1_y
+    dz = -vector_nul_z + vec_1_z
+    return dx, dy, dz
+
+
+def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy,
+                    c_d):
+    dx, dy, dz = gt_vr(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy,
+                       c_d)
+    return dx, dy, dz, c_an_xy, c_an_xz, c_d
+
+
+def coords_to_cam_func(l):
+    abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d = l
+    r_v_z(abc_dy, abc_dz, -cam_an_xy)
+    r_v_y(abc_dx, abc_dz, cam_an_xz)
+    r_v_z(abc_dx, abc_dy, fi_xy=pi / 2)
+
+    return WIDTH * (abc_dx / 2 / cam_d + 1 / 2), HEIGHT * (1 - (abc_dz / 2 * sqrt(3) / cam_d + 1 / 2))
+
+
 @njit(fastmath=True)
 def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_an_xz, vector_nul_an_xy,
           vector_nul_d):
