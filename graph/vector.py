@@ -45,13 +45,14 @@ def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d):
 
 @njit(fastmath=True)
 def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_an_xz, vector_nul_an_xy,
-          vector_nul_d):
+          vector_nul_d, trigonometry):
     self_dx = -vector_nul_x + self_x
     self_dy = -vector_nul_y + self_y
     self_dz = -vector_nul_z + self_z
-    vector_nul_dx = vector_nul_d * cos(vector_nul_an_xy) * cos(vector_nul_an_xz)
-    vector_nul_dy = vector_nul_d * sin(vector_nul_an_xy) * cos(vector_nul_an_xz)
-    vector_nul_dz = vector_nul_d * sin(vector_nul_an_xz)
+    vector_nul_an_xy_sin, vector_nul_an_xz_sin, vector_nul_an_xy_cos, vector_nul_an_xz_cos =  trigonometry
+    vector_nul_dx = vector_nul_d * vector_nul_an_xy_cos * vector_nul_an_xz_cos
+    vector_nul_dy = vector_nul_d * vector_nul_an_xy_sin * vector_nul_an_xz_cos
+    vector_nul_dz = vector_nul_d * vector_nul_an_xz_sin
     l = (self_dx * vector_nul_dx + self_dy * vector_nul_dy + self_dz * vector_nul_dz) \
         / (vector_nul_d * vector_nul_d)
     dx = self_dx / l - vector_nul_dx
@@ -91,12 +92,9 @@ class Vector:
         self.an_xz_sin = 0
         self.an_xy_sin = 0
 
+    @staticmethod
     def from_polar(self, x, y, z, lng, lat, r):
         vector = Vector(x0=x, y0=y, z0=z, d0=r, an_xy0=lng, an_xz0=lat)
-        self.an_xz_cos = cos(self.an_xz)
-        self.an_xy_cos = cos(self.an_xy)
-        self.an_xz_sin = sin(self.an_xz)
-        self.an_xy_sin = sin(self.an_xy)
         vector.set_coords_di_from_d()
         return vector
 
@@ -104,6 +102,10 @@ class Vector:
     # def from_decart
 
     def set_coords_di_from_d(self):
+        self.an_xz_cos = cos(self.an_xz)
+        self.an_xy_cos = cos(self.an_xy)
+        self.an_xz_sin = sin(self.an_xz)
+        self.an_xy_sin = sin(self.an_xy)
         self.dx = self.d * self.an_xy_cos * self.an_xz_cos
         self.dy = self.d * self.an_xy_cos * self.an_xz_cos
         self.dz = self.d * self.an_xz_cos
