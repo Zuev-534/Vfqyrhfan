@@ -61,11 +61,11 @@ def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vect
     return dx, dy, dz
 
 @njit(fastmath=True)
-def new_di_in_new_pos_func(self, vector_nul):
-    self.dx = -vector_nul.x + self.x
-    self.dy = -vector_nul.y + self.y
-    self.dz = -vector_nul.z + self.z
-    return
+def new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z):
+    self_dx = -vector_nul_x + self_x
+    self_dy = -vector_nul_y + self_y
+    self_dz = -vector_nul_z + self_z
+    return self_dx, self_dy, self_dz
 
 @njit(fastmath=True)
 def r_v_z(x, y, fi_xy=0.0):
