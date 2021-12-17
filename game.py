@@ -2,7 +2,7 @@ import pygame
 from time import time
 from player import coords, Player
 from pygame.draw import circle
-from vocabulary import BLACK, WHITE, GREY1, convert_point
+from vocabulary import *
 from scene import Scene
 from itertools import chain
 from graph import Cube, Vector
@@ -42,7 +42,7 @@ class Game:
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
             self.log()
-
+            self.GUI()
             pygame.display.update()
 
         pygame.quit()
@@ -52,6 +52,9 @@ class Game:
             self.running = False
         elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.running = False
+
+    def GUI(self):
+        circle(self.screen, BLACK, (WIDTH / 2, HEIGHT / 2), 4, 1)
 
     def log(self):
 

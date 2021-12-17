@@ -34,13 +34,14 @@ class Rasterizer:
     def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1, ):
         screen.fill(GREY1)
         temp_order = cut(scene, order, camera)
-        outline = 1
         fatline = self.selected_block(camera, scene)
         print(fatline)
 
         for item in temp_order:
             if fatline == item:
-                outline = 2
+                outline = 3
+            else:
+                outline = 1
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
                            camera.an_xz,
                            camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
@@ -52,10 +53,10 @@ class Rasterizer:
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for i in range(8 * 15):
-            rx += cam.dx / 15 / cam.d
-            ry += cam.dy / 15 / cam.d
-            rz += cam.dz / 15 / cam.d
+        for i in range(6 * 7):
+            rx += cam.dx / 7 / cam.d
+            ry += cam.dy / 7 / cam.d
+            rz += cam.dz / 7 / cam.d
             print(rx, ry, rz)
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 return round(rx), round(ry), round(rz)
