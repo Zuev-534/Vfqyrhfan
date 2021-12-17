@@ -35,6 +35,5 @@ order = order[:len(order) - 7]
 generate(order[::-1][1:][::-1])
 out.close()
 
-
 if __name__ == "__main__":
     print("This module is not for direct call!")
