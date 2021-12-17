@@ -1,10 +1,10 @@
 import pygame
 from graph import Vector
+from graph import vector
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1
+from vocabulary import GREY1, WIDTH, HEIGHT
 from order_of_output import *
-
 
 def cut(scene, order, camera):
     t_o = []
@@ -22,12 +22,12 @@ def cut(scene, order, camera):
 
 
 def draw_bottom(screen, cam):
-    points = [
-        [cam.x + distance * 2, cam.y + distance * 2, 10]
-        [cam.x - distance * 2, cam.y + distance * 2, 10]
-        [cam.x + distance * 2, cam.y - distance * 2, 10]
-        [cam.x - distance * 2, cam.y - distance * 2, 10]
-    ]
+    x_ground, y_ground = vector.coords_to_cam_func(
+        *vector.get_vector_func(100000, 100000, 5, cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
+                                                                                     cam.an_xz_sin,
+                                                                                     cam.an_xy_cos,
+                                                                                     cam.an_xz_cos)))
+    pygame.draw.polygon(screen, (50, 150, 50), [[0, y_ground], [WIDTH, y_ground], [WIDTH, HEIGHT], [0, HEIGHT]])
 
 
 class Rasterizer:
@@ -35,8 +35,7 @@ class Rasterizer:
         screen.fill(GREY1)
         temp_order = cut(scene, order, camera)
         fatline = self.selected_block(camera, scene)
-        print(fatline)
-
+        draw_bottom(screen, camera)
         for item in temp_order:
             if fatline == item:
                 outline = 3
@@ -57,7 +56,6 @@ class Rasterizer:
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d
-            print(rx, ry, rz)
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 return round(rx), round(ry), round(rz)
 

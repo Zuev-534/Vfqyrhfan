@@ -47,14 +47,21 @@ def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d, trig
 
 @njit(fastmath=True)
 def gt_vr(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_an_xz, vector_nul_an_xy,
-          vector_nul_d, trigonometry):
-    self_dx, self_dy, self_dz = new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z)
+          vector_nul_d, trigonometry, relative = False):
+    if relative:
+        self_dx, self_dy, self_dz = self_x, self_y, self_z
+    else:
+        self_dx, self_dy, self_dz = new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z)
+
     vector_nul_an_xy_sin, vector_nul_an_xz_sin, vector_nul_an_xy_cos, vector_nul_an_xz_cos = trigonometry
+
     vector_nul_dx = vector_nul_d * vector_nul_an_xy_cos * vector_nul_an_xz_cos
     vector_nul_dy = vector_nul_d * vector_nul_an_xy_sin * vector_nul_an_xz_cos
     vector_nul_dz = vector_nul_d * vector_nul_an_xz_sin
+
     l = (self_dx * vector_nul_dx + self_dy * vector_nul_dy + self_dz * vector_nul_dz) \
         / (vector_nul_d * vector_nul_d)
+
     dx = self_dx / l - vector_nul_dx
     dy = self_dy / l - vector_nul_dy
     dz = self_dz / l - vector_nul_dz
