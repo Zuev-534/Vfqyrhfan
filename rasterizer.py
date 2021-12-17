@@ -36,6 +36,7 @@ class Rasterizer:
         temp_order = cut(scene, order, camera)
         outline = 1
         fatline = self.selected_block(camera, scene)
+
         for item in temp_order:
             if fatline == item:
                 outline = 3
@@ -46,8 +47,16 @@ class Rasterizer:
                                                                                             camera.an_xy_cos,
                                                                                             camera.an_xz_cos), outline)
 
-    def selected_block(self, player_get_camera, scene):
-        return False
+    def selected_block(self, cam, scene):
+        rx = cam.x
+        ry = cam.y
+        rz = cam.z
+        for i in range(8 * 15):
+            rx += cam.dx / 15 / cam.d
+            ry += cam.dy / 15 / cam.d
+            rz += cam.dz / 15 / cam.d
+            if scene.map[round(rx)][round(ry)][round(rz)]:
+                return round(rx), round(ry), round(rz)
 
 
 if __name__ == "__main__":
