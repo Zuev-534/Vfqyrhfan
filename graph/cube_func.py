@@ -12,11 +12,12 @@ def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z, cam_an_xz, cam_
         for i in range(2):
             for j in range(2):
                 for k in range(2):
-                    coords_2d[i][j][k] = vector.coords_to_cam_func(*vector.get_vector_func(points[i][j][k][0], points[i][j][k][1],
-                                                                             points[i][j][k][2], cam_x, cam_y, cam_z,
-                                                                             cam_an_xz,
-                                                                             cam_an_xy,
-                                                                             cam_d))
+                    coords_2d[i][j][k] = vector.coords_to_cam_func(
+                        *vector.get_vector_func(points[i][j][k][0], points[i][j][k][1],
+                                                points[i][j][k][2], cam_x, cam_y, cam_z,
+                                                cam_an_xz,
+                                                cam_an_xy,
+                                                cam_d))
 
         if cam_x > x + cub_h / 2:
             draw_square_func(screen, cub_id, coords_2d, i=3)
@@ -94,3 +95,7 @@ def set_coords_with_move_func(x, y, z, h_cube):
                 points[i][j][k][1] = y + (-1) ** (j + 1) * h_cube / 2
                 points[i][j][k][2] = z + (-1) ** (k + 1) * h_cube / 2
     return points
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

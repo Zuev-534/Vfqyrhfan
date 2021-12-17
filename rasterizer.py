@@ -29,3 +29,7 @@ class Rasterizer:
             x, y, z = item
             draw_cube_func(screen, scene.map[x][y][z], x, y, z, camera.x, camera.y, camera.z, camera.an_xz,
                            camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h)
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

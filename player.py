@@ -124,3 +124,7 @@ def coords(screen, player: Player, fps):
         text_render(screen, "an_xy = " + str(player.lng)[:4], 50, 300)
         text_render(screen, "an_xz = " + str(player.lat)[:4], 50, 330)
         text_render(screen, "fly_mod = " + str(player.fly_mod)[:4], 50, 360)
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

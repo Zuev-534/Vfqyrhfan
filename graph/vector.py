@@ -23,6 +23,7 @@ def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y
     dz = -vector_nul_z + vec_1_z
     return dx, dy, dz
 
+
 # проверен(в бою)
 def get_vector_func(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d):
     dx, dy, dz = gt_vr(x, y, z, c_x, c_y, c_z, c_an_xz, c_an_xy, c_d)
@@ -162,3 +163,7 @@ class Vector:
         self.rotate_vector_z(fi_xy=pi / 2)
 
         return WIDTH * (self.dx / 2 / cam.d + 1 / 2), HEIGHT * (1 - (self.dz / 2 * sqrt(3) / cam.d + 1 / 2))
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

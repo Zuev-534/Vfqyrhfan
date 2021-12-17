@@ -92,3 +92,7 @@ def convert_point(point, o_start):
     x = x + a
     y = -y + b
     return x, y
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")

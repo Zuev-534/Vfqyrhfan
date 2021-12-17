@@ -4,7 +4,7 @@ from pygame.draw import polygon
 
 
 class Cube:
-    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1, vis = 1):
+    def __init__(self, x0=0, y0=0, z0=0, color=GREEN, h0=1, vis=1):
         self.x = x0
         self.y = y0
         self.z = z0
@@ -105,3 +105,7 @@ class Cube:
                      self.coords_2d[0][1][k - 2],
                      self.coords_2d[1][1][k - 2],
                      self.coords_2d[1][0][k - 2]], 1)
+
+
+if __name__ == "__main__":
+    print("This module is not for direct call!")
