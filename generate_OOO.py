@@ -1,6 +1,6 @@
 from cube import *
 
-distance = 16
+distance = 10
 h_dis = 10
 out = open('order_of_output.py', 'w')
 

@@ -5,7 +5,6 @@ from numpy import sign
 from numpy import float32
 from pygame.draw import *
 
-
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
 k = 0.001  # Чувствительность мыши
@@ -35,11 +34,12 @@ CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY1 = (180, 180, 180)
+
+
 # -------------------------------------------------------------------
 
 
-
-# можно собрать отдельный фвйл-библиотеку блоков
+# можно собрать отдельный файл-библиотеку блоков
 def get_color(id):
     """
     return: цвет
@@ -94,6 +94,18 @@ def convert_point(point, o_start):
     x = x + a
     y = -y + b
     return x, y
+
+
+def cut(scene, order, camera, d, h):
+    t_o = []
+    for item in order:
+        x, y, z = item
+        x += int(camera.x + 0.5) - int(d / 2)
+        y += int(camera.y + 0.5) - int(d / 2)
+        z += int(camera.z + 0.5) - int(h / 2)
+        if scene.map[x][y][z]:
+            t_o.append((x, y, z))
+    return t_o
 
 
 if __name__ == "__main__":

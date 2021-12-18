@@ -10,9 +10,9 @@ class Scene:
         self.map = generate_emp(1000, 1000, 1000)
 
     def test(self):
-        for i in range(10):
-            for k in range(10):
-                self.map[10 + i][21 + k][10] = 4
+        for i in range(20):
+            for k in range(20):
+                self.map[510 + i][521 + k][10] = 4
 
         self.map[10][21][13] = 4
 

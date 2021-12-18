@@ -26,7 +26,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player(Vector(0, 20, 12), self.gravity)
+        self.player = Player(Vector(500, 500, 12), self.gravity)
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
@@ -59,8 +59,8 @@ class Game:
     def log(self):
 
         circle(self.screen, BLACK,
-               Vector(10, 21, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
-        circle(self.screen, BLACK, Vector(100, 111, 2000).get_vector(self.player.get_camera()).coords_to_cam(
+               Vector(510, 521, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
+        circle(self.screen, BLACK, Vector(500, 500, 200000).get_vector(self.player.get_camera()).coords_to_cam(
             self.player.get_camera()), 10)
 
         clip = self.screen.get_clip()

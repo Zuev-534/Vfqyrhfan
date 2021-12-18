@@ -3,23 +3,8 @@ from graph import Vector
 from graph import vector
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, WIDTH, HEIGHT
-from order_of_output import *
-
-
-def cut(scene, order, camera):
-    t_o = []
-    for item in order:
-        x, y, z = item
-        x += int(camera.x + 0.5) - int(distance / 2)
-        y += int(camera.y + 0.5) - int(distance / 2)
-        z += int(camera.z + 0.5) - int(h_dis / 2)
-        try:
-            if scene.map[x][y][z]:
-                t_o.append((x, y, z))
-        except:
-            pass
-    return t_o
+from vocabulary import GREY1, WIDTH, HEIGHT, cut
+import order_of_output
 
 
 def draw_bottom(screen, cam):
@@ -40,7 +25,7 @@ class Rasterizer:
         screen.fill(GREY1)
         if self.coord_history != (camera.x, camera.y, camera.z):
             self.coord_history = (camera.x, camera.y, camera.z)
-            self.temp_order = cut(scene, order, camera)
+            self.temp_order = cut(scene, order_of_output.order, camera, order_of_output.distance, order_of_output.h_dis)
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
