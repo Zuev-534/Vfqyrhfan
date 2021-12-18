@@ -35,6 +35,8 @@ class Player:
                     self.fly_mod = - self.fly_mod
                 if event.key == pygame.K_t:
                     self.test_mod = - self.test_mod
+                if event.key == pygame.K_SPACE and self.fly_mod == -1:
+                    self.jump()
                 self.pressed_keys.append(event.key)
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
@@ -88,13 +90,6 @@ class Player:
         if self.fly_mod == -1:
             self.a.z = self.g
 
-        self.check_tuk(cam, order, ground, scene)
-        self.r.x += self.v.x
-        self.r.y += self.v.y
-        self.r.z += self.v.z
-        self.v.x += self.a.x
-        self.v.y += self.a.y
-        self.v.z += self.a.z
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
@@ -109,6 +104,13 @@ class Player:
         if abs(self.v.z) <= speed_limit_min:
             self.v.z = 0
 
+        self.check_tuk(cam, order, ground, scene)
+        self.r.x += self.v.x
+        self.r.y += self.v.y
+        self.r.z += self.v.z
+        self.v.x += self.a.x
+        self.v.y += self.a.y
+        self.v.z += self.a.z
     def check_tuk(self, cam, order, ground, scene):
         """
         Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
@@ -126,6 +128,11 @@ class Player:
             self.v.y = 0
         if ret[5] and self.v.z <= 0:
             self.v.z = 0
+
+    def jump(self):
+        print(self.v.z)
+        if abs(abs(self.v.z) - 0.003) < 0.0000001:
+            self.v.z = speed_limit_max * 1.5
 
 
 def coords(screen, player: Player, fps):
