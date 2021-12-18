@@ -3,6 +3,7 @@ from vocabulary import *
 
 from graph import vector_boosted
 
+
 class Vector:
     def __init__(self, x0=0.0, y0=0.0, z0=0.0, d0=0.0, dx0=0.0, dy0=0.0, dz0=0.0, an_xy0=0.0, an_xz0=0.0):
         self.d = d0
@@ -14,10 +15,9 @@ class Vector:
         self.dz = dz0
         self.an_xy = an_xy0
         self.an_xz = an_xz0
-        self.an_xz_cos = 0
-        self.an_xy_cos = 0
-        self.an_xz_sin = 0
-        self.an_xy_sin = 0
+
+        # an_xy_sin, an_xy_cos, an_xz_sin, an_xz_cos
+        self.trigonometry_array = [0, 1, 0, 2]
 
     @staticmethod
     def from_polar(x, y, z, lng, lat, r):
@@ -29,13 +29,14 @@ class Vector:
     # def from_decart
 
     def set_coords_di_from_d(self):
-        self.an_xz_cos = cos(self.an_xz)
-        self.an_xy_cos = cos(self.an_xy)
-        self.an_xz_sin = sin(self.an_xz)
-        self.an_xy_sin = sin(self.an_xy)
-        self.dx = self.d * self.an_xy_cos * self.an_xz_cos
-        self.dy = self.d * self.an_xy_sin * self.an_xz_cos
-        self.dz = self.d * self.an_xz_sin
+        self.trigonometry_array[0] = vector_boosted.sin(self.an_xy)
+        self.trigonometry_array[1] = vector_boosted.cos(self.an_xy)
+        self.trigonometry_array[2] = vector_boosted.sin(self.an_xz)
+        self.trigonometry_array[3] = vector_boosted.cos(self.an_xz)
+        self.dx, self.dy, self.dz = vector_boosted.set_coords_di_from_d(self.d, self.trigonometry_array[0],
+                                                                        self.trigonometry_array[1],
+                                                                        self.trigonometry_array[2],
+                                                                        self.trigonometry_array[3])
 
     def new_di_in_new_pos(self, vector_nul):
         self.dx = -vector_nul.x + self.x
@@ -43,14 +44,10 @@ class Vector:
         self.dz = -vector_nul.z + self.z
 
     # def SPEEEED(self, vector_nul):
-    #     obj = np.array([self.x, self.y, self.z], dtype=float32)
-    #     kam = np.array([vector_nul.x, vector_nul.y, vector_nul.z], dtype=float32)
-    #     d_obj = np.zeros(3, dtype=float32)
-    #     d_kam = np.zeros(3, dtype=float32)
     #     return (obj, d_obj, kam, d_kam, vector_nul.an_xy, vector_nul.an_xz, vector_nul.d)
 
     def set_coords_d_from_di(self):
-        self.d = sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
+        self.d = np.sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
 
     def scalar(self, vector_nul):
         return self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz
@@ -72,8 +69,10 @@ class Vector:
 
     def get_vector(self, vector_nul: Vector) -> Vector:
         dx, dy, dz = vector_boosted.gt_vr(self.x, self.y, self.z, vector_nul.x, vector_nul.y, vector_nul.z,
-                           vector_nul.an_xz, vector_nul.an_xy, vector_nul.d,
-                           (vector_nul.an_xy_sin, vector_nul.an_xz_sin, vector_nul.an_xy_cos, vector_nul.an_xz_cos))
+                                          vector_nul.an_xz, vector_nul.an_xy, vector_nul.d,
+                                          (vector_nul.trigonometry_array[0], vector_nul.trigonometry_array[2],
+                                           vector_nul.trigonometry_array[1],
+                                           vector_nul.trigonometry_array[3]))
         abc = Vector(dx0=dx, dy0=dy, dz0=dz)
         abc.set_coords_d_from_di()
         return abc
@@ -85,7 +84,7 @@ class Vector:
         self.dx, self.dz = vector_boosted.r_v_y(self.dx, self.dz, fi_zx)
 
     def rotate_vector_x(self, fi_yz=0.0):
-        self.dz, self.dy =  vector_boosted.r_v_x(self.dz, self.dy, fi_yz)
+        self.dz, self.dy = vector_boosted.r_v_x(self.dz, self.dy, fi_yz)
 
     def print_all(self):
         print("self = ", self)
@@ -102,9 +101,9 @@ class Vector:
     def coords_to_cam(self, cam: Vector):
         self.rotate_vector_z(-cam.an_xy)
         self.rotate_vector_y(cam.an_xz)
-        self.rotate_vector_z(fi_xy=pi / 2)
+        self.rotate_vector_z(fi_xy=1.570795)
 
-        return WIDTH * (self.dx / 2 / cam.d + 1 / 2), HEIGHT * (1 - (self.dz / 2 * sqrt(3) / cam.d + 1 / 2))
+        return WIDTH * (self.dx / 2 / cam.d + 1 / 2), HEIGHT * (1 - (self.dz / 2 * 1.732050 / cam.d + 1 / 2))
 
     def min_int_distance(self, scene, cam: Vector, order, ground):
         """

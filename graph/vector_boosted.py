@@ -14,7 +14,7 @@ def get_angle_cos_func(dx, dy, dz, d, vector_nul_dx, vector_nul_dy, vector_nul_d
 
 @njit(fastmath=True)
 def set_coords_d_from_di_func(dx, dy, dz):
-    return sqrt(dx ** 2 + dy ** 2 + dz ** 2)
+    return np.sqrt(dx ** 2 + dy ** 2 + dz ** 2)
 
 
 @njit(fastmath=True)
@@ -39,7 +39,7 @@ def coords_to_cam_func(abc_dx, abc_dy, abc_dz, cam_an_xy, cam_an_xz, cam_d, trig
     abc_dx, abc_dz = abc_dx * cam_an_xz_cos + abc_dz * cam_an_xz_sin, - abc_dx * cam_an_xz_sin + abc_dz * cam_an_xz_cos
     abc_dx, abc_dy = - abc_dy, abc_dx
 
-    return WIDTH * (abc_dx / 2 / cam_d + 1 / 2), HEIGHT * (1 - (abc_dz / 2 * sqrt(3) / cam_d + 1 / 2))
+    return WIDTH * (abc_dx / 2 / cam_d + 1 / 2), HEIGHT * (1 - (abc_dz / 2 * np.sqrt(3) / cam_d + 1 / 2))
 
 
 @njit(fastmath=True)
@@ -75,6 +75,11 @@ def new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, v
 
 
 @njit(fastmath=True)
+def set_coords_di_from_d(d, an_xy_sin, an_xy_cos, an_xz_sin, an_xz_cos):
+    return d * an_xy_cos * an_xz_cos, d * an_xy_sin * an_xz_cos, d * an_xz_sin
+
+
+@njit(fastmath=True)
 def r_v_z(x, y, fi_xy=0.0):
     return x * cos(fi_xy) - y * sin(fi_xy), x * sin(fi_xy) + y * cos(fi_xy)
 
@@ -87,3 +92,13 @@ def r_v_y(x, z, fi_zx=0.0):
 @njit(fastmath=True)
 def r_v_x(z, y, fi_yz=0.0):
     return y * sin(fi_yz) + z * cos(fi_yz), y * cos(fi_yz) - z * sin(fi_yz)
+
+
+@njit(fastmath=True)
+def sin(x):
+    return np.sin(x)
+
+
+@njit(fastmath=True)
+def cos(x):
+    return np.cos(x)

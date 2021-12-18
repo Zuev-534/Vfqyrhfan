@@ -1,4 +1,4 @@
-from math import *
+import math
 import numpy as np
 import pygame
 from numpy import sign

@@ -8,8 +8,8 @@ import order_of_output
 
 
 def draw_bottom(screen, cam):
-    for i in range(order_of_output.distance+15):
-        for j in range(order_of_output.distance+15):
+    for i in range(order_of_output.distance + 15):
+        for j in range(order_of_output.distance + 15):
             a = True
             if a:
                 try:
@@ -17,10 +17,10 @@ def draw_bottom(screen, cam):
                         *vector_boosted.get_vector_func(
                             int(cam.x) - (order_of_output.distance + 15) / 2 + i,
                             int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
-                            cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
-                                                                               cam.an_xz_sin,
-                                                                               cam.an_xy_cos,
-                                                                               cam.an_xz_cos)))
+                            cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.trigonometry_array[0],
+                                                                               cam.trigonometry_array[2],
+                                                                               cam.trigonometry_array[1],
+                                                                               cam.trigonometry_array[3])))
 
                     pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
                 except:
@@ -48,10 +48,11 @@ class Rasterizer:
                                camera.x, camera.y,
                                camera.z,
                                camera.an_xz,
-                               camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
-                                                                                                camera.an_xz_sin,
-                                                                                                camera.an_xy_cos,
-                                                                                                camera.an_xz_cos),
+                               camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h,
+                               (camera.trigonometry_array[0],
+                                camera.trigonometry_array[2],
+                                camera.trigonometry_array[1],
+                                camera.trigonometry_array[3]),
                                outline,
                                grnd=fatline[3])
                 outline = 1
@@ -61,10 +62,11 @@ class Rasterizer:
                     outline = 3
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
                            camera.an_xz,
-                           camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
-                                                                                            camera.an_xz_sin,
-                                                                                            camera.an_xy_cos,
-                                                                                            camera.an_xz_cos), outline)
+                           camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h,
+                           (camera.trigonometry_array[0],
+                            camera.trigonometry_array[2],
+                            camera.trigonometry_array[1],
+                            camera.trigonometry_array[3]), outline)
             outline = 1
 
     def selected_block(self, cam, scene):

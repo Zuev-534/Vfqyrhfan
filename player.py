@@ -44,18 +44,18 @@ class Player:
             # x = - delta <= ось с пайгеймой не сходится
             x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
             pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
-            self.lng = (self.lng + x + pi) % (pi * 2) - pi
+            self.lng = (self.lng + x + np.pi) % (np.pi * 2) - np.pi
             self.lat = (self.lat - y)
-            if self.lat > pi / 2:
-                self.lat = pi / 2
-            if self.lat < -pi / 2:
-                self.lat = -pi / 2
+            if self.lat > np.pi / 2:
+                self.lat = np.pi / 2
+            if self.lat < -np.pi / 2:
+                self.lat = -np.pi / 2
 
     def move(self, cam, order, ground, scene):
         """
         перемещает игрока посредством добавления вектору скорости ускорения
         """
-        v_horizontal = sqrt(self.v.x ** 2 + self.v.y ** 2)
+        v_horizontal = np.sqrt(self.v.x ** 2 + self.v.y ** 2)
         if v_horizontal > speed_limit_min:
             self.a.y = -self.v.y / v_horizontal * stopper_acceleration
             self.a.x = -self.v.x / v_horizontal * stopper_acceleration
@@ -69,17 +69,17 @@ class Player:
 
         for key in self.pressed_keys:
             if key == pygame.K_d:
-                self.a.x += +leg_force * sin(self.lng)
-                self.a.y += -leg_force * cos(self.lng)
+                self.a.x += +leg_force * np.sin(self.lng)
+                self.a.y += -leg_force * np.cos(self.lng)
             elif key == pygame.K_a:
-                self.a.x += -leg_force * sin(self.lng)
-                self.a.y += +leg_force * cos(self.lng)
+                self.a.x += -leg_force * np.sin(self.lng)
+                self.a.y += +leg_force * np.cos(self.lng)
             elif key == pygame.K_s:
-                self.a.x += -leg_force * cos(self.lng)
-                self.a.y += -leg_force * sin(self.lng)
+                self.a.x += -leg_force * np.cos(self.lng)
+                self.a.y += -leg_force * np.sin(self.lng)
             elif key == pygame.K_w:
-                self.a.x += +leg_force * cos(self.lng)
-                self.a.y += +leg_force * sin(self.lng)
+                self.a.x += +leg_force * np.cos(self.lng)
+                self.a.y += +leg_force * np.sin(self.lng)
             elif key == pygame.K_SPACE and self.fly_mod == 1:
                 if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                     self.a.z += -leg_force
@@ -126,8 +126,6 @@ class Player:
             self.v.y = 0
         if ret[5] and self.v.z <= 0:
             self.v.z = 0
-
-
 
 
 def coords(screen, player: Player, fps):

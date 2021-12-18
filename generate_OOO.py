@@ -30,7 +30,6 @@ for cub in order:
     cub.main.set_coords_d_from_di()
 order.sort(key=lambda x: x.main.d, reverse=True)
 
-
 order = order[:len(order)]
 generate(order[::-1][1:][::-1])
 out.close()

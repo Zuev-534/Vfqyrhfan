@@ -11,7 +11,6 @@ from rasterizer import Rasterizer
 import order_of_tuk
 
 
-
 class Game:
     def __init__(self, width, height, ground):
         self.FPS = 60
