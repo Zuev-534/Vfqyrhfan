@@ -38,6 +38,8 @@ class Player:
                 if event.key == pygame.K_SPACE and self.fly_mod == -1:
                     self.jump()
                 self.pressed_keys.append(event.key)
+            if event.key == pygame.K_m:
+                music()
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
