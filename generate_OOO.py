@@ -7,9 +7,9 @@ out = open('order_of_output.py', 'w')
 
 def generate(order):
     out.write("order = ( \n")
-    for cub in order:
+    for cub in order[:-1]:
         out.write("    " + str((cub.x, cub.y, cub.z)) + ",\n")
-    out.write("    (0, 0, 0)\n")
+    out.write("    " + str((order[-1].x, order[-1].y, order[-1].z)) + "\n")
     out.write(") \n")
     out.write("\n")
     out.write("distance = " + str(distance) + "\n")
