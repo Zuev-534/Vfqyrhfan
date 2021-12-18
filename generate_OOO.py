@@ -5,11 +5,11 @@ h_dis = 13
 out = open('order_of_output.py', 'w')
 
 
-def generate(order):
+def generate(ord):
     out.write("order = ( \n")
-    for cub in order[:-1]:
-        out.write("    " + str((cub.x, cub.y, cub.z)) + ",\n")
-    out.write("    " + str((order[-1].x, order[-1].y, order[-1].z)) + "\n")
+    for cube in order[:-1]:
+        out.write("    " + str((cube.x, cube.y, cube.z)) + ",\n")
+    out.write("    " + str((ord[-1].x, ord[-1].y, ord[-1].z)) + "\n")
     out.write(") \n")
     out.write("\n")
     out.write("distance = " + str(distance) + "\n")
