@@ -80,14 +80,14 @@ def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
 # Убрал как непостоянный необязательный фактор пока ошибки не исправлю
 def cub_are_vis_or_func(cub_id, x, y, z, cam_x, cam_y, cam_z, cam_dx, cam_dy, cam_dz, cam_d):
     return True
-    # if cub_id == 0:
-    #     return 0
-    # dx, dy, dz = vector.new_di_in_new_pos_func(x, y, z, cam_x, cam_y, cam_z)
-    # d = vector.set_coords_d_from_di_func(dx, dy, dz)
-    # if vector.get_angle_cos_func(dx, dy, dz, d, cam_dx, cam_dy, cam_dz, cam_d) > 1 / 2:
-    #     return True
-    # else:
-    #     return False
+# if cub_id == 0:
+#     return 0
+# dx, dy, dz = vector.new_di_in_new_pos_func(x, y, z, cam_x, cam_y, cam_z)
+# d = vector.set_coords_d_from_di_func(dx, dy, dz)
+# if vector.get_angle_cos_func(dx, dy, dz, d, cam_dx, cam_dy, cam_dz, cam_d) > 1 / 2:
+#     return True
+# else:
+#     return False
 
 
 @njit(fastmath=True)
