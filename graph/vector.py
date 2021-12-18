@@ -129,7 +129,7 @@ class Vector:
             elif 0 < -dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
                 ret[5] += 1
             elif abs(dx) <= 0.5 or abs(dy) <= 0.5 or abs(dz) <= 0.5:
-                if sqrt((abs(dx) - 0.5) ** 2 + (abs(dy) - 0.5) ** 2) <= 0.92 and abs(dz) <= 0.5:
+                if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dy) - 0.5) ** 2) <= 0.92 and abs(dz) <= 0.5:
                     if dx > 0:
                         ret[0] += 1
                     else:
@@ -139,7 +139,7 @@ class Vector:
                     else:
                         ret[4] += 1
 
-                if sqrt((abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dy) <= 0.5:
+                if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dy) <= 0.5:
                     if dx > 0:
                         ret[0] += 1
                     else:
@@ -149,7 +149,7 @@ class Vector:
                     else:
                         ret[5] += 1
 
-                if sqrt((abs(dy) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dx) <= 0.5:
+                if np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dx) <= 0.5:
                     if dy > 0:
                         ret[1] += 1
                     else:
@@ -158,7 +158,7 @@ class Vector:
                         ret[2] += 1
                     else:
                         ret[5] += 1
-            elif sqrt((abs(dy) - 0.5) ** 2 + (abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.89:
+            elif np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.89:
                 if dx > 0:
                     ret[0] += 1
                 else:
@@ -174,6 +174,4 @@ class Vector:
 
         if cam.z <= ground + 1.5:
             ret[5] += 1
-
-        print(ret)
         return ret
