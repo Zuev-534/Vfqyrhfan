@@ -1,5 +1,5 @@
+from vocabulary import *
 from numba import njit
-
 
 
 @njit(fastmath=True)

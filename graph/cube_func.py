@@ -111,8 +111,8 @@ def coord2d_func(points, cam_x, cam_y, cam_z, cam_an_xz, cam_an_xy, cam_d, trigo
     for i in range(2):
         for j in range(2):
             for k in range(2):
-                coords_2d[i][j][k] = vector.coords_to_cam_func(
-                    *vector.get_vector_func(points[i][j][k][0], points[i][j][k][1],
+                coords_2d[i][j][k] = vector_boosted.coords_to_cam_func(
+                    *vector_boosted.get_vector_func(points[i][j][k][0], points[i][j][k][1],
                                             points[i][j][k][2], cam_x, cam_y, cam_z,
                                             cam_an_xz,
                                             cam_an_xy,
