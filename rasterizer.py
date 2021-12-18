@@ -32,9 +32,15 @@ def draw_bottom(screen, cam):
 
 
 class Rasterizer:
+    def __init__(self):
+        self.coord_history = (0, 0, 0)
+        self.temp_order = []
+
     def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1, ):
         screen.fill(GREY1)
-        temp_order = cut(scene, order, camera)
+        if self.coord_history != (camera.x, camera.y, camera.z):
+            self.coord_history = (camera.x, camera.y, camera.z)
+            self.temp_order = cut(scene, order, camera)
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
@@ -53,7 +59,7 @@ class Rasterizer:
                                outline,
                                grnd=fatline[3])
                 outline = 1
-        for item in temp_order:
+        for item in self.temp_order:
             if type(fatline) == type((1, 2, 3)):
                 if fatline[:-1] == item:
                     outline = 3
