@@ -41,14 +41,16 @@ class Rasterizer:
         if type(fatline) == type((1, 2, 3)):
             if fatline[3]:
                 outline = 3
-                draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1], fatline[2],
+                draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1],
+                               fatline[2],
                                camera.x, camera.y,
                                camera.z,
                                camera.an_xz,
                                camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h, (camera.an_xy_sin,
                                                                                                 camera.an_xz_sin,
                                                                                                 camera.an_xy_cos,
-                                                                                                camera.an_xz_cos), outline,
+                                                                                                camera.an_xz_cos),
+                               outline,
                                grnd=fatline[3])
                 outline = 1
         for item in temp_order:
@@ -62,7 +64,6 @@ class Rasterizer:
                                                                                             camera.an_xy_cos,
                                                                                             camera.an_xz_cos), outline)
             outline = 1
-
 
     def selected_block(self, cam, scene):
         rx = cam.x
