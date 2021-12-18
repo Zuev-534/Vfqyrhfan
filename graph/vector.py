@@ -203,18 +203,65 @@ class Vector:
         """
         ret = [0, 0, 0, 0, 0, 0]
         for item in cut(scene, order, cam, 3, 3):
-            if item[0] - cam.x <= 1.45 and abs(-item[1] + cam.y) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
-                ret[3] += 1
-            elif item[1] - cam.y <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
-                ret[4] += 1
-            elif item[2] - cam.z <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[1] + cam.y) <= 0.5:
-                ret[5] += 1
-            elif -item[0] + cam.x <= 1.45 and abs(-item[1] + cam.y) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+            dx = item[0] - cam.x
+            dy = item[1] - cam.y
+            dz = item[2] - cam.z
+            if 0 < dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
                 ret[0] += 1
-            elif -item[1] + cam.y <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+            elif 0 < dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
                 ret[1] += 1
-            elif -item[2] + cam.z <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[1] + cam.y) <= 0.5:
+            elif 0 < dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
                 ret[2] += 1
+            elif 0 < -dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
+                ret[3] += 1
+            elif 0 < -dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
+                ret[4] += 1
+            elif 0 < -dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
+                ret[5] += 1
+            elif abs(dx) <= 0.5 or abs(dy) <= 0.5 or abs(dz) <= 0.5:
+                if sqrt((abs(dx) - 0.5) ** 2 + (abs(dy) - 0.5) ** 2) <= 0.92 and abs(dz) <= 0.5:
+                    if dx > 0:
+                        ret[0] += 1
+                    else:
+                        ret[3] += 1
+                    if dy > 0:
+                        ret[1] += 1
+                    else:
+                        ret[4] += 1
+
+                if sqrt((abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dy) <= 0.5:
+                    if dx > 0:
+                        ret[0] += 1
+                    else:
+                        ret[3] += 1
+                    if dz > 0:
+                        ret[2] += 1
+                    else:
+                        ret[5] += 1
+
+                if sqrt((abs(dy) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dx) <= 0.5:
+                    if dy > 0:
+                        ret[1] += 1
+                    else:
+                        ret[4] += 1
+                    if dz > 0:
+                        ret[2] += 1
+                    else:
+                        ret[5] += 1
+            elif sqrt((abs(dy) - 0.5) ** 2 + (abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.89:
+                if dx > 0:
+                    ret[0] += 1
+                else:
+                    ret[3] += 1
+                if dy > 0:
+                    ret[1] += 1
+                else:
+                    ret[4] += 1
+                if dz > 0:
+                    ret[2] += 1
+                else:
+                    ret[5] += 1
+
         if cam.z <= ground + 1.5:
             ret[5] += 1
 
