@@ -62,18 +62,10 @@ class Game:
 
     def log(self):
 
-        circle(self.screen, BLACK,
-               Vector(510, 521, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
-        circle(self.screen, BLACK, Vector(500, 500, 200000).get_vector(self.player.get_camera()).coords_to_cam(
-            self.player.get_camera()), 10)
-
         clip = self.screen.get_clip()
         center = (clip.w / 2, clip.h / 2, 0)
 
         camera = self.player.get_camera()
-        circle(self.screen, BLACK, convert_point((camera.x, camera.y, 0), center), 5)
-        circle(self.screen, BLACK, convert_point((10, 21, 10), center), 5)
-        circle(self.screen, BLACK, convert_point((100, 111, 0), center), 5)
 
         u = 15
         pygame.draw.lines(self.screen, WHITE, True, [
