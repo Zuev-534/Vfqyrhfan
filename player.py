@@ -113,6 +113,7 @@ class Player:
         self.v.x += self.a.x
         self.v.y += self.a.y
         self.v.z += self.a.z
+
     def check_tuk(self, cam, order, ground, scene):
         """
         Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
