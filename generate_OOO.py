@@ -1,7 +1,7 @@
 from cube import *
 
-distance = 10
-h_dis = 10
+distance = 11
+h_dis = 11
 out = open('order_of_output.py', 'w')
 
 
@@ -23,15 +23,15 @@ for i in range(distance):
         for k in range(h_dis):
             order.append(pool[i][j][k])
 
-igrok = Vector((distance + 1) / 2 - 0.01, (distance + 1) / 2 - 0.01, (h_dis - 1) / 2)
+igrok = Vector((distance - 1) / 2, (distance - 1) / 2, (h_dis - 1) / 2)
 igrok.set_coords_d_from_di()
 for cub in order:
     cub.main.new_di_in_new_pos(igrok)
     cub.main.set_coords_d_from_di()
 order.sort(key=lambda x: x.main.d, reverse=True)
 
-order = order[:len(order) - 7]
 
+order = order[:len(order)]
 generate(order[::-1][1:][::-1])
 out.close()
 

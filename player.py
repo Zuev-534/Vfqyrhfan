@@ -51,7 +51,7 @@ class Player:
             if self.lat < -pi / 2:
                 self.lat = -pi / 2
 
-    def move(self):
+    def move(self, cam, order, ground, scene):
         """
         перемещает игрока посредством добавления вектору скорости ускорения
         """
@@ -88,6 +88,7 @@ class Player:
         if self.fly_mod == -1:
             self.a.z = self.g
 
+        self.check_tuk(cam, order, ground, scene)
         self.r.x += self.v.x
         self.r.y += self.v.y
         self.r.z += self.v.z
@@ -107,11 +108,25 @@ class Player:
             self.v.y = 0
         if abs(self.v.z) <= speed_limit_min:
             self.v.z = 0
-    def check_tuk(self):
+
+    def check_tuk(self, cam, order, ground, scene):
         """
         Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
         """
-        
+        ret = self.r.min_int_distance(scene, cam, order, ground)
+        if ret[0] and self.v.x >= 0:
+            self.v.x = 0
+        if ret[1] and self.v.y >= 0:
+            self.v.y = 0
+        if ret[2] and self.v.z >= 0:
+            self.v.z = 0
+        if ret[3] and self.v.x <= 0:
+            self.v.x = 0
+        if ret[4] and self.v.y <= 0:
+            self.v.y = 0
+        if ret[5] and self.v.z <= 0:
+            self.v.z = 0
+
 
 
 

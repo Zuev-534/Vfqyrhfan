@@ -3,13 +3,13 @@ from graph import Vector
 from graph import vector
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, WIDTH, HEIGHT, cut
+from vocabulary import GREY1, WIDTH, HEIGHT, cut, ground
 import order_of_output
 
 
 def draw_bottom(screen, cam):
     x_ground, y_ground = vector.coords_to_cam_func(
-        *vector.get_vector_func(100000, 100000, 9, cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
+        *vector.get_vector_func(100000, 100000, ground, cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
                                                                                                       cam.an_xz_sin,
                                                                                                       cam.an_xy_cos,
                                                                                                       cam.an_xz_cos)))
@@ -66,7 +66,7 @@ class Rasterizer:
             rz += cam.dz / 7 / cam.d
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 return round(rx), round(ry), round(rz), False
-            if round(rz) == 9:
+            if round(rz) == ground:
                 return round(rx), round(ry), round(rz), True
 
 

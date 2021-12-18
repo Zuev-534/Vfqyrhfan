@@ -8,12 +8,15 @@ from itertools import chain
 from graph import Cube, Vector
 from math import sin, cos
 from rasterizer import Rasterizer
+import order_of_tuk
+
 
 
 class Game:
-    def __init__(self, width, height):
+    def __init__(self, width, height, ground):
         self.FPS = 60
         self.gravity = -0.003
+        self.ground = ground
 
         pygame.init()
         pygame.display.set_caption('Test controlling')
@@ -33,12 +36,13 @@ class Game:
     def loop(self):
         while self.running:
             self.clock.tick(self.FPS)
+            self.player_get_camera = self.player.get_camera()
 
             for event in pygame.event.get():
                 self.update(event)
                 self.player.update(event)
-            self.player.move()
-            self.player_get_camera = self.player.get_camera()
+            self.player.move(self.player_get_camera, order_of_tuk.order, self.ground, self.scene)
+
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
             self.log()

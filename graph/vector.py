@@ -194,3 +194,29 @@ class Vector:
         self.rotate_vector_z(fi_xy=pi / 2)
 
         return WIDTH * (self.dx / 2 / cam.d + 1 / 2), HEIGHT * (1 - (self.dz / 2 * sqrt(3) / cam.d + 1 / 2))
+
+    def min_int_distance(self, scene, cam: Vector, order, ground):
+        """
+        проверяет нахождение блоков поблизости в кубе 5х5, возвращает 6 чисел в формате,
+        какую компоненту скорости нужно убить
+        return: [0,0,1,0,0,1]
+        """
+        ret = [0, 0, 0, 0, 0, 0]
+        for item in cut(scene, order, cam, 3, 3):
+            if item[0] - cam.x <= 1.45 and abs(-item[1] + cam.y) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+                ret[3] += 1
+            elif item[1] - cam.y <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+                ret[4] += 1
+            elif item[2] - cam.z <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[1] + cam.y) <= 0.5:
+                ret[5] += 1
+            elif -item[0] + cam.x <= 1.45 and abs(-item[1] + cam.y) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+                ret[0] += 1
+            elif -item[1] + cam.y <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[2] + cam.z) <= 0.5:
+                ret[1] += 1
+            elif -item[2] + cam.z <= 1.45 and abs(-item[0] + cam.x) <= 0.5 and abs(-item[1] + cam.y) <= 0.5:
+                ret[2] += 1
+        if cam.z <= ground + 1.5:
+            ret[5] += 1
+
+        print(ret)
+        return ret
