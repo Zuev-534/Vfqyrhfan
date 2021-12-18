@@ -1,7 +1,7 @@
 from cube import *
 
-distance = 11
-h_dis = 11
+distance = 21
+h_dis = 13
 out = open('order_of_output.py', 'w')
 
 
