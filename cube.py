@@ -11,7 +11,7 @@ class Cube:
         self.color = color
         self.h = h0
         self.points = None
-        self.coords_2d = [[[(0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
+        self.coords_2d = [[[(0, 0) for _ in range(2)] for _ in range(2)] for _ in range(2)]
 
         self.vizible = 1
         self.main = Vector(x0, y0, z0)
@@ -19,7 +19,7 @@ class Cube:
         self.set_coords_with_move()
 
     def set_coords_with_move(self):
-        self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
+        self.points = [[[Vector(0, 0, 0) for _ in range(2)] for _ in range(2)] for _ in range(2)]
         for i in range(2):
             for j in range(2):
                 for k in range(2):
