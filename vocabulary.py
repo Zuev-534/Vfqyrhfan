@@ -4,7 +4,7 @@ import pygame
 from numpy import sign
 from numpy import float32
 from pygame.draw import *
-from decimal import *
+
 
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
@@ -13,8 +13,8 @@ leg_force = 0.01
 stopper_acceleration = 0.19 * leg_force  # На сколько ед\с падают составляющие скорости
 mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки миникарты в окне
 
-znak1 = [1, 1, -1, -1]
-znak2 = [1, -1, -1, 1]
+signature_1 = [1, 1, -1, -1]
+signature_2 = [1, -1, -1, 1]
 speed_limit_max = 6 * leg_force
 speed_limit_min = 0.2 * leg_force
 
@@ -37,7 +37,6 @@ WHITE = (255, 255, 255)
 GREY1 = (180, 180, 180)
 # -------------------------------------------------------------------
 
-getcontext().prec = 4
 
 
 # можно собрать отдельный фвйл-библиотеку блоков

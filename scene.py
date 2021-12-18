@@ -12,8 +12,7 @@ class Scene:
     def test(self):
         for i in range(10):
             for k in range(10):
-                self.map[10+i][21+k][10] = 4
-
+                self.map[10 + i][21 + k][10] = 4
 
 
 if __name__ == "__main__":
