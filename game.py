@@ -45,7 +45,7 @@ class Game:
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
             self.log()
-            self.GUI()
+            self.gui()
             pygame.display.update()
 
         pygame.quit()
@@ -56,7 +56,7 @@ class Game:
         elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.running = False
 
-    def GUI(self):
+    def gui(self):
         circle(self.screen, BLACK, (WIDTH / 2, HEIGHT / 2), 4, 1)
 
     def log(self):
