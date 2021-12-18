@@ -4,6 +4,7 @@ import pygame
 from numpy import sign
 from numpy import float32
 from pygame.draw import *
+from random import randint
 
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
@@ -108,6 +109,19 @@ def cut(scene, order, camera, d, h):
             t_o.append((x, y, z))
     return t_o
 
+
+def music():
+    rnd = randint(1, 3)
+    if rnd == 1:
+        pygame.mixer.music.load('music\\Seven.mp3')
+        pygame.mixer.music.play(-1)
+    elif rnd == 2:
+        pygame.mixer.music.load('music\\Im_Alright_(Creative Commons)_FREE_vlog positive_background.mp3')
+        pygame.mixer.music.play(-1)
+    elif rnd == 3:
+        pygame.mixer.music.load('music\\Jason_Shaw_Solo_Acoustic_Guitar_[Creative Commons Music].mp3')
+        pygame.mixer.music.play(-1)
+        
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
