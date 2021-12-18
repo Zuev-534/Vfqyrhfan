@@ -36,7 +36,6 @@ class Cube:
                     print(self.points[i][j][k].z)
 
     def cub_are_vis_or(self, cam):
-        global counter
         self.main.new_di_in_new_pos(cam)
         self.main.set_coords_d_from_di()
         if self.main.get_angle_cos(cam) > 1 / 2 and cam.d / 2 < self.main.d < 50:
@@ -55,22 +54,28 @@ class Cube:
                         self.coords_2d[i][j][k] = (x, y)
 
             if cam.x > self.x + self.h / 2:
-                self.draw_square(screen, cam, i=3)
+                self.draw_square(screen, i=3)
             elif cam.x < self.x - self.h / 2:
-                self.draw_square(screen, cam, i=2)
+                self.draw_square(screen, i=2)
             if cam.y > self.y + self.h / 2:
-                self.draw_square(screen, cam, j=3)
+                self.draw_square(screen, j=3)
             elif cam.y < self.y - self.h / 2:
-                self.draw_square(screen, cam, j=2)
+                self.draw_square(screen, j=2)
             if cam.z > self.z + self.h / 2:
-                self.draw_square(screen, cam, k=3)
+                self.draw_square(screen, k=3)
             elif cam.z < self.z - self.h / 2:
-                self.draw_square(screen, cam, k=2)
+                self.draw_square(screen, k=2)
         else:
             pass
 
-    def draw_square(self, screen, cam, i=0, j=0, k=0):
+    def draw_square(self, screen, i=0, j=0, k=0):
+        """
+        рисует на экране заданные стороны какого-то куба
 
+        i:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по x
+        j:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по y
+        k:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по z
+        """
         if i == 2 or i == 3:
             polygon(screen, self.color,
                     [self.coords_2d[i - 2][0][0],

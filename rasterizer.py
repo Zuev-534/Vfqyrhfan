@@ -40,7 +40,7 @@ class Rasterizer:
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
-        if type(fatline) == type((1, 2, 3)):
+        if isinstance(fatline, tuple):
             if fatline[3]:
                 outline = 3
                 draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1],
@@ -57,7 +57,7 @@ class Rasterizer:
                                grnd=fatline[3])
                 outline = 1
         for item in self.temp_order:
-            if type(fatline) == type((1, 2, 3)):
+            if isinstance(fatline, tuple):
                 if fatline[:-1] == item:
                     outline = 3
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
@@ -69,11 +69,12 @@ class Rasterizer:
                             camera.trigonometry_array[3]), outline)
             outline = 1
 
-    def selected_block(self, cam, scene):
+    @staticmethod
+    def selected_block(cam, scene):
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for i in range(6 * 7):
+        for _ in range(5 * 7):
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d
