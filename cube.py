@@ -11,7 +11,7 @@ class Cube:
         self.color = color
         self.h = h0
         self.points = None
-        self.coords_2d = [[[(0, 0) for _ in range(2)] for _ in range(2)] for _ in range(2)]
+        self.coords_2d = [[[(0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
 
         self.vizible = 1
         self.main = Vector(x0, y0, z0)
@@ -19,7 +19,7 @@ class Cube:
         self.set_coords_with_move()
 
     def set_coords_with_move(self):
-        self.points = [[[Vector(0, 0, 0) for _ in range(2)] for _ in range(2)] for _ in range(2)]
+        self.points = [[[Vector(0, 0, 0) for j in range(2)] for i in range(2)] for k in range(2)]
         for i in range(2):
             for j in range(2):
                 for k in range(2):
@@ -36,6 +36,7 @@ class Cube:
                     print(self.points[i][j][k].z)
 
     def cub_are_vis_or(self, cam):
+        global counter
         self.main.new_di_in_new_pos(cam)
         self.main.set_coords_d_from_di()
         if self.main.get_angle_cos(cam) > 1 / 2 and cam.d / 2 < self.main.d < 50:
@@ -54,28 +55,22 @@ class Cube:
                         self.coords_2d[i][j][k] = (x, y)
 
             if cam.x > self.x + self.h / 2:
-                self.draw_square(screen, i=3)
+                self.draw_square(screen, cam, i=3)
             elif cam.x < self.x - self.h / 2:
-                self.draw_square(screen, i=2)
+                self.draw_square(screen, cam, i=2)
             if cam.y > self.y + self.h / 2:
-                self.draw_square(screen, j=3)
+                self.draw_square(screen, cam, j=3)
             elif cam.y < self.y - self.h / 2:
-                self.draw_square(screen, j=2)
+                self.draw_square(screen, cam, j=2)
             if cam.z > self.z + self.h / 2:
-                self.draw_square(screen, k=3)
+                self.draw_square(screen, cam, k=3)
             elif cam.z < self.z - self.h / 2:
-                self.draw_square(screen, k=2)
+                self.draw_square(screen, cam, k=2)
         else:
             pass
 
-    def draw_square(self, screen, i=0, j=0, k=0):
-        """
-        рисует на экране заданные стороны какого-то куба
+    def draw_square(self, screen, cam, i=0, j=0, k=0):
 
-        i:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по x
-        j:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по y
-        k:0-ничего, 2-ближняя к нулю сторона, 3-дальняя к нулю сторона по z
-        """
         if i == 2 or i == 3:
             polygon(screen, self.color,
                     [self.coords_2d[i - 2][0][0],

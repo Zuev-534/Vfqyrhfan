@@ -13,14 +13,10 @@ def draw_bottom(screen, cam):
             a = True
             if a:
                 try:
-                    x_ground, y_ground = vector_boosted.coords_to_cam_func(
-                        *vector_boosted.get_vector_func(
-                            int(cam.x) - (order_of_output.distance + 15) / 2 + i,
-                            int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
-                            cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.trigonometry_array[0],
-                                                                               cam.trigonometry_array[2],
-                                                                               cam.trigonometry_array[1],
-                                                                               cam.trigonometry_array[3])))
+                    x_ground, y_ground = vector_boosted.from_world_to_screen(
+                        int(cam.x) - (order_of_output.distance + 15) / 2 + i,
+                        int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
+                        cam.x, cam.y, cam.z, cam.d, cam.trigonometry_array)
 
                     pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
                 except:
@@ -40,41 +36,27 @@ class Rasterizer:
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
-        if isinstance(fatline, tuple):
+        if type(fatline) == type((1, 2, 3)):
             if fatline[3]:
                 outline = 3
                 draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1],
-                               fatline[2],
-                               camera.x, camera.y,
-                               camera.z,
-                               camera.an_xz,
-                               camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h,
-                               (camera.trigonometry_array[0],
-                                camera.trigonometry_array[2],
-                                camera.trigonometry_array[1],
-                                camera.trigonometry_array[3]),
-                               outline,
-                               grnd=fatline[3])
+                               fatline[2], camera.x, camera.y, camera.z, camera.d, cub_h, camera.trigonometry_array,
+                               outline, grnd=fatline[3])
                 outline = 1
         for item in self.temp_order:
-            if isinstance(fatline, tuple):
+            if type(fatline) == type((1, 2, 3)):
                 if fatline[:-1] == item:
                     outline = 3
-            draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z,
-                           camera.an_xz,
-                           camera.an_xy, camera.d, camera.dx, camera.dy, camera.dz, cub_h,
-                           (camera.trigonometry_array[0],
-                            camera.trigonometry_array[2],
-                            camera.trigonometry_array[1],
-                            camera.trigonometry_array[3]), outline)
+            draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z, camera.d,
+                           cub_h,
+                           camera.trigonometry_array, outline)
             outline = 1
 
-    @staticmethod
-    def selected_block(cam, scene):
+    def selected_block(self, cam, scene):
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for _ in range(5 * 7):
+        for i in range(6 * 7):
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d

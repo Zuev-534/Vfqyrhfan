@@ -38,8 +38,6 @@ class Player:
                 if event.key == pygame.K_SPACE and self.fly_mod == -1:
                     self.jump()
                 self.pressed_keys.append(event.key)
-            if event.key == pygame.K_m:
-                music()
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
@@ -113,7 +111,6 @@ class Player:
         self.v.x += self.a.x
         self.v.y += self.a.y
         self.v.z += self.a.z
-
     def check_tuk(self, cam, order, ground, scene):
         """
         Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
@@ -133,7 +130,6 @@ class Player:
             self.v.z = 0
 
     def jump(self):
-        print(self.v.z)
         if abs(abs(self.v.z) - 0.003) < 0.0000001:
             self.v.z = speed_limit_max * 1.5
 
