@@ -3,17 +3,27 @@ from graph import Vector
 from graph import vector
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, WIDTH, HEIGHT, cut
+from vocabulary import GREY1, WIDTH, HEIGHT, cut, BLACK
 import order_of_output
 
 
 def draw_bottom(screen, cam):
-    x_ground, y_ground = vector.coords_to_cam_func(
-        *vector.get_vector_func(100000, 100000, 9, cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
-                                                                                                      cam.an_xz_sin,
-                                                                                                      cam.an_xy_cos,
-                                                                                                      cam.an_xz_cos)))
-    pygame.draw.polygon(screen, (50, 150, 50), [[0, y_ground], [WIDTH, y_ground], [WIDTH, HEIGHT], [0, HEIGHT]])
+    for i in range(order_of_output.distance+15):
+        for j in range(order_of_output.distance+15):
+            a = True
+            if a:
+                try:
+                    x_ground, y_ground = vector.coords_to_cam_func(
+                        *vector.get_vector_func(
+                                                int(cam.x) - (order_of_output.distance+15)/2 + i, int(cam.y) - (order_of_output.distance+15)/2 + j, 9.5,
+                                                cam.x, cam.y, cam.z, cam.an_xz, cam.an_xy, cam.d, (cam.an_xy_sin,
+                                                                                                   cam.an_xz_sin,
+                                                                                                   cam.an_xy_cos,
+                                                                                                   cam.an_xz_cos)))
+
+                    pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
+                except:
+                    pass
 
 
 class Rasterizer:
