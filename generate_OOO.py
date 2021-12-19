@@ -1,6 +1,6 @@
 from graph import Vector
-distance = 21
-h_dis = 13
+distance = 13
+h_dis = 7
 out = open('order_of_output.py', 'w')
 
 

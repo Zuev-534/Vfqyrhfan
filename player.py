@@ -120,16 +120,22 @@ class Player:
         ret = self.r.min_int_distance(scene, cam, order, ground)
         if ret[0] and self.v.x >= 0:
             self.v.x = 0
+            self.r.x -= 0.001
         if ret[1] and self.v.y >= 0:
             self.v.y = 0
+            self.r.y -= 0.001
         if ret[2] and self.v.z >= 0:
             self.v.z = 0
+            self.r.z -= 0.001
         if ret[3] and self.v.x <= 0:
             self.v.x = 0
+            self.r.x += 0.001
         if ret[4] and self.v.y <= 0:
             self.v.y = 0
+            self.r.y += 0.001
         if ret[5] and self.v.z <= 0:
             self.v.z = 0
+            self.r.z += 0.001
 
     def jump(self):
         if abs(abs(self.v.z) - 0.003) < 0.0000001:
