@@ -51,7 +51,7 @@ class Cube:
             for i in range(2):
                 for j in range(2):
                     for k in range(2):
-                        x, y = self.points[i][j][k].get_vector(cam).coords_to_cam(cam)
+                        x, y = self.points[i][j][k].from_world_to_screen(cam).coords_to_cam(cam)
                         self.coords_2d[i][j][k] = (x, y)
 
             if cam.x > self.x + self.h / 2:
