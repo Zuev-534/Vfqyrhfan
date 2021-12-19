@@ -7,25 +7,20 @@ from vocabulary import GREY1, cut, ground, WHITE, mult, BLACK
 import order_of_output
 
 
-def draw_bottom(screen: pygame.Surface, cam: Vector):
-    for i in range(0, order_of_output.distance + 15, 3):
-        for j in range(0, order_of_output.distance + 15, 3):
-            x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
-                int(cam.x) - (order_of_output.distance + 15) / 2 + i,
-                int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
-                cam.x, cam.y, cam.z, cam.d, cam.trigonometry_array, screen.get_clip().size)
-            if condition:
-                pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
+
 
 
 class Rasterizer:
     def __init__(self):
         self.coord_history = (0, 0, 0)
         self.temp_order = []
-        self.fatline = None
 
     def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1):
         screen.fill(GREY1)
+        self.draw_bottom(screen, camera)
+        self.draw_cubes(screen, scene, camera, cub_h)
+
+    def draw_cubes(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1):
         if self.coord_history != (camera.x, camera.y, camera.z):
             self.coord_history = (camera.x, camera.y, camera.z)
             self.temp_order = cut(scene, order_of_output.order, camera, order_of_output.distance, order_of_output.h_dis)
@@ -51,6 +46,17 @@ class Rasterizer:
             outline = 1
 
     @staticmethod
+    def draw_bottom(screen: pygame.Surface, camera: Vector):
+        for i in range(0, order_of_output.distance + 15, 3):
+            for j in range(0, order_of_output.distance + 15, 3):
+                x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
+                    int(camera.x) - (order_of_output.distance + 15) / 2 + i,
+                    int(camera.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
+                    camera.x, camera.y, camera.z, camera.d, camera.trigonometry_array, screen.get_clip().size)
+                if condition:
+                    pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
+
+    @staticmethod
     def selected_block(cam, scene):
         """
         получает на вход камеру и массив кубов, выдаёт координату куба который требуется выделить
@@ -67,7 +73,6 @@ class Rasterizer:
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d
-
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 k = 4
                 if max(abs(rx - round(rx)), abs(ry - round(ry)), abs(rz - round(rz))) == abs(rx - round(rx)):
