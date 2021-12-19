@@ -73,8 +73,6 @@ class Rasterizer:
         camera: камера
         return: None
         """
-        for i in range(0, order_of_output.distance+2, 3):
-            for j in range(0, order_of_output.distance+2, 3):
         border = np.zeros(((order_of_output.distance + 2) // 3 + 1, (order_of_output.distance + 2) // 3 + 1, 2),
                           dtype='int')
         for i in range(0, order_of_output.distance + 2, 3):
