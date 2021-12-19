@@ -45,8 +45,9 @@ class Player:
                 self.jump()
             elif event.key == pygame.K_m:
                 music()
-        if event == pygame.MOUSEBUTTONDOWN:
-            print('tre')
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                print('tre')
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
