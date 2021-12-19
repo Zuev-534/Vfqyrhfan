@@ -1,10 +1,11 @@
 from vocabulary import *
+import graph
 from graph import Vector
 import pygame
 
 
 class Player:
-    def __init__(self, point: tuple[float, float, float], g: float, screen_size: tuple[int, int]):
+    def __init__(self, point: tuple([float, float, float]), g: float, screen_size: tuple([int, int])):
         self.r = pygame.Vector3(point)
         self.v = pygame.Vector3()
         self.a = pygame.Vector3()
@@ -14,6 +15,7 @@ class Player:
         self.g = g
         self.test_mode = False
         self.n = 8
+        self.cam = None
 
         self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE]
         self.pressed_keys = []
@@ -25,7 +27,8 @@ class Player:
         """
         return: возвращает вектор евклидовых координат из полярных координат
         """
-        return Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 0.1)
+        self.cam = Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 0.1)
+        return self.cam
 
     def update(self, event):
         """
@@ -42,6 +45,8 @@ class Player:
                 self.jump()
             elif event.key == pygame.K_m:
                 music()
+        if event == pygame.MOUSEBUTTONDOWN:
+            print('tre')
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
@@ -97,8 +102,7 @@ class Player:
         if not self.fly_mode:
             self.a.z = self.g
 
-        self.r += self.v
-        self.v += self.a
+
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
@@ -112,6 +116,38 @@ class Player:
             self.v.y = 0
         if abs(self.v.z) <= speed_limit_min:
             self.v.z = 0
+
+        self.check_tuk(order, ground, scene)
+        self.r += self.v
+        self.v += self.a
+
+    def check_tuk(self, order, ground, scene):
+        """
+        Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
+        """
+        ret = graph.vector.check_distance(scene, self.cam, order, ground)
+        if ret[0] and self.v.x >= 0:
+            self.v.x = 0
+            self.r.x -= 0.001
+        if ret[1] and self.v.y >= 0:
+            self.v.y = 0
+            self.r.y -= 0.001
+        if ret[2] and self.v.z >= 0:
+            self.v.z = 0
+            self.r.z -= 0.001
+        if ret[3] and self.v.x <= 0:
+            self.v.x = 0
+            self.r.x += 0.001
+        if ret[4] and self.v.y <= 0:
+            self.v.y = 0
+            self.r.y += 0.001
+        if ret[5] and self.v.z <= 0:
+            self.v.z = 0
+            self.r.z += 0.001
+
+    def jump(self):
+        if abs(abs(self.v.z) - 0.003) < 0.0000001:
+            self.v.z = speed_limit_max * 1.5
 
 
 def coords(screen, player: Player, fps):

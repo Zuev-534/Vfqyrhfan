@@ -73,61 +73,32 @@ class Vector:
         print("an_xy = ", self.an_xy)
         print("an_xy = ", self.an_xz)
 
-    @staticmethod
-    def min_int_distance(scene, cam: Vector, order, grnd):
-        """
-        проверяет нахождение блоков поблизости в кубе 3х3, возвращает 6 чисел в формате,
-        какую компоненту скорости нужно убить
-        return: [0,0,1,0,0,1]
-        """
-        ret = [0, 0, 0, 0, 0, 0]
-        for item in cut(scene, order, cam, 3, 3):
-            dx = item[0] - cam.x
-            dy = item[1] - cam.y
-            dz = item[2] - cam.z
-            if 0 < dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
-                ret[0] += 1
-            elif 0 < dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
-                ret[1] += 1
-            elif 0 < dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
-                ret[2] += 1
-            elif 0 < -dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
-                ret[3] += 1
-            elif 0 < -dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
-                ret[4] += 1
-            elif 0 < -dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
-                ret[5] += 1
-            elif abs(dx) <= 0.5 or abs(dy) <= 0.5 or abs(dz) <= 0.5:
-                if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dy) - 0.5) ** 2) <= 0.92 and abs(dz) <= 0.5:
-                    if dx > 0:
-                        ret[0] += 1
-                    else:
-                        ret[3] += 1
-                    if dy > 0:
-                        ret[1] += 1
-                    else:
-                        ret[4] += 1
 
-                if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dy) <= 0.5:
-                    if dx > 0:
-                        ret[0] += 1
-                    else:
-                        ret[3] += 1
-                    if dz > 0:
-                        ret[2] += 1
-                    else:
-                        ret[5] += 1
-
-                if np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dx) <= 0.5:
-                    if dy > 0:
-                        ret[1] += 1
-                    else:
-                        ret[4] += 1
-                    if dz > 0:
-                        ret[2] += 1
-                    else:
-                        ret[5] += 1
-            elif np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.87:
+def check_distance(scene, cam: Vector, order, grnd):
+    """
+    проверяет нахождение блоков поблизости в кубе 3х3, возвращает 6 чисел в формате,
+    какую компоненту скорости нужно убить
+    return: [0,0,1,0,0,1]
+    """
+    ret = [0, 0, 0, 0, 0, 0]
+    for item in cut(scene, order, cam, 3, 3):
+        dx = item[0] - cam.x
+        dy = item[1] - cam.y
+        dz = item[2] - cam.z
+        if 0 < dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
+            ret[0] += 1
+        elif 0 < dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
+            ret[1] += 1
+        elif 0 < dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
+            ret[2] += 1
+        elif 0 < -dx <= 1.45 and abs(dy) <= 0.5 and abs(dz) <= 0.5:
+            ret[3] += 1
+        elif 0 < -dy <= 1.45 and abs(dx) <= 0.5 and abs(dz) <= 0.5:
+            ret[4] += 1
+        elif 0 < -dz <= 1.45 and abs(dx) <= 0.5 and abs(dy) <= 0.5:
+            ret[5] += 1
+        elif abs(dx) <= 0.5 or abs(dy) <= 0.5 or abs(dz) <= 0.5:
+            if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dy) - 0.5) ** 2) <= 0.92 and abs(dz) <= 0.5:
                 if dx > 0:
                     ret[0] += 1
                 else:
@@ -136,11 +107,40 @@ class Vector:
                     ret[1] += 1
                 else:
                     ret[4] += 1
+
+            if np.sqrt((abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dy) <= 0.5:
+                if dx > 0:
+                    ret[0] += 1
+                else:
+                    ret[3] += 1
                 if dz > 0:
                     ret[2] += 1
                 else:
                     ret[5] += 1
 
-        if cam.z <= grnd + 1.5:
-            ret[5] += 1
-        return ret
+            if np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.92 and abs(dx) <= 0.5:
+                if dy > 0:
+                    ret[1] += 1
+                else:
+                    ret[4] += 1
+                if dz > 0:
+                    ret[2] += 1
+                else:
+                    ret[5] += 1
+        elif np.sqrt((abs(dy) - 0.5) ** 2 + (abs(dx) - 0.5) ** 2 + (abs(dz) - 0.5) ** 2) <= 0.87:
+            if dx > 0:
+                ret[0] += 1
+            else:
+                ret[3] += 1
+            if dy > 0:
+                ret[1] += 1
+            else:
+                ret[4] += 1
+            if dz > 0:
+                ret[2] += 1
+            else:
+                ret[5] += 1
+
+    if cam.z <= grnd + 1.5:
+        ret[5] += 1
+    return ret
