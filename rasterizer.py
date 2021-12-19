@@ -120,7 +120,6 @@ class Rasterizer:
                 del array[c]
             else:
                 c += 1
-        print(array)
         if len(array) >= 4:
             if array[0][0] < 0 or 0 < array[0][1] < heg and array[-1][0] > wei or 0 < array[-1][1] < heg:
                 pygame.draw.polygon(screen, get_color(0), [[0, heg], *array, [wei, heg]])
