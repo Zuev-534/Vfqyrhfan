@@ -22,6 +22,7 @@ class Player:
         self.fly_mode = True
 
         self.screen_size = screen_size
+        self.color = 4
 
     def get_camera(self) -> Vector:
         """
@@ -51,8 +52,12 @@ class Player:
                 scene.dest_block(fat)
                 const = True
             if event.button == 3:
-                scene.add_block(fat)
+                scene.add_block(fat, self.color)
                 const = True
+            if event.button == 4:
+                self.change_color(1)
+            if event.button == 5:
+                self.change_color(-1)
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
@@ -109,7 +114,6 @@ class Player:
         if not self.fly_mode:
             self.a.z = self.g
 
-
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
@@ -155,6 +159,16 @@ class Player:
     def jump(self):
         if abs(abs(self.v.z) - 0.003) < 0.0000001:
             self.v.z = speed_limit_max * 1.5
+
+    def change_color(self, rotate):
+        if rotate > 0:
+            self.color += 1
+        elif rotate < 0:
+            self.color -= 1
+        if self.color == 9:
+            self.color = 1
+        elif self.color == 0:
+            self.color = 8
 
 
 def coords(screen, player: Player, fps):

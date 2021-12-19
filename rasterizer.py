@@ -69,10 +69,10 @@ class Rasterizer:
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for _ in range(6 * 7):
-            rx += cam.dx / 7 / cam.d
-            ry += cam.dy / 7 / cam.d
-            rz += cam.dz / 7 / cam.d
+        for _ in range(6 * 10):
+            rx += cam.dx / 10 / cam.d
+            ry += cam.dy / 10 / cam.d
+            rz += cam.dz / 10 / cam.d
             k = [0 for _ in range(3)]
             if scene.map[round(rx)][round(ry)][round(rz)]:
 

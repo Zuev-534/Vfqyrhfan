@@ -48,7 +48,7 @@ class Game:
             self.constr = False
 
             self.log()
-            self.gui()
+            self.gui(self.player.color)
             pygame.display.update()
 
         pygame.quit()
@@ -59,9 +59,10 @@ class Game:
         elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.running = False
 
-    def gui(self):
+    def gui(self, color):
         w, h = self.screen.get_clip().size
-        circle(self.screen, BLACK, (w / 2, h / 2), 4, 1)
+        circle(self.screen, get_color(color), (w / 2, h / 2), 6, 2)
+
 
     def log(self):
 
