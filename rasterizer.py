@@ -3,19 +3,19 @@ from graph import Vector
 from graph import vector_boosted
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, WIDTH, HEIGHT, cut, ground, BLACK
+from vocabulary import GREY1, WIDTH, HEIGHT, cut, ground, WHITE, mult, BLACK
 import order_of_output
 
 
 def draw_bottom(screen, cam):
-    for i in range(order_of_output.distance + 15):
-        for j in range(order_of_output.distance + 15):
+    for i in range(0, order_of_output.distance + 15, 3):
+        for j in range(0, order_of_output.distance + 15, 3):
             x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
                 int(cam.x) - (order_of_output.distance + 15) / 2 + i,
                 int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
                 cam.x, cam.y, cam.z, cam.d, cam.trigonometry_array)
             if condition:
-                pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
+                pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
 
 
 class Rasterizer:
@@ -31,7 +31,7 @@ class Rasterizer:
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
-        if type(fatline) == type((1, 2, 3)):
+        if isinstance(fatline, tuple):
             if fatline[3]:
                 outline = 3
                 draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1],
@@ -39,7 +39,7 @@ class Rasterizer:
                                outline, grnd=fatline[3])
                 outline = 1
         for item in self.temp_order:
-            if type(fatline) == type((1, 2, 3)):
+            if isinstance(fatline, tuple):
                 if fatline[:-1] == item:
                     outline = 3
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z, camera.d,
@@ -47,11 +47,19 @@ class Rasterizer:
                            camera.trigonometry_array, outline)
             outline = 1
 
-    def selected_block(self, cam, scene):
+    @staticmethod
+    def selected_block(cam, scene):
+        """
+        получает на вход камеру и массив кубов, выдаёт координату куба который требуется выделить
+        и сторону куба на который наводится игрок
+        cam: камера
+        scene: массив блоков
+        return: координаты в формате x, y, z True/False в зависимости от того выделен куб или пол
+        """
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for i in range(6 * 7):
+        for _ in range(6 * 7):
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d

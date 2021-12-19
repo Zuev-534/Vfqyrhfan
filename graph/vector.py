@@ -16,7 +16,7 @@ class Vector:
         self.an_xz = an_xz0
 
         # an_xy_sin, an_xy_cos, an_xz_sin, an_xz_cos
-        self.trigonometry_array = [0, 1, 0, 1]
+        self.trigonometry_array = np.array([0, 1, 0, 1], dtype='float32')
 
     @staticmethod
     def from_polar(x, y, z, lng, lat, r):
@@ -36,7 +36,7 @@ class Vector:
         self.dy = -vector_nul.y + self.y
         self.dz = -vector_nul.z + self.z
 
-    def from_world_to_screen(self, vector_nul: Vector):
+    def from_world_to_screen(self, vector_nul):
         self.new_di_in_new_pos(vector_nul)
         dx, dy = vector_boosted.from_relative_to_screen(self.dx, self.dy, self.dz, vector_nul.d,
                                                         vector_nul.trigonometry_array)
@@ -73,7 +73,8 @@ class Vector:
         print("an_xy = ", self.an_xy)
         print("an_xy = ", self.an_xz)
 
-    def min_int_distance(self, scene, cam: Vector, order, ground):
+    @staticmethod
+    def min_int_distance(scene, cam: Vector, order, grnd):
         """
         проверяет нахождение блоков поблизости в кубе 3х3, возвращает 6 чисел в формате,
         какую компоненту скорости нужно убить
@@ -140,6 +141,6 @@ class Vector:
                 else:
                     ret[5] += 1
 
-        if cam.z <= ground + 1.5:
+        if cam.z <= grnd + 1.5:
             ret[5] += 1
         return ret

@@ -14,7 +14,6 @@ class Scene:
             for k in range(20):
                 self.map[510 + i][521 + k][10] = 4
 
-        self.map[10][21][13] = 4
 
 
 if __name__ == "__main__":

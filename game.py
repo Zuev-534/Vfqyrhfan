@@ -5,7 +5,7 @@ from pygame.draw import circle
 from vocabulary import *
 from scene import Scene
 from itertools import chain
-from graph import Cube, Vector, vector_boosted
+from graph import Vector, vector_boosted
 from math import sin, cos
 from rasterizer import Rasterizer
 import order_of_tuk
@@ -29,7 +29,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player((500, 500, 12), self.gravity)
+        self.player = Player((50, 50, 12), self.gravity)
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
