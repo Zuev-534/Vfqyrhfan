@@ -37,10 +37,9 @@ class Vector:
         self.dz = -vector_nul.z + self.z
 
     def from_world_to_screen(self, vector_nul: Vector):
-        dx, dy = vector_boosted.from_world_to_screen(self.x, self.y, self.z, vector_nul.x, vector_nul.y,
-                                                     vector_nul.z,
-                                                     vector_nul.d,
-                                                     vector_nul.trigonometry_array)
+        self.new_di_in_new_pos(vector_nul)
+        dx, dy = vector_boosted.from_relative_to_screen(self.dx, self.dy, self.dz, vector_nul.d,
+                                                        vector_nul.trigonometry_array)
 
         return dx, dy
 

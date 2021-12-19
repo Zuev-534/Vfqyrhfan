@@ -10,17 +10,12 @@ import order_of_output
 def draw_bottom(screen, cam):
     for i in range(order_of_output.distance + 15):
         for j in range(order_of_output.distance + 15):
-            a = True
-            if a:
-                try:
-                    x_ground, y_ground = vector_boosted.from_world_to_screen(
-                        int(cam.x) - (order_of_output.distance + 15) / 2 + i,
-                        int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
-                        cam.x, cam.y, cam.z, cam.d, cam.trigonometry_array)
-
-                    pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
-                except:
-                    pass
+            x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
+                int(cam.x) - (order_of_output.distance + 15) / 2 + i,
+                int(cam.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
+                cam.x, cam.y, cam.z, cam.d, cam.trigonometry_array)
+            if condition:
+                pygame.draw.circle(screen, BLACK, (int(x_ground), int(y_ground)), 5)
 
 
 class Rasterizer:

@@ -13,22 +13,23 @@ def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z,
     points = set_coords_with_move_func(x, y, z, cub_h)
 
     if True:
-        coords_2d = coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry)
-        if grnd:
-            draw_square_func(screen, 0, coords_2d, k=3, out_line=outline)
-        else:
-            if cam_x > x + cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, i=3, out_line=outline)
-            elif cam_x < x - cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, i=2, out_line=outline)
-            if cam_y > y + cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, j=3, out_line=outline)
-            elif cam_y < y - cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, j=2, out_line=outline)
-            if cam_z > z + cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, k=3, out_line=outline)
-            elif cam_z < z - cub_h / 2:
-                draw_square_func(screen, cub_id, coords_2d, k=2, out_line=outline)
+        coords_2d, condition = coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry)
+        if condition:
+            if grnd:
+                draw_square_func(screen, 0, coords_2d, k=3, out_line=outline)
+            else:
+                if cam_x > x + cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, i=3, out_line=outline)
+                elif cam_x < x - cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, i=2, out_line=outline)
+                if cam_y > y + cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, j=3, out_line=outline)
+                elif cam_y < y - cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, j=2, out_line=outline)
+                if cam_z > z + cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, k=3, out_line=outline)
+                elif cam_z < z - cub_h / 2:
+                    draw_square_func(screen, cub_id, coords_2d, k=2, out_line=outline)
 
 
 # проверено(только осмотрел)
@@ -106,10 +107,15 @@ if __name__ == "__main__":
 
 def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry):
     coords_2d = np.zeros((2, 2, 2, 2), dtype=float32)
+    condition = True
     for i in range(2):
         for j in range(2):
             for k in range(2):
-                coords_2d[i][j][k] = vector_boosted.from_world_to_screen(points[i][j][k][0], points[i][j][k][1],
-                                                                         points[i][j][k][2], cam_x, cam_y, cam_z, cam_d,
-                                                                         trigonometry)
-    return coords_2d
+                temp = True
+                if condition:
+                    coords_2d[i][j][k][0], coords_2d[i][j][k][1], temp = vector_boosted.from_world_to_screen(
+                        points[i][j][k][0], points[i][j][k][1],
+                        points[i][j][k][2], cam_x, cam_y, cam_z, cam_d,
+                        trigonometry)
+                condition = temp and condition
+    return coords_2d, condition
