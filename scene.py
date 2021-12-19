@@ -14,6 +14,15 @@ class Scene:
             for k in range(20):
                 self.map[51 + i][52 + k][10] = 4
 
+    def dest_block(self, fat):
+        if not isinstance(fat, type(None)):
+            self.map[fat[0]][fat[1]][fat[2]] = 0
+            print('kill')
+
+    def add_block(self, fat, color=5):
+        if not isinstance(fat, type(None)):
+            self.map[fat[0] + fat[4][0]][fat[1] + fat[4][1]][fat[2] + fat[4][2]] = color
+            print(fat[4])
 
 
 if __name__ == "__main__":

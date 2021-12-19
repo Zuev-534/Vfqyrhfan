@@ -32,6 +32,7 @@ class Game:
         self.player = Player((50, 50, 12), self.gravity, (width, height))
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
+        self.constr = False
 
     def loop(self):
         while self.running:
@@ -40,10 +41,11 @@ class Game:
 
             for event in pygame.event.get():
                 self.update(event)
-                self.player.update(event)
+                self.constr = self.player.update(event, self.scene, self.rasterizer.fat)
             self.player.move(order_of_tuk.order, self.ground, self.scene)
 
-            self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
+            self.rasterizer.draw(self.screen, self.scene, self.player_get_camera, self.constr)
+            self.constr = False
 
             self.log()
             self.gui()

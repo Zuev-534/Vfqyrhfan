@@ -30,10 +30,11 @@ class Player:
         self.cam = Vector.from_polar(self.r.x, self.r.y, self.r.z, self.lng, self.lat, 0.1)
         return self.cam
 
-    def update(self, event):
+    def update(self, event, scene, fat):
         """
         обновляет конфигурацию надатых клавиш и перемещает угол взгляда игрока посредством измерения перемещения мыши
         """
+        const = False
         if event.type == pygame.KEYDOWN:
             if event.key in self.control_keys:
                 self.pressed_keys.append(event.key)
@@ -47,7 +48,11 @@ class Player:
                 music()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                print('tre')
+                scene.dest_block(fat)
+                const = True
+            if event.button == 3:
+                scene.add_block(fat)
+                const = True
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
@@ -65,6 +70,7 @@ class Player:
                 self.lat = -np.pi / 2
         elif event.type == pygame.VIDEORESIZE:
             self.screen_size = (event.w, event.h)
+        return const
 
     def move(self, order, ground, scene):
         """
