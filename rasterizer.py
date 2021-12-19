@@ -83,7 +83,6 @@ class Rasterizer:
                     camera.x, camera.y, camera.z, camera.d, camera.trigonometry_array, screen.get_clip().size)
                 if condition:
                     border[i // 3][j // 3][0], border[i // 3][j // 3][1] = int(x_ground), int(y_ground)
-                    pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
 
         bottom = np.zeros(((order_of_output.distance + 2) // 3 * 3 * 4 - 4, 2))
 
