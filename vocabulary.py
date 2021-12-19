@@ -15,7 +15,7 @@ mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки 
 ground = 9
 
 # угол обзора(косинус от камеры)
-angle_of_view = 0.35
+angle_of_view = 0.4
 
 signature_1 = [1, 1, -1, -1]
 signature_2 = [1, -1, -1, 1]
@@ -102,6 +102,15 @@ def convert_point(point, o_start):
 
 
 def cut(scene, order, camera, d, h):
+    """
+    выдаёт нужный порядок отрисовки кубов
+    order: массив из блоков с относительной координатой, хранится order_of_output.py
+    scene: массив из блоков, которые вокруг игрока
+    camera: камера игрока
+    d: диаметр отрисовки блоков
+    h: высота отрисовки блоков
+    return: массив в нужном порядке отрисовки блоков
+    """
     t_o = []
     for item in order:
         x, y, z = item
@@ -114,6 +123,9 @@ def cut(scene, order, camera, d, h):
 
 
 def music():
+    """
+    при вызове включает рандомную музыку из списка (лицензия на музыку открыта)
+    """
     rnd = randint(1, 3)
     if rnd == 1:
         pygame.mixer.music.load('music\\Seven.mp3')

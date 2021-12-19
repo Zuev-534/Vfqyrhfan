@@ -1,3 +1,4 @@
+from __future__ import annotations
 from vocabulary import *
 from graph import vector_boosted
 
@@ -72,7 +73,8 @@ class Vector:
         print("an_xy = ", self.an_xy)
         print("an_xy = ", self.an_xz)
 
-    def min_int_distance(self, scene, cam, order, grnd):
+    @staticmethod
+    def min_int_distance(scene, cam: Vector, order, grnd):
         """
         проверяет нахождение блоков поблизости в кубе 3х3, возвращает 6 чисел в формате,
         какую компоненту скорости нужно убить
