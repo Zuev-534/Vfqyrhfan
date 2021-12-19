@@ -3,7 +3,7 @@ from graph import Vector
 from graph import vector_boosted
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, cut, ground, WHITE, mult, BLACK
+from vocabulary import GREY1, cut, ground
 import order_of_output
 
 
@@ -44,11 +44,11 @@ class Rasterizer:
 
     @staticmethod
     def draw_bottom(screen: pygame.Surface, camera: Vector):
-        for i in range(0, order_of_output.distance + 15, 3):
-            for j in range(0, order_of_output.distance + 15, 3):
+        for i in range(0, order_of_output.distance+2, 3):
+            for j in range(0, order_of_output.distance+2, 3):
                 x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
-                    int(camera.x) - (order_of_output.distance + 15) / 2 + i,
-                    int(camera.y) - (order_of_output.distance + 15) / 2 + j, ground + 0.5,
+                    int(camera.x) + 0.5 - (order_of_output.distance+2) / 2 + i,
+                    int(camera.y) + 0.5 - (order_of_output.distance+2) / 2 + j, ground + 0.5,
                     camera.x, camera.y, camera.z, camera.d, camera.trigonometry_array, screen.get_clip().size)
                 if condition:
                     pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
