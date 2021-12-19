@@ -4,10 +4,6 @@ from numba import njit
 from graph import vector_boosted
 
 
-def mult(color, k):
-    return color[0] * k, color[1] * k, color[2] * k
-
-
 def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z,
                    cam_d, cub_h, trigonometry, outline, grnd=False):
     points = set_coords_with_move_func(x, y, z, cub_h)
@@ -75,6 +71,7 @@ def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
                  coords_2d[0][1][k - 2],
                  coords_2d[1][1][k - 2],
                  coords_2d[1][0][k - 2]], out_line)
+        screen.fill
 
 
 # Убрал как непостоянный необязательный фактор пока ошибки не исправлю

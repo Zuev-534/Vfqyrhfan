@@ -15,7 +15,7 @@ mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки 
 ground = 9
 
 # угол обзора(косинус от камеры)
-angle_of_view = 1/2
+angle_of_view = 0.35
 
 signature_1 = [1, 1, -1, -1]
 signature_2 = [1, -1, -1, 1]
@@ -124,7 +124,11 @@ def music():
     elif rnd == 3:
         pygame.mixer.music.load('music\\Jason_Shaw_Solo_Acoustic_Guitar_[Creative Commons Music].mp3')
         pygame.mixer.music.play(-1)
-        
+
+
+def mult(color, k):
+    return color[0] * k, color[1] * k, color[2] * k
+
 
 if __name__ == "__main__":
     print("This module is not for direct call!")

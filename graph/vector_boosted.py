@@ -20,7 +20,7 @@ def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y
     return dx, dy, dz
 
 
-@njit(fastmath=True, parallel=True)
+@njit(fastmath=True)
 def from_world_to_screen(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_d, trigonometry):
     self_dx, self_dy, self_dz = new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z)
     return from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry)

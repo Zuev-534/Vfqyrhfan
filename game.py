@@ -5,7 +5,7 @@ from pygame.draw import circle
 from vocabulary import *
 from scene import Scene
 from itertools import chain
-from graph import Cube, Vector, vector_boosted
+from graph import Vector, vector_boosted
 from math import sin, cos
 from rasterizer import Rasterizer
 import order_of_tuk
