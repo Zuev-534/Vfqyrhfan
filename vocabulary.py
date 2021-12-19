@@ -136,8 +136,14 @@ def music():
         pygame.mixer.music.play(-1)
 
 
-def mult(color, k):
-    return color[0] * k, color[1] * k, color[2] * k
+def mult(color, kof):
+    """
+    создана для затенения сторон блоков, умножает на коэфициент яркость блоков
+    color: цвет в формате rgb
+    r: коэф яркости от 0 до 1
+    return: цвет в формате rgb
+    """
+    return color[0] * kof, color[1] * kof, color[2] * kof
 
 
 if __name__ == "__main__":
