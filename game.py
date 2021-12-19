@@ -5,15 +5,18 @@ from pygame.draw import circle
 from vocabulary import *
 from scene import Scene
 from itertools import chain
-from graph import Cube, Vector
+from graph import Cube, Vector, vector_boosted
 from math import sin, cos
 from rasterizer import Rasterizer
+import order_of_tuk
+import order_of_output
 
 
 class Game:
-    def __init__(self, width, height):
+    def __init__(self, width, height, ground):
         self.FPS = 60
         self.gravity = -0.003
+        self.ground = ground
 
         pygame.init()
         pygame.display.set_caption('Test controlling')
@@ -26,23 +29,24 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player((0, 20, 10), self.gravity)
+        self.player = Player((500, 500, 12), self.gravity)
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
     def loop(self):
         while self.running:
             self.clock.tick(self.FPS)
+            self.player_get_camera = self.player.get_camera()
 
             for event in pygame.event.get():
                 self.update(event)
                 self.player.update(event)
-            self.player.move()
-            self.player_get_camera = self.player.get_camera()
+            self.player.move(self.player_get_camera, order_of_tuk.order, self.ground, self.scene)
+
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
             self.log()
-            self.GUI()
+            self.gui()
             pygame.display.update()
 
         pygame.quit()
@@ -53,23 +57,15 @@ class Game:
         elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.running = False
 
-    def GUI(self):
+    def gui(self):
         circle(self.screen, BLACK, (WIDTH / 2, HEIGHT / 2), 4, 1)
 
     def log(self):
-
-        circle(self.screen, BLACK,
-               Vector(10, 21, 10).get_vector(self.player.get_camera()).coords_to_cam(self.player.get_camera()), 10)
-        circle(self.screen, BLACK, Vector(100, 111, 2000).get_vector(self.player.get_camera()).coords_to_cam(
-            self.player.get_camera()), 10)
 
         clip = self.screen.get_clip()
         center = (clip.w / 2, clip.h / 2, 0)
 
         camera = self.player.get_camera()
-        circle(self.screen, BLACK, convert_point((camera.x, camera.y, 0), center), 5)
-        circle(self.screen, BLACK, convert_point((10, 21, 10), center), 5)
-        circle(self.screen, BLACK, convert_point((100, 111, 0), center), 5)
 
         u = 15
         pygame.draw.lines(self.screen, WHITE, True, [

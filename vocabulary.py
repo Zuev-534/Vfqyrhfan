@@ -1,10 +1,10 @@
-from math import *
+import math
 import numpy as np
 import pygame
 from numpy import sign
 from numpy import float32
 from pygame.draw import *
-from decimal import *
+from random import randint
 
 WIDTH, HEIGHT = 1200, 720
 FPS = 60
@@ -12,9 +12,13 @@ k = 0.001  # Чувствительность мыши
 leg_force = 0.01
 stopper_acceleration = 0.19 * leg_force  # На сколько ед\с падают составляющие скорости
 mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки миникарты в окне
+ground = 9
 
-znak1 = [1, 1, -1, -1]
-znak2 = [1, -1, -1, 1]
+# угол обзора(косинус от камеры)
+angle_of_view = 1/2
+
+signature_1 = [1, 1, -1, -1]
+signature_2 = [1, -1, -1, 1]
 speed_limit_max = 6 * leg_force
 speed_limit_min = 0.2 * leg_force
 
@@ -25,6 +29,7 @@ FORWARD = "FORWARD"
 ROTATE = "ROTATE"
 NOTHING = "NOTHING"
 
+AIR = (50, 150, 50)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
@@ -34,16 +39,18 @@ CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY1 = (180, 180, 180)
+
+
 # -------------------------------------------------------------------
 
-getcontext().prec = 4
 
-
-# можно собрать отдельный фвйл-библиотеку блоков
+# можно собрать отдельный файл-библиотеку блоков
 def get_color(id):
     """
     return: цвет
     """
+    if id == 0:
+        return AIR
     if id == 1:
         return WHITE
     if id == 2:
@@ -93,6 +100,31 @@ def convert_point(point, o_start):
     y = -y + b
     return x, y
 
+
+def cut(scene, order, camera, d, h):
+    t_o = []
+    for item in order:
+        x, y, z = item
+        x += int(camera.x + 0.5) - int(d / 2)
+        y += int(camera.y + 0.5) - int(d / 2)
+        z += int(camera.z + 0.5) - int(h / 2)
+        if scene.map[x][y][z]:
+            t_o.append((x, y, z))
+    return t_o
+
+
+def music():
+    rnd = randint(1, 3)
+    if rnd == 1:
+        pygame.mixer.music.load('music\\Seven.mp3')
+        pygame.mixer.music.play(-1)
+    elif rnd == 2:
+        pygame.mixer.music.load('music\\Im_Alright_(Creative Commons)_FREE_vlog positive_background.mp3')
+        pygame.mixer.music.play(-1)
+    elif rnd == 3:
+        pygame.mixer.music.load('music\\Jason_Shaw_Solo_Acoustic_Guitar_[Creative Commons Music].mp3')
+        pygame.mixer.music.play(-1)
+        
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
