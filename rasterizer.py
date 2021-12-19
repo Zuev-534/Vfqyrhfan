@@ -114,16 +114,16 @@ class Rasterizer:
         array = (bottom.tolist())
         array.sort()
         c = 0
-        W, H = screen.get_clip().size
+        wei, heg = screen.get_clip().size
         while c <= len(array) - 1:
-            if array[c][1] >= H:
+            if array[c][1] >= heg:
                 del array[c]
             else:
                 c += 1
         print(array)
         if len(array) >= 4:
-            if array[0][0] < 0 or 0 < array[0][1] < H and array[-1][0] > W or 0 < array[-1][1] < H:
-                pygame.draw.polygon(screen, get_color(0), [[0, H], *array, [W, H]])
+            if array[0][0] < 0 or 0 < array[0][1] < heg and array[-1][0] > wei or 0 < array[-1][1] < heg:
+                pygame.draw.polygon(screen, get_color(0), [[0, heg], *array, [wei, heg]])
             else:
                 pygame.draw.polygon(screen, get_color(0), array)
         else:

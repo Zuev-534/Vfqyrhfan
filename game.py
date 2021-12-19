@@ -11,7 +11,6 @@ from rasterizer import Rasterizer
 import order_of_tuk
 
 
-
 class Game:
     def __init__(self, width, height, ground):
         """
@@ -83,5 +82,3 @@ class Game:
         w, h = self.screen.get_clip().size
         circle(self.screen, get_color(color), (w / 2, h / 2), 6, 2)
         coords(self.screen, self.player, self.clock.get_fps())
-
-

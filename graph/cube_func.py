@@ -72,6 +72,7 @@ def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
                  coords_2d[1][1][k - 2],
                  coords_2d[1][0][k - 2]], out_line)
 
+
 @njit(fastmath=True)
 def set_coords_with_move_func(x, y, z, h_cube):
     points = np.zeros((2, 2, 2, 3), dtype=float32)
@@ -86,6 +87,7 @@ def set_coords_with_move_func(x, y, z, h_cube):
 
 if __name__ == "__main__":
     print("This module is not for direct call!")
+
 
 @njit(fastmath=True)
 def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen_size):
