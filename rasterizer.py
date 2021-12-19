@@ -1,9 +1,10 @@
+import numpy as np
 import pygame
 from graph import Vector
 from graph import vector_boosted
 from graph.cube_func import draw_cube_func
 from scene import Scene
-from vocabulary import GREY1, cut, ground
+from vocabulary import GREY1, cut, ground, get_color
 import order_of_output
 
 
@@ -44,14 +45,59 @@ class Rasterizer:
 
     @staticmethod
     def draw_bottom(screen: pygame.Surface, camera: Vector):
-        for i in range(0, order_of_output.distance+2, 3):
-            for j in range(0, order_of_output.distance+2, 3):
+        border = np.zeros(((order_of_output.distance + 2) // 3 + 1, (order_of_output.distance + 2) // 3 + 1, 2),
+                          dtype='int')
+        for i in range(0, order_of_output.distance + 2, 3):
+            for j in range(0, order_of_output.distance + 2, 3):
                 x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
-                    int(camera.x) + 0.5 - (order_of_output.distance+2) / 2 + i,
-                    int(camera.y) + 0.5 - (order_of_output.distance+2) / 2 + j, ground + 0.5,
+                    int(camera.x) + 0.5 - (order_of_output.distance + 2) / 2 + i,
+                    int(camera.y) + 0.5 - (order_of_output.distance + 2) / 2 + j, ground + 0.5,
                     camera.x, camera.y, camera.z, camera.d, camera.trigonometry_array, screen.get_clip().size)
                 if condition:
+                    border[i // 3][j // 3][0], border[i // 3][j // 3][1] = int(x_ground), int(y_ground)
                     pygame.draw.circle(screen, (30, 30, 30), (int(x_ground), int(y_ground)), 3)
+
+        bottom = np.zeros(((order_of_output.distance + 2) // 3 * 3 * 4 - 4, 2))
+
+        c = 0
+        # х - отрицательный
+        a = 0
+        for j in range(0, order_of_output.distance + 2, 3):
+            if border[a // 3][j // 3][0] != 0 and border[a // 3][j // 3][0] != 0:
+                bottom[c] = border[a // 3][j // 3]
+                c += 1
+        # у- положителььный
+        a = (order_of_output.distance + 2) // 3 * 3
+        for i in range(0, order_of_output.distance + 2, 3):
+            if border[i // 3][a // 3][0] != 0 and border[i // 3][a // 3][0] != 0:
+                bottom[c] = border[i // 3][a // 3]
+                c += 1
+        # х - положительный
+        a = (order_of_output.distance + 2) // 3 * 3
+        for j in range((order_of_output.distance + 2) // 3 * 3, -1, -3):
+            if border[a // 3][j // 3][0] != 0 and border[a // 3][j // 3][0] != 0:
+                bottom[c] = border[a // 3][j // 3]
+                c += 1
+        # y - отрицательный
+        for i in range((order_of_output.distance + 2) // 3 * 3, -1, -3):
+            if border[i // 3][0 // 3][0] != 0 and border[i // 3][0 // 3][0] != 0:
+                bottom[c] = border[i // 3][0 // 3]
+                c += 1
+        bottom = bottom[~np.all(bottom == 0, axis=1)]
+        array = (bottom.tolist())
+        array.sort()
+        c = 0
+        W, H = screen.get_clip().size
+        while c <= len(array)-1:
+            if array[c][1] >= H:
+                del array[c]
+            else:
+                c += 1
+
+        if array[0][0] < 0 or 0 < array[0][1] < H and array[-1][0] > W or 0 < array[-1][1] < H:
+            pygame.draw.polygon(screen, get_color(0), [[0, H], *array, [W, H]])
+        else:
+            pygame.draw.polygon(screen, get_color(0), array)
 
     @staticmethod
     def selected_block(cam, scene):

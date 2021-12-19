@@ -13,7 +13,7 @@ stopper_acceleration = 0.19 * leg_force  # На сколько ед\с пада�
 ground = 9
 
 # угол обзора(косинус от камеры)
-angle_of_view = 0.4
+angle_of_view = 0.3
 
 signature_1 = [1, 1, -1, -1]
 signature_2 = [1, -1, -1, 1]
