@@ -194,4 +194,6 @@ def check_distance(scene, cam: Vector, order, grnd):
 
     if cam.z <= grnd + 1.5:
         ret[5] += 1
+    if cam.z >= 19:
+        ret[2] += 1
     return ret
