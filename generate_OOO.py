@@ -12,21 +12,8 @@ def generate(out, ord, distance, h_dis):
 
 
 def generate_ooo():
-    suc = False
-    distance = 0
-    h_dis = 0
-    while not suc:
-        try:
-            distance = int(int(input("Введите желаемую дальность прорисовки: ")) * 2)
-            h_dis = int(int(input("Введите желаемую высоту прорисовки: ")) * 2)
-        except not suc:
-            print("Попробуйте еще раз")
-        if 13 > distance > 60:
-            distance = 15
-        if 7 > h_dis > 20:
-            h_dis = 7
-        if distance % 2 - 1 and  h_dis % 2 - 1:
-            suc = True
+    distance = 26
+    h_dis = 14
     out = open('order_of_output.py', 'w')
     igrok = Vector((distance - 1) / 2, (distance - 1) / 2, (h_dis - 1) / 2)
     igrok.set_coords_d_from_di()
@@ -41,4 +28,6 @@ def generate_ooo():
 
     order.sort(key=lambda x: x.d, reverse=True)
     generate(out, order[:-7], distance, h_dis)
+    print(distance, h_dis)
     out.close()
+generate_ooo():
