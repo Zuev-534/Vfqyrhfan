@@ -7,9 +7,6 @@ from vocabulary import GREY1, cut, ground, WHITE, mult, BLACK
 import order_of_output
 
 
-
-
-
 class Rasterizer:
     def __init__(self):
         self.coord_history = (0, 0, 0)
@@ -25,7 +22,7 @@ class Rasterizer:
             self.coord_history = (camera.x, camera.y, camera.z)
             self.temp_order = cut(scene, order_of_output.order, camera, order_of_output.distance, order_of_output.h_dis)
         self.fatline = self.selected_block(camera, scene)
-        draw_bottom(screen, camera)
+        self.draw_bottom(screen, camera)
         outline = 1
         if isinstance(self.fatline, tuple):
             if self.fatline[3]:
@@ -75,23 +72,31 @@ class Rasterizer:
             rz += cam.dz / 7 / cam.d
             if scene.map[round(rx)][round(ry)][round(rz)]:
                 k = 4
-                if max(abs(rx - round(rx)), abs(ry - round(ry)), abs(rz - round(rz))) == abs(rx - round(rx)):
-                    if rx - round(rx) >= 0:
+                a = round(rx)
+                b = round(ry)
+                c = round(rz)
+                a_0 = abs(rx - round(rx))
+                b_0 = abs(ry - round(ry))
+                c_0 = abs(rz - round(rz))
+                maximum = max(abs(rx - round(rx)), abs(ry - round(ry)), abs(rz - round(rz)))
+
+                if maximum == abs(rx - round(rx)):
+                    if a_0 >= 0:
                         k = 0
                     else:
                         k = 1
-                elif max(abs(rx - round(rx)), abs(ry - round(ry)), abs(rz - round(rz))) == abs(ry - round(ry)):
-                    if ry - round(ry) >= 0:
+                elif maximum == b:
+                    if b_0 >= 0:
                         k = 2
                     else:
                         k = 3
-                elif max(abs(rx - round(rx)), abs(ry - round(ry)), abs(rz - round(rz))) == abs(rz - round(rz)):
-                    if rz - round(rz) >= 0:
+                elif maximum == c:
+                    if c_0 >= 0:
                         k = 4
                     else:
                         k = 5
 
-                return round(rx), round(ry), round(rz), False, k
+                return a, b, c, False, k
             if round(rz) == ground:
                 return round(rx), round(ry), round(rz), True, 4
 
