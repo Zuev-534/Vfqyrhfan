@@ -21,13 +21,17 @@ def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y
 
 
 @njit(fastmath=True)
-def from_world_to_screen(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z, vector_nul_d, trigonometry):
+def from_world_to_screen(self_x, self_y, self_z,
+                         vector_nul_x, vector_nul_y, vector_nul_z,
+                         vector_nul_d,
+                         trigonometry,
+                         screen_size):
     self_dx, self_dy, self_dz = new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z)
-    return from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry)
+    return from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry, screen_size)
 
 
 @njit(fastmath=True)
-def from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry):
+def from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry, screen_size):
     vector_nul_dx, vector_nul_dy, vector_nul_dz = set_coords_di_from_d(vector_nul_d, trigonometry)
 
     self_d = set_coords_d_from_di_func(self_dx, self_dy, self_dz)
@@ -38,7 +42,9 @@ def from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometr
                                                                                vector_nul_d)
     if condition:
         dx, dz = transformation_to_screen(dx, dy, dz, trigonometry)
-        return WIDTH * (dx / 2 / vector_nul_d + 1 / 2), HEIGHT * (
+
+        width, height = screen_size
+        return width * (dx / 2 / vector_nul_d + 1 / 2), height * (
                 1 - (dz / 2 * np.sqrt(3) / vector_nul_d + 1 / 2)), True
     else:
         return -10, -10, False

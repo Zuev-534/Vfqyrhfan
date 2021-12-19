@@ -1,13 +1,15 @@
+import pygame
+
 from vocabulary import *
 from numba import njit
 from graph import vector_boosted
 
 
-def draw_cube_func(screen, cub_id, x, y, z, cam_x, cam_y, cam_z,
+def draw_cube_func(screen: pygame.Surface, cub_id, x, y, z, cam_x, cam_y, cam_z,
                    cam_d, cub_h, trigonometry, outline, grnd=False):
     points = set_coords_with_move_func(x, y, z, cub_h)
 
-    coords_2d, condition = coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry)
+    coords_2d, condition = coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen.get_clip().size)
     if condition:
         if grnd:
             draw_square_func(screen, 0, coords_2d, k=3, out_line=outline)
@@ -86,7 +88,7 @@ if __name__ == "__main__":
     print("This module is not for direct call!")
 
 @njit(fastmath=True)
-def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry):
+def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen_size):
     coords_2d = np.zeros((2, 2, 2, 2), dtype=float32)
     condition = True
     for i in range(2):
@@ -97,6 +99,6 @@ def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry):
                     coords_2d[i][j][k][0], coords_2d[i][j][k][1], temp = vector_boosted.from_world_to_screen(
                         points[i][j][k][0], points[i][j][k][1],
                         points[i][j][k][2], cam_x, cam_y, cam_z, cam_d,
-                        trigonometry)
+                        trigonometry, screen_size)
                 condition = temp and condition
     return coords_2d, condition

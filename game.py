@@ -29,7 +29,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player((50, 50, 12), self.gravity)
+        self.player = Player((50, 50, 12), self.gravity, (width, height))
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
@@ -58,7 +58,8 @@ class Game:
             self.running = False
 
     def gui(self):
-        circle(self.screen, BLACK, (WIDTH / 2, HEIGHT / 2), 4, 1)
+        w, h = self.screen.get_clip().size
+        circle(self.screen, BLACK, (w / 2, h / 2), 4, 1)
 
     def log(self):
 

@@ -4,7 +4,7 @@ import pygame
 
 
 class Player:
-    def __init__(self, point: tuple[float, float, float], g: float):
+    def __init__(self, point: tuple[float, float, float], g: float, screen_size: tuple[int, int]):
         self.r = pygame.Vector3(point)
         self.v = pygame.Vector3()
         self.a = pygame.Vector3()
@@ -18,6 +18,8 @@ class Player:
         self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE]
         self.pressed_keys = []
         self.fly_mode = True
+
+        self.screen_size = screen_size
 
     def get_camera(self) -> Vector:
         """
@@ -46,14 +48,17 @@ class Player:
         elif event.type == pygame.MOUSEMOTION:
             mx, my = pygame.mouse.get_pos()
             # x = - delta <= ось с пайгеймой не сходится
-            x, y = -k * (mx - int(WIDTH / 2)), k * (my - int(HEIGHT / 2))
-            pygame.mouse.set_pos([int(WIDTH / 2), int(HEIGHT / 2)])
+            w, h = self.screen_size
+            x, y = -k * (mx - w // 2), k * (my - h // 2)
+            pygame.mouse.set_pos([w // 2, h // 2])
             self.lng = (self.lng + x + np.pi) % (np.pi * 2) - np.pi
             self.lat = (self.lat - y)
             if self.lat > np.pi / 2:
                 self.lat = np.pi / 2
             if self.lat < -np.pi / 2:
                 self.lat = -np.pi / 2
+        elif event.type == pygame.VIDEORESIZE:
+            self.screen_size = (event.w, event.h)
 
     def move(self, order, ground, scene):
         """

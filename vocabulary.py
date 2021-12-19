@@ -6,12 +6,10 @@ from numpy import float32
 from pygame.draw import *
 from random import randint
 
-WIDTH, HEIGHT = 1200, 720
 FPS = 60
 k = 0.001  # Чувствительность мыши
 leg_force = 0.01
 stopper_acceleration = 0.19 * leg_force  # На сколько ед\с падают составляющие скорости
-mm_o = (WIDTH / 2, HEIGHT / 2, 0)  # Точка центра отрисовки миникарты в окне
 ground = 9
 
 # угол обзора(косинус от камеры)
