@@ -6,12 +6,19 @@ import pygame
 
 class Player:
     def __init__(self, point: tuple([float, float, float]), g: float, screen_size: tuple([int, int])):
+        """
+        инициализирует игрока,
+        # longitude - долгота угла
+        # latitude - широта угла
+        points: начальное положение
+        g: ускорение свободного падения
+        screen_size: размер экрана
+        """
         self.r = pygame.Vector3(point)
         self.v = pygame.Vector3()
         self.a = pygame.Vector3()
-        self.h = 1.75
-        self.lng = 0  # longitude - долгота угла
-        self.lat = 0  # latitude - широта угла
+        self.lng = 0  # longitude
+        self.lat = 0  # latitude
         self.g = g
         self.test_mode = False
         self.n = 8
@@ -33,7 +40,12 @@ class Player:
 
     def update(self, event, scene, fat):
         """
-        обновляет конфигурацию надатых клавиш и перемещает угол взгляда игрока посредством измерения перемещения мыши
+        обновляет конфигурацию нажатых клавиш и перемещает угол взгляда игрока посредством измерения перемещения мыши,
+        отвечает за обработку событий и распределяет задачи между методами по обработке событий
+        event: пайгеймовское событие
+        scene: хранит массив блоков и их цвета
+        fat: хранит информацию о выделенном кубе
+        return: True, если игрок поставил/убрал куб
         """
         const = False
         if event.type == pygame.KEYDOWN:
@@ -79,7 +91,11 @@ class Player:
 
     def move(self, order, ground, scene):
         """
-        перемещает игрока посредством добавления вектору скорости ускорения
+        перемещает игрока посредством добавления вектору скорости ускорения, замедляет его при слишком большой скорости.
+        order: соседние блоки в относительных координатах
+        ground: уровень земли в мире
+        scene: хранит массив блоков и их цвета
+        return: None
         """
         v_horizontal = np.sqrt(self.v.x ** 2 + self.v.y ** 2)
         if v_horizontal > speed_limit_min:
@@ -135,6 +151,10 @@ class Player:
     def check_tuk(self, order, ground, scene):
         """
         Проверяет нахождение поблизости блоков и изменяет вектор скорости для того, чтобы нельзя было к ним приближаться
+        order: соседние блоки в относительных координатах
+        ground: уровень земли в мире
+        scene: хранит массив блоков и их цвета
+        return: None
         """
         ret = graph.vector.check_distance(scene, self.cam, order, ground)
         if ret[0] and self.v.x >= 0:
@@ -157,10 +177,19 @@ class Player:
             self.r.z += 0.001
 
     def jump(self):
+        """
+        добавляет вектор скорости вверх при нулевой вертикальной компоненте скорости
+        return: None
+        """
         if abs(abs(self.v.z) - 0.003) < 0.0000001:
             self.v.z = speed_limit_max * 1.5
 
     def change_color(self, rotate):
+        """
+        изменяет цвет в соответствии с поворотом колёсика мыши
+        rotate: направление поворота колёсика (1- вперёд, -1 - назад)
+        return: None
+        """
         if rotate > 0:
             self.color += 1
         elif rotate < 0:

@@ -15,11 +15,30 @@ class Rasterizer:
         self.player_const = 0
 
     def draw(self, screen: pygame.Surface, scene: Scene, camera: Vector, cub_h=1):
+        """
+        распределяет задачи по отрисовке между draw_bottom и draw_cubes
+        screen:пайгеймовский экран, на который надо отрисовывать
+        scene:в ней хранятся данные о положении и цвете кубов
+        camera:камера
+        cub_h: размер кубов(лучше не менять)
+        return:None
+        """
         screen.fill(GREY1)
         self.draw_bottom(screen, camera)
         self.draw_cubes(screen, scene, camera, cub_h)
 
     def draw_cubes(self, screen: pygame.Surface, scene: Scene, camera: Vector, const, cub_h=1):
+        """
+        отвечает за отрисовку кубов, за само выделение блоков,
+        внутри себя создаёт порядок отрисовки и по нему рисует кубы,
+        обновляет карту при взаимодействии игрока с объектами
+        screen: пайгеймовский экран, на который надо отрисовывать
+        scene: в ней хранятся данные о положении и цвете кубов
+        camera: камера
+        const:True если требуется обновление карты в следствии взаимодействия игрока с объектами
+        cub_h: размер кубов(лучше не менять)
+        return:None
+        """
         if self.coord_history != (camera.x, camera.y, camera.z) or const:
             self.player_const = 0
             self.coord_history = (camera.x, camera.y, camera.z)
@@ -47,6 +66,12 @@ class Rasterizer:
 
     @staticmethod
     def draw_bottom(screen: pygame.Surface, camera: Vector):
+        """
+        отвечает за отрисовку нижней границы мира
+        screen: экран из пайгейма
+        camera: камера
+        return: None
+        """
         for i in range(0, order_of_output.distance+2, 3):
             for j in range(0, order_of_output.distance+2, 3):
                 x_ground, y_ground, condition = vector_boosted.from_world_to_screen(
