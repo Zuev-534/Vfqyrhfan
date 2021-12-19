@@ -29,7 +29,7 @@ class Game:
         self.scene = Scene()
         self.scene.test()
 
-        self.player = Player(Vector(50, 50, 12), self.gravity)
+        self.player = Player((50, 50, 12), self.gravity)
         self.rasterizer = Rasterizer()
         self.player_get_camera = None
 
@@ -41,7 +41,7 @@ class Game:
             for event in pygame.event.get():
                 self.update(event)
                 self.player.update(event)
-            self.player.move(self.player_get_camera, order_of_tuk.order, self.ground, self.scene)
+            self.player.move(order_of_tuk.order, self.ground, self.scene)
 
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
