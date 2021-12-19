@@ -1,0 +1,4 @@
+numpy
+pygame
+numba
+python 3.9
