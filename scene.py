@@ -7,10 +7,15 @@ def generate_emp(a, b, c):
 
 class Scene:
     def __init__(self):
-        self.map = generate_emp(1000, 1000, 1000)
+        """
+        генерирует массив, в которые можно записывать кубы
+        """
+        self.map = generate_emp(100, 100, 50)
 
     def test(self):
-        pass
+        for i in range(10):
+            for k in range(10):
+                self.map[51 + i][52 + k][10] = 4
 
 
 

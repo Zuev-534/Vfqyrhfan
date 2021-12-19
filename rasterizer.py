@@ -31,7 +31,7 @@ class Rasterizer:
         fatline = self.selected_block(camera, scene)
         draw_bottom(screen, camera)
         outline = 1
-        if type(fatline) == type((1, 2, 3)):
+        if isinstance(fatline, tuple):
             if fatline[3]:
                 outline = 3
                 draw_cube_func(screen, scene.map[fatline[0]][fatline[1]][fatline[2]], fatline[0], fatline[1],
@@ -39,7 +39,7 @@ class Rasterizer:
                                outline, grnd=fatline[3])
                 outline = 1
         for item in self.temp_order:
-            if type(fatline) == type((1, 2, 3)):
+            if isinstance(fatline, tuple):
                 if fatline[:-1] == item:
                     outline = 3
             draw_cube_func(screen, scene.map[item[0]][item[1]][item[2]], *item, camera.x, camera.y, camera.z, camera.d,
@@ -47,11 +47,19 @@ class Rasterizer:
                            camera.trigonometry_array, outline)
             outline = 1
 
-    def selected_block(self, cam, scene):
+    @staticmethod
+    def selected_block(cam, scene):
+        """
+        получает на вход камеру и массив кубов, выдаёт координату куба который требуется выделить
+        и сторону куба на который наводится игрок
+        cam: камера
+        scene: массив блоков
+        return: координаты в формате x, y, z True/False в зависимости от того выделен куб или пол
+        """
         rx = cam.x
         ry = cam.y
         rz = cam.z
-        for i in range(6 * 7):
+        for _ in range(6 * 7):
             rx += cam.dx / 7 / cam.d
             ry += cam.dy / 7 / cam.d
             rz += cam.dz / 7 / cam.d
