@@ -4,16 +4,25 @@ from numba import njit
 
 @njit(fastmath=True)
 def scalar_func(dx, dy, dz, vector_nul_dx, vector_nul_dy, vector_nul_dz):
+    """
+        Скалярное произведение двух векторов по составляющим
+    """
     return dx * vector_nul_dx + dy * vector_nul_dy + dz * vector_nul_dz
 
 
 @njit(fastmath=True)
 def set_coords_d_from_di_func(dx, dy, dz):
+    """
+        Определение длины вектора
+    """
     return np.sqrt(dx * dx + dy * dy + dz * dz)
 
 
 @njit(fastmath=True)
 def new_di_in_new_pos_func(vec_1_x, vec_1_y, vec_1_z, vector_nul_x, vector_nul_y, vector_nul_z):
+    """
+        Векторная разность
+    """
     dx = -vector_nul_x + vec_1_x
     dy = -vector_nul_y + vec_1_y
     dz = -vector_nul_z + vec_1_z
@@ -26,12 +35,18 @@ def from_world_to_screen(self_x, self_y, self_z,
                          vector_nul_d,
                          trigonometry,
                          screen_size):
+    """
+        Функция проецирования точки на камеру(точка в абсолютных координатах)
+    """
     self_dx, self_dy, self_dz = new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z)
     return from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry, screen_size)
 
 
 @njit(fastmath=True)
 def from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometry, screen_size):
+    """
+        Функция проецирования точки на камеру(точка в относительных координатах)
+    """
     vector_nul_dx, vector_nul_dy, vector_nul_dz = set_coords_di_from_d(vector_nul_d, trigonometry)
 
     self_d = set_coords_d_from_di_func(self_dx, self_dy, self_dz)
@@ -52,6 +67,9 @@ def from_relative_to_screen(self_dx, self_dy, self_dz, vector_nul_d, trigonometr
 
 @njit(fastmath=True)
 def transformation_to_screen(dx, dy, dz, trigonometry):
+    """
+        Преобразование координат в вид, соответствующий отрисовке пайгейма
+    """
     dx, dy = dx * trigonometry[1] + dy * trigonometry[0], - dx * trigonometry[0] + dy * trigonometry[1]
     dz = - dx * trigonometry[2] + dz * trigonometry[3]
     return -dy, dz
@@ -59,12 +77,18 @@ def transformation_to_screen(dx, dy, dz, trigonometry):
 
 @njit(fastmath=True)
 def set_coords_di_from_d(vector_nul_d, trigonometry):
+    """
+        Переход из полярных координат
+    """
     return vector_nul_d * trigonometry[1] * trigonometry[3], vector_nul_d * trigonometry[0] * trigonometry[
         3], vector_nul_d * trigonometry[2]
 
 
 @njit(fastmath=True)
 def find_projected_vector(self_dx, self_dy, self_dz, self_d, vector_nul_dx, vector_nul_dy, vector_nul_dz, vector_nul_d):
+    """
+        Укорачивание вектора до камеры и проверка видимости
+    """
     aspect_ratio = (self_dx * vector_nul_dx + self_dy * vector_nul_dy + self_dz * vector_nul_dz) / (
         vector_nul_d)
     cos_cam_point = aspect_ratio / self_d
@@ -80,16 +104,29 @@ def find_projected_vector(self_dx, self_dy, self_dz, self_d, vector_nul_dx, vect
 
 @njit(fastmath=True)
 def get_angle_cos_func(dx, dy, dz, d, vector_nul_dx, vector_nul_dy, vector_nul_dz, vector_nul_d):
+    """
+        Косинус между двумя радиус-векторами
+    """
     return scalar_func(dx, dy, dz, vector_nul_dx, vector_nul_dy, vector_nul_dz) / (d * vector_nul_d)
 
 
 @njit(fastmath=True)
 def new_di_in_new_pos_func(self_x, self_y, self_z, vector_nul_x, vector_nul_y, vector_nul_z):
+    """
+        Векторное вычитаение
+    """
     self_dx = -vector_nul_x + self_x
     self_dy = -vector_nul_y + self_y
     self_dz = -vector_nul_z + self_z
     return self_dx, self_dy, self_dz
 
+
+
+
+
+"""
+Ниже находятся матрицы поворота относительно указанных осей в правых тройках
+"""
 
 @njit(fastmath=True)
 def r_v_z(x, y, fi_xy=0.0):

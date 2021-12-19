@@ -7,6 +7,9 @@ from graph import vector_boosted
 
 def draw_cube_func(screen: pygame.Surface, cub_id, x, y, z, cam_x, cam_y, cam_z,
                    cam_d, cub_h, trigonometry, outline, grnd=False):
+    """
+        Функция отрисовки куба по заданным параметры
+    """
     points = set_coords_with_move_func(x, y, z, cub_h)
 
     coords_2d, condition = coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen.get_clip().size)
@@ -28,8 +31,11 @@ def draw_cube_func(screen: pygame.Surface, cub_id, x, y, z, cam_x, cam_y, cam_z,
                 draw_square_func(screen, cub_id, coords_2d, k=2, out_line=outline)
 
 
-# проверено(только осмотрел)
+
 def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
+    """
+        Функция отрисовки грани куба в зависимости от положения, определенного ранее
+    """
     if i == 2 or i == 3:
         lightness = 0.8
         polygon(screen, mult(get_color(cub_id), lightness),
@@ -75,6 +81,9 @@ def draw_square_func(screen, cub_id, coords_2d, i=0, j=0, k=0, out_line=1):
 
 @njit(fastmath=True)
 def set_coords_with_move_func(x, y, z, h_cube):
+    """
+    Просчет координат углов куба
+    """
     points = np.zeros((2, 2, 2, 3), dtype=float32)
     for i in range(2):
         for j in range(2):
@@ -91,6 +100,9 @@ if __name__ == "__main__":
 
 @njit(fastmath=True)
 def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen_size):
+    """
+    Просчет проекций углов куба и его попадание в угол обзора
+    """
     coords_2d = np.zeros((2, 2, 2, 2), dtype=float32)
     condition = True
     for i in range(2):
@@ -103,4 +115,6 @@ def coord2d_func(points, cam_x, cam_y, cam_z, cam_d, trigonometry, screen_size):
                         points[i][j][k][2], cam_x, cam_y, cam_z, cam_d,
                         trigonometry, screen_size)
                 condition = temp and condition
+                if not condition:
+                    break
     return coords_2d, condition
