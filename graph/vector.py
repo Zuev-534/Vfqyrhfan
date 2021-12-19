@@ -24,9 +24,6 @@ class Vector:
         vector.set_coords_di_from_d()
         return vector
 
-    # @staticmethod
-    # def from_decart
-
     def set_coords_di_from_d(self):
         self.trigonometry_array[0] = np.sin(self.an_xy)
         self.trigonometry_array[1] = np.cos(self.an_xy)
@@ -39,13 +36,43 @@ class Vector:
         self.dy = -vector_nul.y + self.y
         self.dz = -vector_nul.z + self.z
 
-    def get_vector(self, vector_nul: Vector):
+    def from_world_to_screen(self, vector_nul: Vector):
         dx, dy = vector_boosted.from_world_to_screen(self.x, self.y, self.z, vector_nul.x, vector_nul.y,
-                                                         vector_nul.z,
-                                                         vector_nul.d,
-                                                         vector_nul.trigonometry_array)
+                                                     vector_nul.z,
+                                                     vector_nul.d,
+                                                     vector_nul.trigonometry_array)
 
         return dx, dy
+
+    def set_coords_d_from_di(self):
+        self.d = np.sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
+
+    def scalar(self, vector_nul):
+        return self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz
+
+    def get_angle_cos(self, vector_nul):
+        return self.scalar(vector_nul) / (self.d * vector_nul.d)
+
+    def rotate_vector_z(self, fi_xy=0.0):
+        self.dx, self.dy = vector_boosted.r_v_z(self.dx, self.dy, fi_xy)
+
+    def rotate_vector_y(self, fi_zx=0.0):
+        self.dx, self.dz = vector_boosted.r_v_y(self.dx, self.dz, fi_zx)
+
+    def rotate_vector_x(self, fi_yz=0.0):
+        self.dz, self.dy = vector_boosted.r_v_x(self.dz, self.dy, fi_yz)
+
+    def print_all(self):
+        print("self = ", self)
+        print("d = ", self.d)
+        print("x = ", self.x)
+        print("y = ", self.y)
+        print("z = ", self.z)
+        print("dx = ", self.dx)
+        print("dy = ", self.dy)
+        print("dz = ", self.dz)
+        print("an_xy = ", self.an_xy)
+        print("an_xy = ", self.an_xz)
 
     def min_int_distance(self, scene, cam: Vector, order, ground):
         """
@@ -117,36 +144,3 @@ class Vector:
         if cam.z <= ground + 1.5:
             ret[5] += 1
         return ret
-
-    def set_coords_d_from_di(self):
-        self.d = np.sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
-
-    def scalar(self, vector_nul):
-        return self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz
-
-    def get_angle_cos(self, vector_nul):
-        return self.scalar(vector_nul) / (self.d * vector_nul.d)
-
-    def print_all(self):
-        print("self = ", self)
-        print("d = ", self.d)
-        print("x = ", self.x)
-        print("y = ", self.y)
-        print("z = ", self.z)
-        print("dx = ", self.dx)
-        print("dy = ", self.dy)
-        print("dz = ", self.dz)
-        print("an_xy = ", self.an_xy)
-        print("an_xy = ", self.an_xz)
-
-
-def rotate_vector_z(self, fi_xy=0.0):
-    self.dx, self.dy = vector_boosted.r_v_z(self.dx, self.dy, fi_xy)
-
-
-def rotate_vector_y(self, fi_zx=0.0):
-    self.dx, self.dz = vector_boosted.r_v_y(self.dx, self.dz, fi_zx)
-
-
-def rotate_vector_x(self, fi_yz=0.0):
-    self.dz, self.dy = vector_boosted.r_v_x(self.dz, self.dy, fi_yz)
