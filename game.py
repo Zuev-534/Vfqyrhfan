@@ -9,15 +9,15 @@ from graph import Vector, vector_boosted
 from math import sin, cos
 from rasterizer import Rasterizer
 import order_of_tuk
-import order_of_output
+
 
 
 class Game:
     def __init__(self, width, height, ground):
+        import order_of_output
         self.FPS = 60
         self.gravity = -0.003
         self.ground = ground
-
         pygame.init()
         pygame.display.set_caption('Test controlling')
         pygame.mouse.set_visible(False)
