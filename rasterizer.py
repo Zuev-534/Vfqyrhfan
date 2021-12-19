@@ -115,16 +115,19 @@ class Rasterizer:
         array.sort()
         c = 0
         W, H = screen.get_clip().size
-        while c <= len(array)-1:
+        while c <= len(array) - 1:
             if array[c][1] >= H:
                 del array[c]
             else:
                 c += 1
-
-        if array[0][0] < 0 or 0 < array[0][1] < H and array[-1][0] > W or 0 < array[-1][1] < H:
-            pygame.draw.polygon(screen, get_color(0), [[0, H], *array, [W, H]])
+        print(array)
+        if len(array) >= 4:
+            if array[0][0] < 0 or 0 < array[0][1] < H and array[-1][0] > W or 0 < array[-1][1] < H:
+                pygame.draw.polygon(screen, get_color(0), [[0, H], *array, [W, H]])
+            else:
+                pygame.draw.polygon(screen, get_color(0), array)
         else:
-            pygame.draw.polygon(screen, get_color(0), array)
+            screen.fill(get_color(0))
 
     @staticmethod
     def selected_block(cam, scene):
