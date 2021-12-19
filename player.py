@@ -4,20 +4,20 @@ import pygame
 
 
 class Player:
-    def __init__(self, r: Vector, g: float):
-        self.r = r
-        self.v = Vector()
-        self.a = Vector()
+    def __init__(self, point: tuple[float, float, float], g: float):
+        self.r = pygame.Vector3(point)
+        self.v = pygame.Vector3()
+        self.a = pygame.Vector3()
         self.h = 1.75
         self.lng = 0  # longitude - долгота угла
         self.lat = 0  # latitude - широта угла
         self.g = g
-        self.test_mod = -1
+        self.test_mode = False
         self.n = 8
 
-        self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE, pygame.K_c, pygame.K_t]
+        self.control_keys = [pygame.K_a, pygame.K_w, pygame.K_s, pygame.K_d, pygame.K_SPACE]
         self.pressed_keys = []
-        self.fly_mod = 1
+        self.fly_mode = True
 
     def get_camera(self) -> Vector:
         """
@@ -27,15 +27,15 @@ class Player:
 
     def update(self, event):
         """
-        обновляет конфигурацию надатых клавишь и перемещает угол взгляда игрока посредством измерения перемещения мыши
+        обновляет конфигурацию надатых клавиш и перемещает угол взгляда игрока посредством измерения перемещения мыши
         """
         if event.type == pygame.KEYDOWN:
             if event.key in self.control_keys:
-                if event.key == pygame.K_c:
-                    self.fly_mod = - self.fly_mod
-                if event.key == pygame.K_t:
-                    self.test_mod = - self.test_mod
                 self.pressed_keys.append(event.key)
+            elif event.key == pygame.K_c:
+                self.fly_mode = not self.fly_mode
+            elif event.key == pygame.K_t:
+                self.test_mode = not self.test_mode
         elif event.type == pygame.KEYUP:
             if event.key in self.control_keys:
                 self.pressed_keys.remove(event.key)
@@ -80,26 +80,22 @@ class Player:
             elif key == pygame.K_w:
                 self.a.x += +leg_force * cos(self.lng)
                 self.a.y += +leg_force * sin(self.lng)
-            elif key == pygame.K_SPACE and self.fly_mod == 1:
+            elif key == pygame.K_SPACE and self.fly_mode:
                 if pygame.key.get_mods() & pygame.KMOD_LSHIFT:
                     self.a.z += -leg_force
                 else:
                     self.a.z += +leg_force
-        if self.fly_mod == -1:
+        if not self.fly_mode:
             self.a.z = self.g
 
-        self.r.x += self.v.x
-        self.r.y += self.v.y
-        self.r.z += self.v.z
-        self.v.x += self.a.x
-        self.v.y += self.a.y
-        self.v.z += self.a.z
+        self.r += self.v
+        self.v += self.a
         if v_horizontal > speed_limit_max:
             self.v.x *= speed_limit_max / v_horizontal
             self.v.y *= speed_limit_max / v_horizontal
-        if abs(self.v.z) > speed_limit_max and self.fly_mod == 1:
+        if abs(self.v.z) > speed_limit_max and self.fly_mode:
             self.v.z *= speed_limit_max / abs(self.v.z)
-        if abs(self.v.z) > 3 * speed_limit_max and self.fly_mod == -1:
+        if abs(self.v.z) > 3 * speed_limit_max and not self.fly_mode:
             self.v.z *= 3 * speed_limit_max / abs(self.v.z)
         if abs(self.v.x) <= speed_limit_min:
             self.v.x = 0
@@ -109,13 +105,12 @@ class Player:
             self.v.z = 0
 
 
-
 def coords(screen, player: Player, fps):
     """
     отладочная функция, выводит на экран основные переменные отвечающие за положение и перемещение
     return: None
     """
-    if player.test_mod == 1:
+    if player.test_mode:
         text_render(screen, "FPS = " + str(fps)[:4], 50, 10)
         text_render(screen, "x = " + str(player.r.x)[:4], 50, 30)
         text_render(screen, "y = " + str(player.r.y)[:4], 50, 60)
@@ -128,7 +123,7 @@ def coords(screen, player: Player, fps):
         text_render(screen, "az = " + str(player.a.z * 100)[:4], 50, 270)
         text_render(screen, "an_xy = " + str(player.lng)[:4], 50, 300)
         text_render(screen, "an_xz = " + str(player.lat)[:4], 50, 330)
-        text_render(screen, "fly_mod = " + str(player.fly_mod)[:4], 50, 360)
+        text_render(screen, "fly_mode = " + str(player.fly_mode)[:4], 50, 360)
 
 
 if __name__ == "__main__":
