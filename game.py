@@ -14,6 +14,12 @@ import order_of_tuk
 
 class Game:
     def __init__(self, width, height, ground):
+        """
+        Инициализирует игру и всё остальное
+        width:ширина экрана
+        height: высота экрана
+        ground: уровень земли
+        """
         import order_of_output
         self.FPS = 60
         self.gravity = -0.003
@@ -35,6 +41,10 @@ class Game:
         self.constr = False
 
     def loop(self):
+        """
+        основной цикл игры, отвечает за порядок вызова всех функций
+        return: None
+        """
         while self.running:
             self.clock.tick(self.FPS)
             self.player_get_camera = self.player.get_camera()
@@ -46,39 +56,32 @@ class Game:
 
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera, self.constr)
             self.constr = False
-
-            self.log()
             self.gui(self.player.color)
             pygame.display.update()
 
         pygame.quit()
 
     def update(self, event):
+        """
+        проверяет не нажата ли клавиша выключения программы,
+        при необходимости меняет self.running на False
+        event: пайгеймовский евент
+        return: None
+        """
         if event.type == pygame.QUIT:
             self.running = False
         elif event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.running = False
 
     def gui(self, color):
+        """
+        graphic user interface
+        отвечает за вывод информации для тестера на экран, за кружочек в центре экрана
+        color:цвет в формате от 1 до 8
+        return:None
+        """
         w, h = self.screen.get_clip().size
         circle(self.screen, get_color(color), (w / 2, h / 2), 6, 2)
-
-
-    def log(self):
-
-        clip = self.screen.get_clip()
-        center = (clip.w / 2, clip.h / 2, 0)
-
-        camera = self.player.get_camera()
-
-        u = 15
-        pygame.draw.lines(self.screen, WHITE, True, [
-            convert_point((camera.x, camera.y, 0), center),
-            convert_point((
-                camera.x + u * cos(camera.an_xy),
-                camera.y + u * sin(camera.an_xy),
-                0,
-            ), center),
-        ], 2)
-
         coords(self.screen, self.player, self.clock.get_fps())
+
+

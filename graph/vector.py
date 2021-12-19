@@ -5,6 +5,9 @@ from graph import vector_boosted
 
 class Vector:
     def __init__(self, x0=0.0, y0=0.0, z0=0.0, d0=0.0, dx0=0.0, dy0=0.0, dz0=0.0, an_xy0=0.0, an_xz0=0.0):
+        """
+        инициализирует объект класса вектор
+        """
         self.d = d0
         self.x = x0
         self.y = y0
@@ -20,11 +23,19 @@ class Vector:
 
     @staticmethod
     def from_polar(x, y, z, lng, lat, r):
+        """
+        задаёт относительные координаты из полярных координат
+        return: vector с посчитанными относительными координатами
+        """
         vector = Vector(x0=x, y0=y, z0=z, d0=r, an_xy0=lng, an_xz0=lat)
         vector.set_coords_di_from_d()
         return vector
 
     def set_coords_di_from_d(self):
+        """
+        задаёт относительные координаты из полярных координат
+        return:None
+        """
         self.trigonometry_array[0] = np.sin(self.an_xy)
         self.trigonometry_array[1] = np.cos(self.an_xy)
         self.trigonometry_array[2] = np.sin(self.an_xz)
@@ -32,36 +43,76 @@ class Vector:
         self.dx, self.dy, self.dz = vector_boosted.set_coords_di_from_d(self.d, self.trigonometry_array)
 
     def new_di_in_new_pos(self, vector_nul):
+        """
+        задаёт относительные координаты между двумя точками
+        vector_nul: второй вектор
+        return: None
+        """
         self.dx = -vector_nul.x + self.x
         self.dy = -vector_nul.y + self.y
         self.dz = -vector_nul.z + self.z
 
     def from_world_to_screen(self, vector_nul):
+        """
+        выдаёт координаты на экране из абсолютных координат в мире
+        vector_nul: точка, которую требуется отрисовать
+        return: x, y точки
+        """
         self.new_di_in_new_pos(vector_nul)
         dx, dy = vector_boosted.from_relative_to_screen(self.dx, self.dy, self.dz, vector_nul.d,
                                                         vector_nul.trigonometry_array)
-
         return dx, dy
 
     def set_coords_d_from_di(self):
+        """
+        устанавливает d посредством di
+        """
         self.d = np.sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
 
     def scalar(self, vector_nul):
+        """
+        считает скалярное произведение между веторами
+        vector_nul:
+        return: scalar
+        """
         return self.dx * vector_nul.dx + self.dy * vector_nul.dy + self.dz * vector_nul.dz
 
     def get_angle_cos(self, vector_nul):
+        """
+        выдаёт косинус между векторами
+        vector_nul:второй вектор
+        return: cos между векторами
+        """
         return self.scalar(vector_nul) / (self.d * vector_nul.d)
 
     def rotate_vector_z(self, fi_xy=0.0):
+        """
+        вращает матрицу векторна на угол fi_xy вокруг оси z
+        fi_xy: угол поворота
+        return: None
+        """
         self.dx, self.dy = vector_boosted.r_v_z(self.dx, self.dy, fi_xy)
 
     def rotate_vector_y(self, fi_zx=0.0):
+        """
+        вращает матрицу векторна на угол fi_xz вокруг оси y
+        fi_zx: угол поворота
+        return: None
+        """
         self.dx, self.dz = vector_boosted.r_v_y(self.dx, self.dz, fi_zx)
 
     def rotate_vector_x(self, fi_yz=0.0):
+        """
+        вращает матрицу вектора на на угол fi_yz вокруг оси x
+        fi_yz: угол поворота
+        return: None
+        """
         self.dz, self.dy = vector_boosted.r_v_x(self.dz, self.dy, fi_yz)
 
     def print_all(self):
+        """
+        отладочная функция, выводит все основные данные вектора
+        """
         print("self = ", self)
         print("d = ", self.d)
         print("x = ", self.x)
