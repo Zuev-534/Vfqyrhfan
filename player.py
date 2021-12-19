@@ -55,7 +55,7 @@ class Player:
             if self.lat < -np.pi / 2:
                 self.lat = -np.pi / 2
 
-    def move(self):
+    def move(self, order, ground, scene):
         """
         перемещает игрока посредством добавления вектору скорости ускорения
         """

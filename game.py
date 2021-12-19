@@ -41,7 +41,7 @@ class Game:
             for event in pygame.event.get():
                 self.update(event)
                 self.player.update(event)
-            self.player.move(self.player_get_camera, order_of_tuk.order, self.ground, self.scene)
+            self.player.move(order_of_tuk.order, self.ground, self.scene)
 
             self.rasterizer.draw(self.screen, self.scene, self.player_get_camera)
 
